@@ -1,0 +1,143 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+backend/venv/
+
+# Test data directories (keep locally but exclude from Git)
+table_data/
+FGI_data/
+
+package-lock.json
+package.json
+ts
+
+# === 추가: 하위 디렉토리별 명시적 무시 ===
+/app/node_modules/
+/app/.next/
+/app/.env*
+/app/.DS_Store
+/app/coverage/
+/app/build/
+/app/out/
+node_modules/
+app/node_modules
+app/.env.local
+
+*/node_modules
+*.enc.local
+*.env
+
+/backend/node_modules/
+/backend/.env*
+/backend/.DS_Store
+/backend/coverage/
+/backend/build/
+/backend/out/
+
+# === 추가: macOS, IDE, 에디터, 기타 캐시 ===
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.log
+.idea/
+.vscode/
+*.iml
+
+# === 추가: DB, secret, 기타 ===
+*.sqlite3
+*.db
+*.db-journal
+*.secret
+*.key
+*.crt
+*.p12
+*.pfx
+*.bak
+*.old
+
+# === 추가: 대용량 파일, 미디어, 임시파일 ===
+*.mp3
+*.wav
+*.m4a
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.docx
+*.xlsx
+*.pptx
+*.pdf
+*.tmp
+
+# === 추가: 기타 ===
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

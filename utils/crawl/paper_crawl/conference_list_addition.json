@@ -1,0 +1,164 @@
+{
+    "fields": [
+      {
+        "field": "Natural Language Processing (NLP)",
+        "conferences": [
+          {
+            "name": "ACL Anthology (ACL, EMNLP, NAACL, COLING)",
+            "site": "https://aclanthology.org/volumes/2024.acl-long/"
+          },
+          {
+            "name": "EMNLP (Empirical Methods in NLP)",
+            "site": "https://aclanthology.org/volumes/2024.emnlp-main/"
+          },
+          {
+            "name": "NAACL (North American Chapter of ACL)",
+            "site": "https://aclanthology.org/volumes/2024.naacl-long/"
+          }
+        ]
+      },
+      {
+        "field": "Computer Vision (CV)",
+        "conferences": [
+          {
+            "name": "CVPR (IEEE Conference on Computer Vision and Pattern Recognition)",
+            "site": "https://openaccess.thecvf.com/CVPR2025?day=all"
+          },
+          {
+            "name": "ICCV (International Conference on Computer Vision)",
+            "site": "https://openaccess.thecvf.com/ICCV2023?day=all"
+          },
+          {
+            "name": "ECCV (European Conference on Computer Vision)",
+            "site": "https://www.ecva.net/papers.php"
+          }
+        ]
+      },
+      {
+        "field": "Multimodal",
+        "conferences": [
+          {
+            "name": "NeurIPS",
+            "site": "https://papers.nips.cc/paper_files/paper/2024"
+          },
+          {
+            "name": "ICML",
+            "site": "https://icml.cc/virtual/2025/papers.html"
+          }
+        ]
+      },
+      {
+        "field": "Machine Learning / Deep Learning (ML/DL)",
+        "conferences": [
+          {
+            "name": "JMLR",
+            "site": "https://www.jmlr.org/papers/v26/"
+          },
+          {
+            "name": "ICLR",
+            "site": "https://openreview.net/group?id=ICLR.cc/2025/Conference#tab-accept-oral"
+          }
+        ]
+      },
+      {
+        "field": "Systems / Networking",
+        "conferences": [
+          {
+            "name": "OSDI (Operating Systems Design and Implementation)",
+            "site": "https://www.usenix.org/publications/proceedings"
+          },
+          {
+            "name": "SOSP (Symposium on Operating Systems Principles)",
+            "site": "https://www.usenix.org/publications/proceedings"
+          },
+          {
+            "name": "NSDI (Networked Systems Design and Implementation)",
+            "site": "https://www.usenix.org/publications/proceedings"
+          },
+          {
+            "name": "SIGCOMM (ACM Special Interest Group on Data Communication)",
+            "site": "https://www.usenix.org/publications/proceedings"
+          },
+          {
+            "name": "USENIX ATC (Annual Technical Conference)",
+            "site": "https://conferences.sigcomm.org/sigcomm/2025/accepted.php"
+          }
+        ]
+      },
+      {
+        "field": "Database / IR",
+        "conferences": [
+          {
+            "name": "SIGMOD",
+            "site": "https://sigmod.org/"
+          },
+          {
+            "name": "VLDB (Very Large Data Bases)",
+            "site": "https://vldb.org/"
+          },
+          {
+            "name": "ICDE (IEEE Intl. Conf. on Data Engineering)",
+            "site": "https://www.icde2025.org/accepted-papers"
+          },
+          {
+            "name": "PODS (Principles of Database Systems)",
+            "site": "https://vldb.org/"
+          },
+          {
+            "name": "WWW (Web Conference, 웹 데이터 포함)",
+            "site": "https://vldb.org/"
+          }
+        ]
+      },
+      {
+        "field": "Robotics",
+        "conferences": [
+          {
+            "name": "ICRA (IEEE Intl. Conf. on Robotics and Automation)",
+            "site": "https://www.icra2025.org/program"
+          },
+          {
+            "name": "IROS (IEEE/RSJ Intl. Conf. on Intelligent Robots and Systems)",
+            "site": "https://www.iros2025.org/accepted-papers"
+          },
+          {
+            "name": "RSS (Robotics: Science and Systems)",
+            "site": "https://roboticsconference.org/proceedings"
+          },
+          {
+            "name": "CoRL (Conference on Robot Learning)",
+            "site": "https://www.iros2025.org/accepted-papers"
+          },
+          {
+            "name": "Humanoids (Humanoid Robots Conf.)",
+            "site": "https://www.iros2025.org/accepted-papers"
+          }
+        ]
+      },
+      {
+        "field": "Security / Crypto",
+        "conferences": [
+          {
+            "name": "IEEE S&P (Oakland)",
+            "site": "https://www.ieee-security.org/TC/SP2025/program.html"
+          },
+          {
+            "name": "USENIX Security",
+            "site": "https://www.usenix.org/conference/usenixsecurity24" 
+          },
+          {
+            "name": "CCS (ACM Conference on Computer and Communications Security)",
+            "site": "https://www.sigsac.org/ccs/CCS2025/accepted.html"
+          },
+          {
+            "name": "NDSS (Network and Distributed System Security)",
+            "site": "https://www.iacr.org/conferences/crypto/"
+          },
+          {
+            "name": "CRYPTO / EUROCRYPT",
+            "site": ""
+          }
+        ]
+      }
+    ]
+  }
