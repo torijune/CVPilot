@@ -1,9 +1,3 @@
-# Target URL: 
-# https://aclanthology.org/volumes/2024.emnlp-main/
-# https://aclanthology.org/volumes/2024.acl-long/
-# https://aclanthology.org/volumes/2024.naacl-long/
-# title class= "align-middle", 해당 title의 링크 : href= ~
-# 해당 논문 페이지에 들어와서는 보이는 Abstract class= "card-body acl-abstract"의 span -> 이걸 분석
 import requests
 from bs4 import BeautifulSoup
 import json

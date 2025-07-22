@@ -134,6 +134,7 @@ app/.env.local
 *.pptx
 *.pdf
 *.tmp
+*.csv
 
 # === 추가: 기타 ===
 .DS_Store
