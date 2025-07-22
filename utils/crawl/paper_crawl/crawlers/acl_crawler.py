@@ -8,17 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
-
-
-# 크롤링 대상 컨퍼런스들: conference_config.json에서 crawler가 'acl_crawler'인 것만 읽어옴
-with open('utils/crawl/paper_crawl/conference_config.json', 'r', encoding='utf-8') as f:
-    config = json.load(f)
-
-conference_urls = {}
-for field in config['fields']:
-    for conf in field['conferences']:
-        if conf.get('crawler') == 'acl_crawler':
-            conference_urls[conf['name']] = conf['site']
+import os
 
 def get_preview_sentences(text, num_sentences=2):
     sentences = re.split(r'(?<=[.!?])\s+', text)  # 문장 분리
@@ -59,41 +49,69 @@ def fetch_abstract_and_authors(paper_url: str):
 
     return abstract, authors
 
-if __name__ == "__main__":
+def crawl_all_papers(url: str):
+    """
+    주어진 URL에서 모든 논문을 크롤링하여 하나씩 실시간으로 반환
+    """
+    print(f"🔍 ACL 크롤링 시작: {url}")
+    papers = fetch_paper_titles_and_links(url)
+
+    for i, paper in enumerate(papers, 1):
+        try:
+            # 제목이 비어있는 경우 건너뜀
+            if not paper['title'].strip():
+                continue
+
+            abstract, authors = fetch_abstract_and_authors(paper['url'])
+            
+            paper_data = {
+                'title': paper['title'],
+                'abstract': abstract,
+                'authors': authors,
+                'url': paper['url'],
+                'year': 2024  # 기본값
+            }
+            
+            print(f"✅ 논문 {i}: {paper['title'][:50]}...")
+            yield paper_data  # 실시간으로 하나씩 반환
+
+        except Exception as e:
+            print(f"❌ 논문 {i} 처리 실패: {e}")
+
+    print(f"총 {len(papers)}개 논문 크롤링 완료")
+
+def acl_crawler():
+    """
+    기존 함수 - conference_list.json에서 ACL 관련 컨퍼런스들을 모두 크롤링
+    """
+    # conference_list.json 파일 경로
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+    config_path = os.path.join(base_dir, "conference_list.json")
+    
+    with open(config_path, 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    conference_urls = {}
+    for field in config['fields']:
+        for conf in field['conferences']:
+            if conf.get('crawler') == 'acl_crawler':
+                conference_urls[conf['name']] = conf['site']
+
     all_results = []
 
     for conf_name, url in conference_urls.items():
         print(f"🔍 [{conf_name}] 크롤링 중...")
-        papers = fetch_paper_titles_and_links(url)
-
-        for i, paper in enumerate(papers, 1):
-            try:
-                # 제목이 비어있는 경우 건너뜀
-                if not paper['title'].strip():
-                    continue
-
-                abstract, authors = fetch_abstract_and_authors(paper['url'])
-                paper['abstract'] = abstract
-                paper['authors'] = authors
-                paper['conference'] = conf_name
-                all_results.append(paper)
-
-                preview = get_preview_sentences(abstract, num_sentences=2)
-
-                print(f"✅ 논문 {i} ({conf_name})")
-                print(f"제목: {paper['title']}")
-                print(f"링크: {paper['url']}")
-                print(f"저자: {paper['authors']}")
-                print(f"Abstract (preview): {preview}\n{'-'*60}")
-
-                # 20개마다 중간 저장
-                if len(all_results) % 20 == 0:
-                    with open("papers_partial_2024.json", "w", encoding="utf-8") as f:
-                        json.dump(all_results, f, ensure_ascii=False, indent=2)
-
-            except Exception as e:
-                print(f"❌ 논문 {i} 처리 실패: {e}\n{'-'*60}")
+        for paper in crawl_all_papers(url):
+            paper['conference'] = conf_name
+            all_results.append(paper)
 
     # 전체 최종 저장
-    with open("papers_combined_2024.json", "w", encoding="utf-8") as f:
+    output_path = os.path.join(base_dir, "acl_papers_2024.json")
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, ensure_ascii=False, indent=2)
+    
+    print(f"총 {len(all_results)}개 논문이 {output_path}에 저장되었습니다.")
+    return all_results
+
+if __name__ == "__main__":
+    acl_crawler()
