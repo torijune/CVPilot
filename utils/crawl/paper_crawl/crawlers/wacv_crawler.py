@@ -13,18 +13,31 @@ def fetch_paper_titles_and_links(url: str):
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')
-    # TODO: ICCV 사이트에 맞는 선택자로 수정 필요
-    paper_tags = soup.find_all("a", class_=lambda c: c and "align-middle" in c.split())
+    # WACV 사이트에 맞는 선택자: class="ptitle"인 dt 태그 안의 a 태그 (CVPR과 동일)
+    paper_tags = soup.find_all("dt", class_="ptitle")
 
     papers = []
     for tag in paper_tags:
-        title = tag.text.strip()
+        # dt 태그 안의 a 태그 찾기
+        link_tag = tag.find("a")
+        if not link_tag:
+            continue
+            
+        title = link_tag.text.strip()
         # 제목이 비어 있거나 특정 키워드면 건너뜀
         if not title or title.lower() in {"pdf", "bib", "abs"}:
             continue
 
-        href = tag['href']
-        link = href if href.startswith("http") else "https://iccv.thecvf.com" + href
+        href = link_tag.get('href')
+        if not href:
+            continue
+            
+        # WACV 사이트의 올바른 URL 구조로 수정
+        if href.startswith("http"):
+            link = href
+        else:
+            # 상대 경로인 경우 openaccess.thecvf.com 도메인 사용
+            link = "https://openaccess.thecvf.com" + href
 
         papers.append({"title": title, "url": link})
     return papers
@@ -34,14 +47,27 @@ def fetch_abstract_and_authors(paper_url: str):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # TODO: ICCV 사이트에 맞는 선택자로 수정 필요
-    # Abstract
-    abstract_div = soup.find("div", class_="card-body acl-abstract")
-    abstract = abstract_div.find("span").text.strip() if abstract_div and abstract_div.find("span") else "Abstract not found"
+    # WACV 사이트의 정확한 구조에 맞게 수정 (CVPR과 동일)
+    # Authors - id="authors"인 div에서 저자 정보 추출
+    authors = "Authors not found"
+    authors_div = soup.find("div", id="authors")
+    if authors_div:
+        # 저자 정보는 <i> 태그 안에 있음 (CVPR과 동일)
+        author_i_tag = authors_div.find("i")
+        if author_i_tag:
+            authors = author_i_tag.get_text(strip=True)
+        else:
+            # <i> 태그가 없으면 전체 텍스트에서 저자 부분만 추출
+            full_text = authors_div.get_text(strip=True)
+            # 세미콜론 이전 부분이 저자명 (CVPR과 동일)
+            if ";" in full_text:
+                authors = full_text.split(";")[0].strip()
 
-    # Authors
-    lead_p = soup.find("p", class_="lead")
-    authors = lead_p.get_text(separator=", ").strip() if lead_p else "Authors not found"
+    # Abstract - id="abstract"인 div에서 초록 추출
+    abstract = "Abstract not found"
+    abstract_div = soup.find("div", id="abstract")
+    if abstract_div:
+        abstract = abstract_div.get_text(strip=True)
 
     return abstract, authors
 
@@ -49,7 +75,7 @@ def crawl_all_papers(url: str):
     """
     주어진 URL에서 모든 논문을 크롤링하여 하나씩 실시간으로 반환
     """
-    print(f"🔍 ICCV 크롤링 시작: {url}")
+    print(f"🔍 WACV 크롤링 시작: {url}")
     papers = fetch_paper_titles_and_links(url)
 
     for i, paper in enumerate(papers, 1):
@@ -65,7 +91,7 @@ def crawl_all_papers(url: str):
                 'abstract': abstract,
                 'authors': authors,
                 'url': paper['url'],
-                'year': 2024  # 기본값
+                'year': 2025  # WACV 2025
             }
             
             print(f"✅ 논문 {i}: {paper['title'][:50]}...")
@@ -76,9 +102,9 @@ def crawl_all_papers(url: str):
 
     print(f"총 {len(papers)}개 논문 크롤링 완료")
 
-def iccv_crawler():
+def wacv_crawler():
     """
-    기존 함수 - conference_list.json에서 ICCV 관련 컨퍼런스들을 모두 크롤링
+    기존 함수 - conference_list.json에서 WACV 관련 컨퍼런스들을 모두 크롤링
     """
     # conference_list.json 파일 경로
     base_dir = os.path.dirname(os.path.dirname(__file__))
@@ -90,7 +116,7 @@ def iccv_crawler():
     conference_urls = {}
     for field in config['fields']:
         for conf in field['conferences']:
-            if conf.get('crawler') == 'iccv_crawler':
+            if conf.get('crawler') == 'wacv_crawler':
                 conference_urls[conf['name']] = conf['site']
 
     all_results = []
@@ -102,7 +128,7 @@ def iccv_crawler():
             all_results.append(paper)
 
     # 전체 최종 저장
-    output_path = os.path.join(base_dir, "iccv_papers_2024.json")
+    output_path = os.path.join(base_dir, "wacv_papers_2025.json")
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, ensure_ascii=False, indent=2)
     
@@ -110,4 +136,4 @@ def iccv_crawler():
     return all_results
 
 if __name__ == "__main__":
-    iccv_crawler()
+    wacv_crawler()

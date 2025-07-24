@@ -25,8 +25,9 @@
             "site": "https://openaccess.thecvf.com/CVPR2025?day=all"
           },
           {
-            "name": "ICCV (International Conference on Computer Vision)",
-            "site": "https://openaccess.thecvf.com/ICCV2023?day=all"
+            "name": "WACV (Winter Conference on Applications of Computer Vision)",
+            "site": "https://openaccess.thecvf.com/WACV2025?day=all",
+            "crawler": "wacv_crawler"
           },
           {
             "name": "ECCV (European Conference on Computer Vision)",
