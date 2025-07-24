@@ -13,18 +13,31 @@ def fetch_paper_titles_and_links(url: str):
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')
-    # TODO: ECCV 사이트에 맞는 선택자로 수정 필요
-    paper_tags = soup.find_all("a", class_=lambda c: c and "align-middle" in c.split())
+    # ECCV 사이트에 맞는 선택자: class="ptitle"인 dt 태그 안의 a 태그 (WACV와 동일)
+    paper_tags = soup.find_all("dt", class_="ptitle")
 
     papers = []
     for tag in paper_tags:
-        title = tag.text.strip()
+        # dt 태그 안의 a 태그 찾기
+        link_tag = tag.find("a")
+        if not link_tag:
+            continue
+            
+        title = link_tag.text.strip()
         # 제목이 비어 있거나 특정 키워드면 건너뜀
         if not title or title.lower() in {"pdf", "bib", "abs"}:
             continue
 
-        href = tag['href']
-        link = href if href.startswith("http") else "https://eccv.ecva.net" + href
+        href = link_tag.get('href')
+        if not href:
+            continue
+            
+        # ECCV 사이트의 올바른 URL 구조로 수정
+        if href.startswith("http"):
+            link = href
+        else:
+            # 상대 경로인 경우 openaccess.thecvf.com 도메인 사용
+            link = "https://openaccess.thecvf.com" + href
 
         papers.append({"title": title, "url": link})
     return papers
@@ -34,14 +47,27 @@ def fetch_abstract_and_authors(paper_url: str):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # TODO: ECCV 사이트에 맞는 선택자로 수정 필요
-    # Abstract
-    abstract_div = soup.find("div", class_="card-body acl-abstract")
-    abstract = abstract_div.find("span").text.strip() if abstract_div and abstract_div.find("span") else "Abstract not found"
+    # ECCV 사이트의 정확한 구조에 맞게 수정 (WACV와 동일)
+    # Authors - id="authors"인 div에서 저자 정보 추출
+    authors = "Authors not found"
+    authors_div = soup.find("div", id="authors")
+    if authors_div:
+        # 저자 정보는 <i> 태그 안에 있음 (WACV와 동일)
+        author_i_tag = authors_div.find("i")
+        if author_i_tag:
+            authors = author_i_tag.get_text(strip=True)
+        else:
+            # <i> 태그가 없으면 전체 텍스트에서 저자 부분만 추출
+            full_text = authors_div.get_text(strip=True)
+            # 세미콜론 이전 부분이 저자명 (WACV와 동일)
+            if ";" in full_text:
+                authors = full_text.split(";")[0].strip()
 
-    # Authors
-    lead_p = soup.find("p", class_="lead")
-    authors = lead_p.get_text(separator=", ").strip() if lead_p else "Authors not found"
+    # Abstract - id="abstract"인 div에서 초록 추출
+    abstract = "Abstract not found"
+    abstract_div = soup.find("div", id="abstract")
+    if abstract_div:
+        abstract = abstract_div.get_text(strip=True)
 
     return abstract, authors
 
@@ -65,7 +91,7 @@ def crawl_all_papers(url: str):
                 'abstract': abstract,
                 'authors': authors,
                 'url': paper['url'],
-                'year': 2024  # 기본값
+                'year': 2024  # ECCV 2024
             }
             
             print(f"✅ 논문 {i}: {paper['title'][:50]}...")
