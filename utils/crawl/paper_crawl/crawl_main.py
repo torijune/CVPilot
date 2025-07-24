@@ -71,6 +71,7 @@ def save_paper_to_csv(paper: Dict, field_name: str, conf_name: str, csv_file: st
         csv_paper = {
             'title': paper.get('title', ''),
             'abstract': paper.get('abstract', ''),
+            'authors': paper.get('authors', ''),
             'conference': conf_name,
             'year': paper.get('year', 2024),
             'field': field_name,
@@ -80,7 +81,7 @@ def save_paper_to_csv(paper: Dict, field_name: str, conf_name: str, csv_file: st
         # CSV 파일에 추가 (append 모드)
         file_exists = os.path.exists(csv_file)
         with open(csv_file, 'a', newline='', encoding='utf-8') as f:
-            fieldnames = ['title', 'abstract', 'conference', 'year', 'field', 'url']
+            fieldnames = ['title', 'abstract', 'authors', 'conference', 'year', 'field', 'url']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             
             # 헤더가 없으면 추가

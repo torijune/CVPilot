@@ -13,18 +13,31 @@ def fetch_paper_titles_and_links(url: str):
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')
-    # TODO: NeurIPS 사이트에 맞는 선택자로 수정 필요
-    paper_tags = soup.find_all("a", class_=lambda c: c and "align-middle" in c.split())
+    # NeurIPS 사이트에 맞는 선택자: li class="conference" 안의 a 태그
+    paper_tags = soup.find_all("li", class_="conference")
 
     papers = []
     for tag in paper_tags:
-        title = tag.text.strip()
+        # li 태그 안의 a 태그 찾기
+        link_tag = tag.find("a", title="paper title")
+        if not link_tag:
+            continue
+            
+        title = link_tag.text.strip()
         # 제목이 비어 있거나 특정 키워드면 건너뜀
         if not title or title.lower() in {"pdf", "bib", "abs"}:
             continue
 
-        href = tag['href']
-        link = href if href.startswith("http") else "https://papers.nips.cc" + href
+        href = link_tag.get('href')
+        if not href:
+            continue
+            
+        # NeurIPS 사이트의 올바른 URL 구조로 수정
+        if href.startswith("http"):
+            link = href
+        else:
+            # 상대 경로인 경우 papers.nips.cc 도메인 사용
+            link = "https://papers.nips.cc" + href
 
         papers.append({"title": title, "url": link})
     return papers
@@ -34,14 +47,30 @@ def fetch_abstract_and_authors(paper_url: str):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # TODO: NeurIPS 사이트에 맞는 선택자로 수정 필요
-    # Abstract
-    abstract_div = soup.find("div", class_="card-body acl-abstract")
-    abstract = abstract_div.find("span").text.strip() if abstract_div and abstract_div.find("span") else "Abstract not found"
+    # NeurIPS 사이트의 정확한 구조에 맞게 수정
+    # Authors - class="container-fluid" 하위의 h4 "Authors" 다음에 오는 내용
+    authors = "Authors not found"
+    authors_h4 = soup.find("h4", string="Authors")
+    if authors_h4:
+        # h4 다음에 오는 p 태그에서 저자 정보 추출
+        authors_p = authors_h4.find_next_sibling("p")
+        if authors_p:
+            # p 태그 안의 i 태그에서 저자명 추출
+            author_i_tag = authors_p.find("i")
+            if author_i_tag:
+                authors = author_i_tag.get_text(strip=True)
+            else:
+                # i 태그가 없으면 p 태그 전체 텍스트 사용
+                authors = authors_p.get_text(strip=True)
 
-    # Authors
-    lead_p = soup.find("p", class_="lead")
-    authors = lead_p.get_text(separator=", ").strip() if lead_p else "Authors not found"
+    # Abstract - class="container-fluid" 하위의 h4 "Abstract" 다음에 오는 내용
+    abstract = "Abstract not found"
+    abstract_h4 = soup.find("h4", string="Abstract")
+    if abstract_h4:
+        # h4 다음에 오는 p 태그들에서 초록 추출
+        abstract_p = abstract_h4.find_next_sibling("p")
+        if abstract_p:
+            abstract = abstract_p.get_text(strip=True)
 
     return abstract, authors
 
