@@ -116,6 +116,16 @@ def main():
     total_saved = 0
     total_skipped = 0
 
+    # 이미 크롤링 완료된 학회들 (제외할 학회 목록)
+    completed_conferences = {
+        "ACL Anthology (ACL, EMNLP, NAACL, COLING)",
+        "EMNLP (Empirical Methods in NLP)",
+        "NAACL (North American Chapter of ACL)",
+        "CVPR (IEEE Conference on Computer Vision and Pattern Recognition)",
+        "WACV (Winter Conference on Applications of Computer Vision)",
+        "NeurIPS"
+    }
+    
     for field in conf_data["fields"]:
         field_name = field["field"]
         print(f"\n=== {field_name} 분야 크롤링 시작 ===")
@@ -124,6 +134,11 @@ def main():
             conf_name = conf["name"]
             conf_url = conf["site"]
             crawler_module = conf.get("crawler")
+            
+            # 이미 완료된 학회는 건너뛰기
+            if conf_name in completed_conferences:
+                print(f"[SKIP] {conf_name} (이미 크롤링 완료)")
+                continue
             
             if not crawler_module:
                 print(f"[SKIP] {conf_name} (crawler 미지정)")

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from app.cv_loader.application.cv_service import CVService
+from app.cv_loader.infra.parser import extract_text_from_file
 
 router = APIRouter()
 
@@ -16,3 +17,14 @@ async def upload_cv(
         "suggestions": result.suggestions,
         "projects": result.projects,
     }
+
+@router.post("/extract-text")
+async def extract_text(
+    file: UploadFile = File(...)
+):
+    """파일에서 텍스트 추출"""
+    try:
+        text = await extract_text_from_file(file)
+        return {"text": text}
+    except Exception as e:
+        return {"error": str(e)}, 400

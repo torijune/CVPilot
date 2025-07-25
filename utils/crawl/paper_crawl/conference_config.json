@@ -29,9 +29,9 @@
             "crawler": "cvpr_crawler"
           },
           {
-            "name": "WACV (Winter Conference on Applications of Computer Vision)",
-            "site": "https://openaccess.thecvf.com/WACV2025?day=all",
-            "crawler": "wacv_crawler"
+          "name": "WACV (Winter Conference on Applications of Computer Vision)",
+          "site": "https://openaccess.thecvf.com/WACV2025?day=all",
+          "crawler": "wacv_crawler"
           },
           {
             "name": "ECCV (European Conference on Computer Vision)",

@@ -1,0 +1,10 @@
+[
+  {
+    "title": "DarkBench: Benchmarking Dark Patterns in Large Language Models",
+    "abstract": "Keywords:Dark Patterns, AI Deception, Large Language ModelsTL;DR:We introduce DarkBench, a benchmark revealing that many large language models employ manipulative dark design patterns. Organizations developing LLMs should actively recognize and mitigate the impact of dark design patterns to promote ethical Al.Abstract:We introduce DarkBench, a comprehensive benchmark for detecting dark design patterns—manipulative techniques that influence user behavior—in interactions with large language models (LLMs). Our benchmark comprises 660 prompts across six categories: brand bias, user retention, sycophancy, anthropomorphism, harmful generation, and sneaking. We evaluate models from five leading companies (OpenAI, Anthropic, Meta, Mistral, Google) and find that some LLMs are explicitly designed to favor their developers' products and exhibit untruthful communication, among other manipulative behaviors. Companies developing LLMs should recognize and mitigate the impact of dark design patterns to promote more ethical Al.Primary Area:alignment, fairness, safety, privacy, and societal considerationsCode Of Ethics:I acknowledge that I and all co-authors of this work have read and commit to adhering to the ICLR Code of Ethics.Submission Guidelines:I certify that this submission complies with the submission instructions as described on https://iclr.cc/Conferences/2025/AuthorGuide.Anonymous Url:I certify that there is no URL (e.g., github page) that could be used to find authors’ identity.No Acknowledgement Section:I certify that there is no acknowledgement section in this submission for double blind review.Submission Number:14257",
+    "authors": "Esben Kran, Hieu Minh Nguyen, Akash Kundu, Sami Jawhar, Jinsuk Park, Mateusz Maria Jurewicz",
+    "url": "https://openreview.net/forum?id=odjMSBSWRt",
+    "year": 2025,
+    "conference": "ICLR"
+  }
+]

@@ -37,7 +37,7 @@ def fetch_paper_titles_and_links(url: str):
             link = href
         else:
             # 상대 경로인 경우 openaccess.thecvf.com 도메인 사용
-            link = "https://openaccess.thecvf.com" + href
+            link = "https://www.ecva.net/" + href
 
         papers.append({"title": title, "url": link})
     return papers
