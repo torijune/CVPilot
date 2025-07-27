@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
-from ..entities.cv_analysis import CVAnalysis
+from app.cv_analysis.domain.entities.cv_analysis import CVAnalysis
 
 class CVRepository(ABC):
     """CV 분석 저장소 인터페이스"""

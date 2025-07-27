@@ -15,7 +15,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon
+  ListItemIcon,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import {
   Psychology as PsychologyIcon,
@@ -27,6 +31,9 @@ import {
   Home
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import CVUploader from '../components/CVUploader';
+import RadarChart from '../components/RadarChart';
+import { analyzeCVFromFile } from '../api/api';
 
 interface CVAnalysisResult {
   id: string;
@@ -40,11 +47,11 @@ interface CVAnalysisResult {
 }
 
 const CVAnalysisPage: React.FC = () => {
-  const [cvText, setCvText] = useState('');
   const [field, setField] = useState('Machine Learning / Deep Learning (ML/DL)');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CVAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const router = useRouter();
 
   const fields = [
@@ -58,9 +65,18 @@ const CVAnalysisPage: React.FC = () => {
     router.push('/');
   };
 
+  const handleFileChange = (file: File | null) => {
+    setSelectedFile(file);
+    setError(null);
+  };
+
+  const handleFieldChange = (event: any) => {
+    setField(event.target.value);
+  };
+
   const handleAnalyze = async () => {
-    if (!cvText.trim()) {
-      setError('CV 내용을 입력해주세요.');
+    if (!selectedFile) {
+      setError('CV 파일을 업로드해주세요.');
       return;
     }
 
@@ -68,22 +84,7 @@ const CVAnalysisPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/cv/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cv_text: cvText,
-          field: field
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('CV 분석 중 오류가 발생했습니다.');
-      }
-
-      const data = await response.json();
+      const data = await analyzeCVFromFile(selectedFile, field);
       setResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
@@ -125,46 +126,40 @@ const CVAnalysisPage: React.FC = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
           {/* 입력 섹션 */}
-          <Grid item xs={12} md={6}>
+          <Box sx={{ flex: 1 }}>
             <Paper elevation={0} sx={{ p: 4, height: 'fit-content' }}>
               <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-                CV 내용 입력
+                CV 파일 업로드
               </Typography>
 
-              <TextField
-                select
-                fullWidth
-                label="분야 선택"
-                value={field}
-                onChange={(e) => setField(e.target.value)}
-                sx={{ mb: 3 }}
-              >
-                {fields.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </TextField>
+              <FormControl fullWidth sx={{ mb: 3 }}>
+                <InputLabel id="field-select-label">분야 선택</InputLabel>
+                <Select
+                  labelId="field-select-label"
+                  id="field-select"
+                  value={field}
+                  label="분야 선택"
+                  onChange={handleFieldChange}
+                >
+                  {fields.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-              <TextField
-                multiline
-                rows={12}
-                fullWidth
-                label="CV 내용을 입력하세요"
-                value={cvText}
-                onChange={(e) => setCvText(e.target.value)}
-                placeholder="예시: Python, TensorFlow, PyTorch 경험. 머신러닝 프로젝트 3개 완료. 논문 2편 발표..."
-                sx={{ mb: 3 }}
-              />
+              {/* 파일 업로드 */}
+              <CVUploader onFileChange={handleFileChange} />
 
               <Button
                 variant="contained"
                 fullWidth
                 size="large"
                 onClick={handleAnalyze}
-                disabled={loading || !cvText.trim()}
+                disabled={loading || !selectedFile}
                 startIcon={loading ? <CircularProgress size={20} /> : <AssessmentIcon />}
                 sx={{ py: 1.5 }}
               >
@@ -177,10 +172,10 @@ const CVAnalysisPage: React.FC = () => {
                 </Alert>
               )}
             </Paper>
-          </Grid>
+          </Box>
 
           {/* 결과 섹션 */}
-          <Grid item xs={12} md={6}>
+          <Box sx={{ flex: 1 }}>
             {result ? (
               <Paper elevation={0} sx={{ p: 4 }}>
                 <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
@@ -256,17 +251,7 @@ const CVAnalysisPage: React.FC = () => {
                         <TrendingUpIcon sx={{ mr: 1, color: 'info.main' }} />
                         능력 평가
                       </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                        {Object.entries(result.radar_chart_data.scores || {}).map(([category, score]) => (
-                          <Chip
-                            key={category}
-                            label={`${category}: ${Math.round(Number(score) * 100)}%`}
-                            color={Number(score) > 0.7 ? 'success' : Number(score) > 0.4 ? 'warning' : 'error'}
-                            variant="outlined"
-                            size="small"
-                          />
-                        ))}
-                      </Box>
+                      <RadarChart data={result.radar_chart_data} />
                     </CardContent>
                   </Card>
                 )}
@@ -278,12 +263,12 @@ const CVAnalysisPage: React.FC = () => {
                   CV 분석 결과
                 </Typography>
                 <Typography variant="body2">
-                  왼쪽에서 CV 내용을 입력하고 분석을 시작하세요.
+                  왼쪽에서 CV 파일을 업로드하고 분석을 시작하세요.
                 </Typography>
               </Paper>
             )}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

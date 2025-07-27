@@ -15,22 +15,68 @@ export async function uploadCVAndInterest(cvFile: File, interests: string[]) {
 // 백엔드 서버 URL 설정
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
-// CV 분석 API 호출
-export async function analyzeCV(cvText: string, interests: string[]) {
-  const formData = new FormData();
-  formData.append("cv_text", cvText);
-  formData.append("interests", interests.join(","));
+// CV 분석 API 호출 (텍스트 입력)
+export async function analyzeCV(cvText: string, field: string = "Machine Learning / Deep Learning (ML/DL)") {
+  const response = await fetch(`${BACKEND_URL}/api/v1/cv/analyze`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      cv_text: cvText,
+      field: field
+    }),
+  });
   
-  const res = await fetch(`${BACKEND_URL}/api/v1/cv-analysis/cv-analysis`, {
+  if (!response.ok) {
+    throw new Error(`CV 분석 실패: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
+// CV 분석 API 호출 (파일 업로드)
+export async function analyzeCVFromFile(file: File, field: string = "Machine Learning / Deep Learning (ML/DL)") {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("field", field);
+  
+  const response = await fetch(`${BACKEND_URL}/api/v1/cv/analyze/upload`, {
     method: "POST",
     body: formData,
   });
   
-  if (!res.ok) {
-    throw new Error(`CV 분석 실패: ${res.status}`);
+  if (!response.ok) {
+    throw new Error(`CV 파일 분석 실패: ${response.status}`);
   }
   
-  return res.json();
+  return response.json();
+}
+
+// CV 분석 결과 조회
+export async function getCVAnalysis(analysisId: string) {
+  const response = await fetch(`${BACKEND_URL}/api/v1/cv/analysis/${analysisId}`, {
+    method: "GET",
+  });
+  
+  if (!response.ok) {
+    throw new Error(`CV 분석 결과 조회 실패: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
+// 레이더 차트 데이터 조회
+export async function getRadarChartData(analysisId: string) {
+  const response = await fetch(`${BACKEND_URL}/api/v1/cv/radar-chart/${analysisId}`, {
+    method: "GET",
+  });
+  
+  if (!response.ok) {
+    throw new Error(`레이더 차트 데이터 조회 실패: ${response.status}`);
+  }
+  
+  return response.json();
 }
 
 // 논문 트렌드 API 호출
@@ -45,7 +91,7 @@ export async function getPaperTrend(interest: string, detailedInterests: string[
     params.append('detailed_interests', detailedInterests.join(','));
   }
   
-  const res = await fetch(`${BACKEND_URL}/api/v1/paper-trend/paper-trend?${params}`, {
+  const res = await fetch(`${BACKEND_URL}/api/v1/trends/paper-trend?${params}`, {
     method: "GET",
   });
   
