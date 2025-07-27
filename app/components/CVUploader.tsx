@@ -70,19 +70,7 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
   };
 
   return (
-    <Box sx={{ mb: 4 }}>
-      <Typography 
-        variant="h6" 
-        sx={{ 
-          mb: 3, 
-          fontWeight: 700, 
-          color: '#FFFFFF',
-          fontSize: '1.25rem'
-        }}
-      >
-        CV 파일 업로드
-      </Typography>
-
+    <Box>
       {!selectedFile ? (
         <Paper
           onDragEnter={handleDrag}
@@ -92,16 +80,16 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
           sx={{
             p: 4,
             textAlign: 'center',
-            backgroundColor: dragActive ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+            backgroundColor: dragActive ? 'primary.50' : 'grey.50',
             border: dragActive 
-              ? '2px dashed #3B82F6' 
-              : '2px dashed rgba(255, 255, 255, 0.2)',
-            borderRadius: 3,
+              ? '2px dashed primary.main' 
+              : '2px dashed grey.300',
+            borderRadius: 2,
             transition: 'all 0.3s ease',
             cursor: 'pointer',
             '&:hover': {
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              border: '2px dashed #3B82F6',
+              backgroundColor: 'primary.50',
+              border: '2px dashed primary.main',
               transform: 'translateY(-2px)'
             }
           }}
@@ -109,8 +97,8 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
         >
           <CloudUploadIcon 
             sx={{ 
-              fontSize: 64, 
-              color: dragActive ? '#3B82F6' : '#9CA3AF',
+              fontSize: 48, 
+              color: dragActive ? 'primary.main' : 'grey.500',
               mb: 2,
               transition: 'all 0.3s ease'
             }} 
@@ -119,7 +107,7 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
             variant="h6" 
             sx={{ 
               mb: 1, 
-              color: '#FFFFFF',
+              color: 'text.primary',
               fontWeight: 600
             }}
           >
@@ -128,7 +116,7 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
           <Typography 
             variant="body2" 
             sx={{ 
-              color: '#9CA3AF',
+              color: 'text.secondary',
               mb: 3
             }}
           >
@@ -140,11 +128,9 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
             component="label"
             startIcon={<UploadFileIcon />}
             sx={{
-              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
-              boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.4)',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%)',
-                boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.5)',
+                background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
                 transform: 'translateY(-1px)'
               }
             }}
@@ -163,9 +149,9 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
         <Paper
           sx={{
             p: 3,
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            border: '2px solid rgba(16, 185, 129, 0.3)',
-            borderRadius: 3,
+            backgroundColor: 'success.50',
+            border: '2px solid success.200',
+            borderRadius: 2,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
@@ -175,7 +161,7 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
             <UploadFileIcon 
               sx={{ 
                 fontSize: 32, 
-                color: '#10B981',
+                color: 'success.main',
                 mr: 2
               }} 
             />
@@ -183,7 +169,7 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
               <Typography 
                 variant="subtitle1" 
                 sx={{ 
-                  color: '#FFFFFF',
+                  color: 'text.primary',
                   fontWeight: 600,
                   mb: 0.5
                 }}
@@ -193,7 +179,7 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
               <Typography 
                 variant="body2" 
                 sx={{ 
-                  color: '#9CA3AF'
+                  color: 'text.secondary'
                 }}
               >
                 {formatFileSize(selectedFile.size)}
@@ -204,10 +190,10 @@ const CVUploader: React.FC<Props> = ({ onFileChange }) => {
           <IconButton
             onClick={handleRemoveFile}
             sx={{
-              backgroundColor: 'rgba(239, 68, 68, 0.1)',
-              color: '#EF4444',
+              backgroundColor: 'error.50',
+              color: 'error.main',
               '&:hover': {
-                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                backgroundColor: 'error.100',
                 transform: 'scale(1.1)'
               }
             }}
