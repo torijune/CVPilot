@@ -25,21 +25,12 @@ export interface MethodComparisonResponse {
   }>;
   comparison_analysis: string;
   differentiation_strategy: string;
+  reviewer_feedback: string;
   recommendations: string[];
   created_at: string;
 }
 
-export interface FieldStatistics {
-  total_papers: number;
-  year_distribution: Record<string, number>;
-  conference_distribution: Record<string, number>;
-}
 
-export interface ResearchTrends {
-  recent_papers_count: number;
-  top_keywords: Record<string, number>;
-  yearly_trend: Record<string, number>;
-}
 
 // 방법론 비교 수행
 export async function compareMethods(request: MethodComparisonRequest): Promise<MethodComparisonResponse> {
@@ -71,26 +62,4 @@ export async function getAvailableFields(): Promise<string[]> {
   return response.json();
 }
 
-// 특정 분야의 통계 정보 조회
-export async function getFieldStatistics(field: string): Promise<FieldStatistics> {
-  const response = await fetch(`${BACKEND_URL}/api/v1/comparison/fields/${encodeURIComponent(field)}/statistics`);
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || '분야 통계 조회 중 오류가 발생했습니다.');
-  }
-
-  return response.json();
-}
-
-// 특정 분야의 연구 트렌드 분석
-export async function getResearchTrends(field: string): Promise<ResearchTrends> {
-  const response = await fetch(`${BACKEND_URL}/api/v1/comparison/fields/${encodeURIComponent(field)}/trends`);
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || '연구 트렌드 분석 중 오류가 발생했습니다.');
-  }
-
-  return response.json();
-} 
+ 

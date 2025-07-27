@@ -44,6 +44,7 @@ async def compare_methods(
             comparison_analysis=result.comparison_analysis,
             differentiation_strategy=result.differentiation_strategy,
             reviewer_feedback=result.reviewer_feedback,
+            recommendations=result.recommendations,
             created_at=result.created_at.isoformat()
         )
         
@@ -68,6 +69,8 @@ async def get_available_fields(
     except Exception as e:
         logger.error(f"분야 목록 조회 실패: {e}")
         raise HTTPException(status_code=500, detail="분야 목록 조회 중 오류가 발생했습니다.")
+
+
 
 @router.get("/analysis/{analysis_id}", response_model=ComparisonResponse)
 async def get_comparison_analysis(

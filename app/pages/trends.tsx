@@ -16,6 +16,7 @@ import {
   Stack,
   useTheme,
   useMediaQuery,
+  Link,
 } from '@mui/material';
 import {
   TrendingUp,
@@ -23,11 +24,15 @@ import {
   Science,
   Computer,
   Search,
-  Cloud,
   Article,
   Timeline,
+  OpenInNew,
+  Home,
 } from '@mui/icons-material';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { analyzeTrends, getAvailableFields, TrendAnalysisResponse } from '../api/trends';
+import { useRouter } from 'next/router';
 
 interface FieldOption {
   value: string;
@@ -45,6 +50,7 @@ const fieldOptions: FieldOption[] = [
 export default function TrendsPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const router = useRouter();
   
   const [selectedField, setSelectedField] = useState<string>('');
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -104,39 +110,99 @@ export default function TrendsPage() {
     }
   };
 
-  const renderWordCloud = (wordcloudData: Record<string, number>) => {
-    const sortedWords = Object.entries(wordcloudData)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 20);
+  const handlePaperClick = (paper: any) => {
+    if (paper.url) {
+      window.open(paper.url, '_blank');
+    }
+  };
 
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
+  const renderMarkdown = (content: string) => {
     return (
-      <Box sx={{ mt: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          인기 키워드
-        </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          {sortedWords.map(([word, count]) => (
-            <Chip
-              key={word}
-              label={`${word} (${count})`}
-              size="small"
-              color="primary"
-              variant="outlined"
-              sx={{
-                fontSize: Math.max(12, Math.min(16, 12 + count / 10)),
-                fontWeight: 'bold',
-              }}
-            />
-          ))}
-        </Box>
+      <Box sx={{ 
+        '& h1, & h2, & h3, & h4, & h5, & h6': {
+          fontWeight: 600,
+          mb: 1,
+          mt: 2,
+        },
+        '& h1': { fontSize: '1.5rem' },
+        '& h2': { fontSize: '1.3rem' },
+        '& h3': { fontSize: '1.1rem' },
+        '& h4, & h5, & h6': { fontSize: '1rem' },
+        '& p': {
+          mb: 1.5,
+          lineHeight: 1.7,
+        },
+        '& ul, & ol': {
+          pl: 2,
+          mb: 1.5,
+        },
+        '& li': {
+          mb: 0.5,
+        },
+        '& strong': {
+          fontWeight: 600,
+        },
+        '& em': {
+          fontStyle: 'italic',
+        },
+        '& code': {
+          backgroundColor: 'grey.100',
+          px: 0.5,
+          py: 0.2,
+          borderRadius: 0.5,
+          fontSize: '0.875rem',
+        },
+        '& pre': {
+          backgroundColor: 'grey.100',
+          p: 1,
+          borderRadius: 1,
+          overflow: 'auto',
+          mb: 1.5,
+        },
+        '& blockquote': {
+          borderLeft: '4px solid',
+          borderColor: 'primary.main',
+          pl: 2,
+          ml: 0,
+          my: 1.5,
+          fontStyle: 'italic',
+        },
+      }}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {content}
+        </ReactMarkdown>
       </Box>
     );
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* 헤더 */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
+      <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
+        {/* 홈 버튼 */}
+        <Button
+          variant="outlined"
+          startIcon={<Home />}
+          onClick={handleGoHome}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            color: 'text.primary',
+            borderColor: 'grey.300',
+            '&:hover': {
+              backgroundColor: 'grey.50',
+              borderColor: 'primary.main',
+            },
+          }}
+        >
+          홈으로
+        </Button>
+        
         <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
           <TrendingUp sx={{ mr: 2, verticalAlign: 'middle' }} />
           논문 트렌드 분석
@@ -146,16 +212,17 @@ export default function TrendsPage() {
         </Typography>
       </Box>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 2fr' }, gap: 4 }}>
-        {/* 입력 패널 */}
-        <Box>
-          <Paper elevation={3} sx={{ p: 3, height: 'fit-content' }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '350px 1fr' }, gap: 4 }}>
+        {/* 왼쪽 패널 - 입력 및 설정 */}
+        <Stack spacing={3}>
+          {/* 입력 패널 */}
+          <Paper elevation={3} sx={{ p: 2.5 }}>
             <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
               분석 설정
             </Typography>
             
             {/* 분야 선택 */}
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2.5 }}>
               <Typography variant="subtitle1" gutterBottom>
                 연구 분야
               </Typography>
@@ -167,7 +234,29 @@ export default function TrendsPage() {
                     startIcon={field.icon}
                     onClick={() => setSelectedField(field.value)}
                     fullWidth
-                    sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                    sx={{ 
+                      justifyContent: 'flex-start', 
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      fontSize: '0.875rem',
+                      py: 1.5,
+                      '&.MuiButton-contained': {
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                        '&:hover': {
+                          backgroundColor: 'primary.dark',
+                        },
+                      },
+                      '&.MuiButton-outlined': {
+                        color: 'text.primary',
+                        borderColor: 'grey.300',
+                        backgroundColor: 'white',
+                        '&:hover': {
+                          backgroundColor: 'grey.50',
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
                   >
                     {field.label}
                   </Button>
@@ -176,11 +265,11 @@ export default function TrendsPage() {
             </Box>
 
             {/* 키워드 입력 */}
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2.5 }}>
               <Typography variant="subtitle1" gutterBottom>
                 관심 키워드
               </Typography>
-              <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
                 <TextField
                   size="small"
                   placeholder="키워드 입력"
@@ -193,6 +282,18 @@ export default function TrendsPage() {
                   variant="contained"
                   onClick={handleAddKeyword}
                   disabled={!newKeyword.trim()}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'white',
+                    backgroundColor: 'primary.main',
+                    '&:hover': {
+                      backgroundColor: 'primary.dark',
+                    },
+                    '&:disabled': {
+                      backgroundColor: 'grey.300',
+                      color: 'white',
+                    },
+                  }}
                 >
                   추가
                 </Button>
@@ -215,12 +316,25 @@ export default function TrendsPage() {
             {/* 분석 버튼 */}
             <Button
               variant="contained"
-              size="large"
+              size="medium"
               fullWidth
               onClick={handleAnalyze}
               disabled={loading || !selectedField || keywords.length === 0}
-              startIcon={loading ? <CircularProgress size={20} /> : <Search />}
-              sx={{ py: 1.5 }}
+              startIcon={loading ? <CircularProgress size={18} /> : <Search />}
+              sx={{ 
+                py: 1.5,
+                fontWeight: 600,
+                fontSize: '0.95rem',
+                color: 'white',
+                backgroundColor: 'primary.main',
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                },
+                '&:disabled': {
+                  backgroundColor: 'grey.300',
+                  color: 'white',
+                },
+              }}
             >
               {loading ? '분석 중...' : '트렌드 분석 시작'}
             </Button>
@@ -231,48 +345,61 @@ export default function TrendsPage() {
               </Alert>
             )}
           </Paper>
-        </Box>
+        </Stack>
 
-        {/* 결과 패널 */}
-        <Box>
+        {/* 오른쪽 패널 - 결과 */}
+        <Stack spacing={2.5}>
           {result ? (
-            <Stack spacing={3}>
+            <>
               {/* 트렌드 요약 */}
-              <Paper elevation={3} sx={{ p: 3 }}>
+              <Paper elevation={3} sx={{ p: 2.5 }}>
                 <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
                   <Timeline sx={{ mr: 1, verticalAlign: 'middle' }} />
                   트렌드 분석 결과
                 </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-line', lineHeight: 1.8 }}>
-                  {result.trend_summary}
-                </Typography>
-              </Paper>
-
-              {/* 워드클라우드 */}
-              <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
-                  <Cloud sx={{ mr: 1, verticalAlign: 'middle' }} />
-                  키워드 분석
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                {renderWordCloud(result.wordcloud_data)}
+                <Divider sx={{ mb: 1.5 }} />
+                {renderMarkdown(result.trend_summary)}
               </Paper>
 
               {/* 상위 논문들 */}
-              <Paper elevation={3} sx={{ p: 3 }}>
+              <Paper elevation={3} sx={{ p: 2.5 }}>
                 <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
                   <Article sx={{ mr: 1, verticalAlign: 'middle' }} />
                   관련 논문 TOP 10
                 </Typography>
-                <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 1.5 }} />
                 <Stack spacing={2}>
                   {result.top_papers.map((paper, index) => (
                     <Card key={paper.id} variant="outlined">
                       <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                          {index + 1}. {paper.title}
-                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                          <Typography 
+                            variant="h6" 
+                            gutterBottom 
+                            sx={{ 
+                              fontWeight: 600,
+                              flex: 1,
+                              cursor: paper.url ? 'pointer' : 'default',
+                              '&:hover': paper.url ? {
+                                color: 'primary.main',
+                                textDecoration: 'underline',
+                              } : {},
+                            }}
+                            onClick={() => handlePaperClick(paper)}
+                          >
+                            {index + 1}. {paper.title}
+                          </Typography>
+                          {paper.url && (
+                            <OpenInNew 
+                              sx={{ 
+                                fontSize: 16, 
+                                color: 'text.secondary',
+                                cursor: 'pointer',
+                                '&:hover': { color: 'primary.main' }
+                              }} 
+                            />
+                          )}
+                        </Box>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           {paper.authors} • {paper.conference} {paper.year}
                         </Typography>
@@ -298,7 +425,7 @@ export default function TrendsPage() {
                   ))}
                 </Stack>
               </Paper>
-            </Stack>
+            </>
           ) : (
             <Paper elevation={3} sx={{ p: 6, textAlign: 'center' }}>
               <Search sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
@@ -310,7 +437,7 @@ export default function TrendsPage() {
               </Typography>
             </Paper>
           )}
-        </Box>
+        </Stack>
       </Box>
     </Container>
   );

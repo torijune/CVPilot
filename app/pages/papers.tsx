@@ -25,6 +25,8 @@ import {
   MenuItem,
   Switch,
   FormControlLabel,
+  Grid,
+  Home,
 } from '@mui/material';
 import {
   Article,
@@ -44,7 +46,8 @@ import {
   Timeline,
   Assessment,
 } from '@mui/icons-material';
-import { 
+import { useRouter } from 'next/router';
+import {
   analyzePaper, 
   getRandomPaper, 
   searchPapers, 
@@ -69,6 +72,7 @@ const fieldOptions: FieldOption[] = [
 export default function PapersPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const router = useRouter();
   
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedField, setSelectedField] = useState<string>('');
@@ -178,6 +182,10 @@ export default function PapersPage() {
     }
   };
 
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
   const renderAnalysisSection = (title: string, content: string, icon: React.ReactNode) => (
     <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMore />}>
@@ -199,7 +207,27 @@ export default function PapersPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* 헤더 */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
+      <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
+        {/* 홈 버튼 */}
+        <Button
+          variant="outlined"
+          startIcon={<Home />}
+          onClick={handleGoHome}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            color: 'text.primary',
+            borderColor: 'grey.300',
+            '&:hover': {
+              backgroundColor: 'grey.50',
+              borderColor: 'primary.main',
+            },
+          }}
+        >
+          홈으로
+        </Button>
+        
         <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
           <Article sx={{ mr: 2, verticalAlign: 'middle' }} />
           논문 분석

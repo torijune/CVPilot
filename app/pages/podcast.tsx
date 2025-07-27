@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import {
   Box,
+  Container,
   Typography,
   Paper,
   TextField,
   Button,
-  Grid,
   Card,
   CardContent,
   Chip,
   CircularProgress,
   Alert,
+  Divider,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
-  IconButton
 } from '@mui/material';
 import {
-  Podcasts as PodcastsIcon,
+  Podcast as PodcastIcon,
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
+  Stop as StopIcon,
   Download as DownloadIcon,
-  Article as ArticleIcon,
-  TrendingUp as TrendingUpIcon
+  Home,
 } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 
 interface PodcastResult {
   id: string;
@@ -41,11 +42,12 @@ interface PodcastResult {
 }
 
 const PodcastPage: React.FC = () => {
+  const [selectedPaper, setSelectedPaper] = useState('');
   const [field, setField] = useState('Machine Learning / Deep Learning (ML/DL)');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<PodcastResult | null>(null);
+  const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const router = useRouter();
 
   const fields = [
     'Natural Language Processing (NLP)',
@@ -53,6 +55,10 @@ const PodcastPage: React.FC = () => {
     'Multimodal',
     'Machine Learning / Deep Learning (ML/DL)'
   ];
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
 
   const handleGeneratePodcast = async () => {
     setLoading(true);
@@ -97,7 +103,6 @@ const PodcastPage: React.FC = () => {
   };
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
     // 실제로는 오디오 재생/일시정지 로직 구현
   };
 
@@ -116,12 +121,32 @@ const PodcastPage: React.FC = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
       <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3 }}>
         {/* 헤더 */}
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
+          {/* 홈 버튼 */}
+          <Button
+            variant="outlined"
+            startIcon={<Home />}
+            onClick={handleGoHome}
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              color: 'text.primary',
+              borderColor: 'grey.300',
+              '&:hover': {
+                backgroundColor: 'grey.50',
+                borderColor: 'primary.main',
+              },
+            }}
+          >
+            홈으로
+          </Button>
+          
           <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
-            데일리 페이퍼 팟캐스트
+            Daily Paper Podcast
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            AI가 분석한 최신 논문들을 음성으로 들을 수 있습니다
+            AI가 논문을 읽어주는 팟캐스트를 생성합니다
           </Typography>
         </Box>
 

@@ -10,6 +10,7 @@ class ComparisonResponse(BaseModel):
     comparison_analysis: str
     differentiation_strategy: str
     reviewer_feedback: str
+    recommendations: Optional[List[str]] = None
     created_at: str
 
 class ComparisonScoreResponse(BaseModel):

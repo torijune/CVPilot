@@ -13,12 +13,13 @@ class ComparisonAnalysis:
     comparison_analysis: str
     differentiation_strategy: str
     reviewer_feedback: str
-    created_at: datetime
+    recommendations: List[str] = None
+    created_at: datetime = None
     
     @classmethod
     def create(cls, user_idea: str, field: str, similar_papers: List[Dict[str, Any]], 
                comparison_analysis: str, differentiation_strategy: str, 
-               reviewer_feedback: str) -> 'ComparisonAnalysis':
+               reviewer_feedback: str, recommendations: List[str] = None) -> 'ComparisonAnalysis':
         """비교 분석 엔티티 생성"""
         return cls(
             id=str(uuid.uuid4()),
@@ -28,6 +29,7 @@ class ComparisonAnalysis:
             comparison_analysis=comparison_analysis,
             differentiation_strategy=differentiation_strategy,
             reviewer_feedback=reviewer_feedback,
+            recommendations=recommendations,
             created_at=datetime.now()
         )
     
@@ -41,5 +43,6 @@ class ComparisonAnalysis:
             'comparison_analysis': self.comparison_analysis,
             'differentiation_strategy': self.differentiation_strategy,
             'reviewer_feedback': self.reviewer_feedback,
-            'created_at': self.created_at.isoformat()
+            'recommendations': self.recommendations,
+            'created_at': self.created_at.isoformat() if self.created_at else None
         } 

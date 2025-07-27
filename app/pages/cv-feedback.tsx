@@ -17,7 +17,7 @@ import {
   ListItemIcon,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
 } from '@mui/material';
 import {
   Feedback as FeedbackIcon,
@@ -26,8 +26,10 @@ import {
   Work as WorkIcon,
   ExpandMore as ExpandMoreIcon,
   CheckCircle as CheckCircleIcon,
-  Star as StarIcon
+  Star as StarIcon,
+  Home,
 } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 
 interface FeedbackResult {
   id: string;
@@ -50,6 +52,11 @@ const CVFeedbackPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<FeedbackResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
 
   const handleGetFeedback = async () => {
     if (!cvAnalysisId.trim()) {
@@ -108,12 +115,32 @@ const CVFeedbackPage: React.FC = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
       <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3 }}>
         {/* 헤더 */}
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
+          {/* 홈 버튼 */}
+          <Button
+            variant="outlined"
+            startIcon={<Home />}
+            onClick={handleGoHome}
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              color: 'text.primary',
+              borderColor: 'grey.300',
+              '&:hover': {
+                backgroundColor: 'grey.50',
+                borderColor: 'primary.main',
+              },
+            }}
+          >
+            홈으로
+          </Button>
+          
           <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
             CV 피드백
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            AI가 제안하는 개선 프로젝트와 커리어 방향을 확인하세요
+            AI가 당신의 CV에 대한 구체적인 피드백을 제공합니다
           </Typography>
         </Box>
 

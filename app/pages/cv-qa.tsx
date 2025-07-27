@@ -23,8 +23,10 @@ import {
   Send as SendIcon,
   Person as PersonIcon,
   SmartToy as SmartToyIcon,
-  Psychology as PsychologyIcon
+  Psychology as PsychologyIcon,
+  Home
 } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 
 interface QAMessage {
   id: string;
@@ -46,6 +48,11 @@ const CVQAPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useState<QASession | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
 
   const handleStartSession = async () => {
     if (!cvAnalysisId.trim()) {
@@ -134,12 +141,32 @@ const CVQAPage: React.FC = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
       <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3 }}>
         {/* 헤더 */}
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
+          {/* 홈 버튼 */}
+          <Button
+            variant="outlined"
+            startIcon={<Home />}
+            onClick={handleGoHome}
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              color: 'text.primary',
+              borderColor: 'grey.300',
+              '&:hover': {
+                backgroundColor: 'grey.50',
+                borderColor: 'primary.main',
+              },
+            }}
+          >
+            홈으로
+          </Button>
+          
           <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
-            CV QA
+            CV Q&A
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            CV 기반 면접 질의응답으로 면접 준비를 도와드립니다
+            CV에 대한 질문을 하고 AI의 답변을 받아보세요
           </Typography>
         </Box>
 

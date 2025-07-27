@@ -35,7 +35,8 @@ class ComparisonResult:
     comparison_analysis: str
     differentiation_strategy: str
     reviewer_feedback: str
-    scores: Dict[ComparisonType, ComparisonScore]
+    recommendations: List[str] = None
+    scores: Dict[ComparisonType, ComparisonScore] = None
     
     def get_overall_score(self) -> float:
         """전체 점수 계산"""
@@ -44,6 +45,10 @@ class ComparisonResult:
         
         total_score = sum(score.score for score in self.scores.values())
         return total_score / len(self.scores)
+    
+    def __post_init__(self):
+        if self.scores is None:
+            self.scores = {}
     
     def to_dict(self) -> Dict[str, Any]:
         return {

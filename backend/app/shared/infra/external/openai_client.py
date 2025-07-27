@@ -66,45 +66,7 @@ class OpenAIClient:
         
         return await self._call_chat_completion(prompt)
     
-    async def compare_methods(self, user_idea: str, papers: List[Dict[str, Any]]) -> Dict[str, str]:
-        """방법론 비교 분석"""
-        papers_text = "\n\n".join([
-            f"논문 {i+1}: {paper.get('title', '')}\n초록: {paper.get('abstract', '')}"
-            for i, paper in enumerate(papers[:10])
-        ])
-        
-        prompt = f"""
-        사용자의 연구 아이디어: {user_idea}
-        
-        관련 기존 논문들:
-        {papers_text}
-        
-        다음 세 가지 관점에서 분석해주세요:
-        
-        1. 방법론 비교 분석:
-        - 사용자의 방법이 기존 논문들과 얼마나 유사한지
-        - 어떤 부분이 참신한지
-        
-        2. 차별화 전략:
-        - 사용자의 방법을 더 차별화할 수 있는 방향
-        - 추가로 고려할 수 있는 요소들
-        
-        3. 리뷰어 관점의 평가:
-        - 강점과 약점
-        - 개선이 필요한 부분
-        
-        각 섹션을 명확히 구분하여 한국어로 작성해주세요.
-        """
-        
-        result = await self._call_chat_completion(prompt)
-        
-        # 결과를 섹션별로 분리
-        sections = result.split('\n\n')
-        return {
-            'comparison_analysis': sections[0] if len(sections) > 0 else result,
-            'differentiation_strategy': sections[1] if len(sections) > 1 else '',
-            'reviewer_feedback': sections[2] if len(sections) > 2 else ''
-        }
+
     
     async def analyze_paper_abstract(self, abstract: str, title: str) -> Dict[str, str]:
         """논문 초록 분석"""
