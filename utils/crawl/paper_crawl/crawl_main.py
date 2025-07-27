@@ -123,7 +123,10 @@ def main():
         "NAACL (North American Chapter of ACL)",
         "CVPR (IEEE Conference on Computer Vision and Pattern Recognition)",
         "WACV (Winter Conference on Applications of Computer Vision)",
-        "NeurIPS"
+        "NeurIPS",
+        "ECCV (European Conference on Computer Vision)",
+        "ICML",
+        # 지금 jmlr, icml, iclr 크롤링 중
     }
     
     for field in conf_data["fields"]:

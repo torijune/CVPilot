@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-논문 임베딩 생성 및 Supabase 업로드 스크립트
-OpenAI text-embedding-3-small 모델을 사용하여 논문 제목과 초록을 임베딩합니다.
-"""
-
 import os
 import pandas as pd
 import numpy as np
@@ -21,7 +15,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-load_dotenv()
+load_dotenv(dotenv_path=".env")
 
 class EmbeddingGenerator:
     def __init__(self):
@@ -63,7 +57,8 @@ class EmbeddingGenerator:
                 async with session.post(
                     f"{self.openai_base_url}/embeddings",
                     headers=headers,
-                    json=data
+                    json=data,
+                    ssl=False  # SSL 검증 비활성화
                 ) as response:
                     if response.status == 200:
                         result = await response.json()
@@ -90,7 +85,8 @@ class EmbeddingGenerator:
     
     async def get_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
         """배치로 여러 텍스트의 임베딩을 생성합니다."""
-        async with aiohttp.ClientSession() as session:
+        connector = aiohttp.TCPConnector(ssl=False)  # SSL 검증 비활성화
+        async with aiohttp.ClientSession(connector=connector) as session:
             tasks = []
             for text in texts:
                 task = self.get_embedding(session, text)
@@ -124,21 +120,12 @@ class EmbeddingGenerator:
                                combined_embedding: List[float]) -> bool:
         """Supabase에 논문 임베딩을 업데이트합니다."""
         try:
-            # vector 타입으로 변환
-            title_emb_str = f"[{','.join(map(str, title_embedding))}]"
-            abstract_emb_str = f"[{','.join(map(str, abstract_embedding))}]"
-            combined_emb_str = f"[{','.join(map(str, combined_embedding))}]"
-            
-            # Supabase 함수 호출
-            result = self.supabase.rpc(
-                'update_paper_embeddings',
-                {
-                    'paper_id': paper_id,
-                    'title_emb': title_emb_str,
-                    'abstract_emb': abstract_emb_str,
-                    'combined_emb': combined_emb_str
-                }
-            ).execute()
+            # 직접 테이블 업데이트
+            result = self.supabase.table("papers").update({
+                'title_embedding': title_embedding,
+                'abstract_embedding': abstract_embedding,
+                'combined_embedding': combined_embedding
+            }).eq('id', paper_id).execute()
             
             return True
             
@@ -195,9 +182,37 @@ class EmbeddingGenerator:
             df = pd.read_csv(csv_path)
             logger.info(f"CSV 파일 로드: {len(df)}개 논문")
         else:
-            # Supabase에서 논문 데이터 가져오기
-            result = self.supabase.table("papers").select("*").execute()
-            df = pd.DataFrame(result.data)
+            # Supabase에서 논문 데이터 가져오기 (페이지네이션 적용)
+            all_papers = []
+            page_size = 100  # 타임아웃 방지를 위해 더 작은 배치로 변경
+            offset = 0
+            
+            while True:
+                try:
+                    result = self.supabase.table("papers").select("*").range(offset, offset + page_size - 1).execute()
+                    papers_batch = result.data
+                    
+                    if not papers_batch:
+                        break
+                        
+                    all_papers.extend(papers_batch)
+                    offset += page_size
+                    logger.info(f"페이지 로드 중... 현재 {len(all_papers)}개 논문 로드됨")
+                    
+                    # 타임아웃 방지를 위한 짧은 대기
+                    await asyncio.sleep(0.1)
+                    
+                except Exception as e:
+                    logger.error(f"페이지 {offset} 로드 실패: {e}")
+                    # 실패한 경우 더 작은 배치로 재시도
+                    if page_size > 10:
+                        page_size = max(10, page_size // 2)
+                        logger.info(f"배치 크기를 {page_size}로 줄여서 재시도")
+                        continue
+                    else:
+                        raise
+            
+            df = pd.DataFrame(all_papers)
             logger.info(f"Supabase에서 로드: {len(df)}개 논문")
         
         # 임베딩이 없는 논문만 필터링
@@ -244,11 +259,60 @@ class EmbeddingGenerator:
         logger.info(f"임베딩 생성 완료: {stats}")
         return stats
     
-    def get_embedding_stats(self) -> Dict:
+    async def get_embedding_stats(self) -> Dict:
         """임베딩 통계를 조회합니다."""
         try:
-            result = self.supabase.rpc('get_embedding_stats').execute()
-            return result.data[0] if result.data else {}
+            # 전체 논문 수 조회
+            total_result = self.supabase.table("papers").select("id", count="exact").execute()
+            total_papers = total_result.count if total_result.count is not None else 0
+            
+            # 임베딩이 있는 논문 수 조회
+            with_embeddings_result = self.supabase.table("papers").select(
+                "id", count="exact"
+            ).not_.is_("combined_embedding", "null").execute()
+            papers_with_embeddings = with_embeddings_result.count if with_embeddings_result.count is not None else 0
+            
+            # 임베딩 커버리지 계산
+            embedding_coverage_percent = (papers_with_embeddings / total_papers * 100) if total_papers > 0 else 0
+            
+            # 임베딩이 있는 컨퍼런스 수 조회 (페이지네이션 적용)
+            all_conferences = set()
+            page_size = 100  # 타임아웃 방지를 위해 더 작은 배치로 변경
+            offset = 0
+            
+            while True:
+                try:
+                    conferences_result = self.supabase.table("papers").select(
+                        "conference"
+                    ).not_.is_("combined_embedding", "null").range(offset, offset + page_size - 1).execute()
+                    
+                    conferences_batch = conferences_result.data
+                    if not conferences_batch:
+                        break
+                        
+                    all_conferences.update(item['conference'] for item in conferences_batch)
+                    offset += page_size
+                    
+                    # 타임아웃 방지를 위한 짧은 대기
+                    await asyncio.sleep(0.1)
+                    
+                except Exception as e:
+                    logger.error(f"컨퍼런스 페이지 {offset} 로드 실패: {e}")
+                    if page_size > 10:
+                        page_size = max(10, page_size // 2)
+                        logger.info(f"컨퍼런스 배치 크기를 {page_size}로 줄여서 재시도")
+                        continue
+                    else:
+                        raise
+            
+            conferences_with_embeddings = len(all_conferences)
+            
+            return {
+                "total_papers": total_papers,
+                "papers_with_embeddings": papers_with_embeddings,
+                "embedding_coverage_percent": round(embedding_coverage_percent, 1),
+                "conferences_with_embeddings": conferences_with_embeddings
+            }
         except Exception as e:
             logger.error(f"통계 조회 실패: {e}")
             return {}
@@ -264,7 +328,7 @@ async def main():
         
         # 현재 통계 확인
         print("현재 임베딩 통계:")
-        stats = generator.get_embedding_stats()
+        stats = await generator.get_embedding_stats()
         for key, value in stats.items():
             print(f"  {key}: {value}")
         print()
@@ -274,6 +338,7 @@ async def main():
         
         if choice == "1":
             limit = None
+            print("전체 논문에 대해 임베딩을 생성합니다. (약 19,817개 논문)")
         elif choice == "2":
             limit = int(input("처리할 논문 수를 입력하세요: "))
         elif choice == "3":
@@ -295,7 +360,7 @@ async def main():
         
         # 최종 통계 확인
         print("\n최종 임베딩 통계:")
-        final_stats = generator.get_embedding_stats()
+        final_stats = await generator.get_embedding_stats()
         for key, value in final_stats.items():
             print(f"  {key}: {value}")
         

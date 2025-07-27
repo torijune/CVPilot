@@ -1,42 +1,63 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os
-from dotenv import load_dotenv
+import logging
 
-# .env 환경변수 로드
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), 'app', '.env'))
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Feature-Sliced Clean Architecture API 라우터 임포트
-from app.cv_analysis.api.cv_analysis import router as cv_analysis_router
-from app.cv_loader.api.cv import router as cv_loader_router
-from app.paper_trend.api.paper_trend import router as paper_trend_router
-from app.profess_analysis.api.profess_analysis import router as profess_analysis_router
-
-app = FastAPI(title="Graduate School Recommend Backend", version="1.0.0")
+# FastAPI 앱 생성
+app = FastAPI(
+    title="FOM2025 Summer Conference Backend",
+    description="AI/ML 연구자를 위한 종합 분석 플랫폼",
+    version="1.0.0"
+)
 
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # 프로덕션에서는 특정 도메인으로 제한
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Feature-Sliced Clean Architecture API 라우터 등록
-app.include_router(cv_analysis_router, prefix="/api/v1/cv-analysis")
-app.include_router(cv_loader_router, prefix="/api/v1/cv-loader")
-app.include_router(paper_trend_router, prefix="/api/v1/paper-trend")
-app.include_router(profess_analysis_router, prefix="/api/v1/profess-analysis")
+# 라우터 등록
+from app.paper_trend.api.routes.trend_routes import router as trend_router
+from app.paper_comparsion.api.routes.comparison_routes import router as comparison_router
+from app.cv_analysis.api.routes.cv_routes import router as cv_router
+
+# 라우터 등록
+app.include_router(trend_router, prefix="/api/v1/trends", tags=["trends"])
+app.include_router(comparison_router, prefix="/api/v1/comparison", tags=["comparison"])
+app.include_router(cv_router, prefix="/api/v1/cv", tags=["cv"])
 
 @app.get("/")
 async def root():
-    return {"message": "Graduate School Recommend Backend API - Feature-Sliced Clean Architecture"}
+    """루트 엔드포인트"""
+    return {
+        "message": "FOM2025 Summer Conference Backend API",
+        "version": "1.0.0",
+        "features": [
+            "Paper Trend Analysis",
+            "Paper Comparison", 
+            "CV Analysis",
+            "CV Feedback",
+            "CV QA",
+            "Daily Paper Podcast"
+        ],
+        "endpoints": {
+            "trends": "/api/v1/trends",
+            "comparison": "/api/v1/comparison",
+            "cv": "/api/v1/cv"
+        }
+    }
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "architecture": "feature-sliced-clean-architecture"}
+    """헬스체크 엔드포인트"""
+    return {"status": "healthy", "service": "fom2025_backend"}
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000) 
