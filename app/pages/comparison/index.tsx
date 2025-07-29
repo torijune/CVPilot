@@ -55,7 +55,7 @@ import {
   getAvailableFields, 
   MethodComparisonResponse,
   MethodComparisonRequest
-} from '../api/comparison';
+} from '../../api/comparison';
 import { useRouter } from 'next/router';
 
 interface FieldOption {

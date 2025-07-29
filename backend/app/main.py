@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import logging
+import os
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -23,14 +25,21 @@ app.add_middleware(
 )
 
 # 라우터 등록
-from .paper_trend.api.routes.trend_routes import router as trend_router
-from .paper_comparsion.api.routes.comparison_routes import router as comparison_router
-from .cv_analysis.api.routes.cv_routes import router as cv_router
+from app.paper_trend.api.routes.trend_routes import router as trend_router
+from app.paper_comparsion.api.routes.comparison_routes import router as comparison_router
+from app.cv_analysis.api.routes.cv_routes import router as cv_router
+from app.daily_paper_podcast.api.routes.podcast_routes import router as daily_paper_podcast_router
+
+# 정적 파일 서빙 설정 (오디오 파일용)
+temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp_audio")
+os.makedirs(temp_dir, exist_ok=True)
+app.mount("/audio", StaticFiles(directory=temp_dir), name="audio")
 
 # 라우터 등록
 app.include_router(trend_router, prefix="/api/v1/trends", tags=["trends"])
 app.include_router(comparison_router, prefix="/api/v1/comparison", tags=["comparison"])
 app.include_router(cv_router, prefix="/api/v1/cv", tags=["cv"])
+app.include_router(daily_paper_podcast_router, prefix="/api/v1/podcast", tags=["podcast"])
 
 @app.get("/")
 async def root():
@@ -49,7 +58,8 @@ async def root():
         "endpoints": {
             "trends": "/api/v1/trends",
             "comparison": "/api/v1/comparison",
-            "cv": "/api/v1/cv"
+            "cv": "/api/v1/cv",
+            "podcast": "/api/v1/podcast"
         }
     }
 

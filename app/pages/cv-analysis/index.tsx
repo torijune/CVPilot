@@ -36,9 +36,9 @@ import {
   ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import CVUploader from '../components/CVUploader';
-import RadarChart from '../components/RadarChart';
-import { analyzeCVFromFile } from '../api/api';
+import CVUploader from '../../components/CVUploader';
+import RadarChart from '../../components/RadarChart';
+import { analyzeCVFromFile } from '../../api/cv-analysis';
 
 interface CVAnalysisResult {
   id: string;

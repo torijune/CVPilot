@@ -26,7 +26,6 @@ import {
   Switch,
   FormControlLabel,
   Grid,
-  Home,
 } from '@mui/material';
 import {
   Article,
@@ -45,6 +44,7 @@ import {
   Science as ScienceIcon,
   Timeline,
   Assessment,
+  Home,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import {
@@ -54,7 +54,7 @@ import {
   Paper as PaperInterface, 
   PaperAnalysisResponse,
   PaperAnalysisRequest 
-} from '../api/papers';
+} from '../../api/papers';
 
 interface FieldOption {
   value: string;

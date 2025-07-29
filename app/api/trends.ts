@@ -38,6 +38,29 @@ export interface PopularKeywords {
   keywords: Record<string, number>;
 }
 
+// 논문 트렌드 API 호출
+export async function getPaperTrend(interest: string, detailedInterests: string[] = [], limit: number = 10) {
+  const params = new URLSearchParams({
+    interest: interest,
+    limit: limit.toString()
+  });
+  
+  // 세부 분야가 있으면 추가
+  if (detailedInterests.length > 0) {
+    params.append('detailed_interests', detailedInterests.join(','));
+  }
+  
+  const res = await fetch(`${BACKEND_URL}/api/v1/trends/paper-trend?${params}`, {
+    method: "GET",
+  });
+  
+  if (!res.ok) {
+    throw new Error(`논문 트렌드 조회 실패: ${res.status}`);
+  }
+  
+  return res.json();
+}
+
 // 트렌드 분석 수행
 export async function analyzeTrends(request: TrendAnalysisRequest): Promise<TrendAnalysisResponse> {
   const response = await fetch(`${BACKEND_URL}/api/v1/trends/analyze`, {

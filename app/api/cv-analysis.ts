@@ -1,4 +1,23 @@
-// 예시: 파일 업로드 및 관심분야 전송
+// CV 분석 API 클라이언트
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
+export interface CVAnalysisRequest {
+  cv_text: string;
+  field: string;
+}
+
+export interface CVAnalysisResponse {
+  id: string;
+  cv_text: string;
+  skills: string[];
+  experiences: any[];
+  strengths: string[];
+  weaknesses: string[];
+  radar_chart_data: any;
+  created_at: string;
+}
+
+// 파일 업로드 및 관심분야 전송
 export async function uploadCVAndInterest(cvFile: File, interests: string[]) {
   const formData = new FormData();
   formData.append("cv", cvFile);
@@ -9,11 +28,6 @@ export async function uploadCVAndInterest(cvFile: File, interests: string[]) {
   });
   return res.json();
 }
-
-// 기타 단계별 API 함수도 여기에 추가
-
-// 백엔드 서버 URL 설정
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 // CV 분석 API 호출 (텍스트 입력)
 export async function analyzeCV(cvText: string, field: string = "Machine Learning / Deep Learning (ML/DL)") {
@@ -79,30 +93,7 @@ export async function getRadarChartData(analysisId: string) {
   return response.json();
 }
 
-// 논문 트렌드 API 호출
-export async function getPaperTrend(interest: string, detailedInterests: string[] = [], limit: number = 10) {
-  const params = new URLSearchParams({
-    interest: interest,
-    limit: limit.toString()
-  });
-  
-  // 세부 분야가 있으면 추가
-  if (detailedInterests.length > 0) {
-    params.append('detailed_interests', detailedInterests.join(','));
-  }
-  
-  const res = await fetch(`${BACKEND_URL}/api/v1/trends/paper-trend?${params}`, {
-    method: "GET",
-  });
-  
-  if (!res.ok) {
-    throw new Error(`논문 트렌드 조회 실패: ${res.status}`);
-  }
-  
-  return res.json();
-}
-
-// 파일에서 텍스트 추출 (CV 파일 처리용)
+// 파일에서 텍스트 추출
 export async function extractTextFromFile(file: File): Promise<string> {
   // 간단한 텍스트 파일 처리 (실제로는 PDF 파싱 라이브러리 사용 필요)
   if (file.type === "text/plain") {
@@ -124,4 +115,4 @@ export async function extractTextFromFile(file: File): Promise<string> {
   
   const data = await res.json();
   return data.text;
-}
+} 

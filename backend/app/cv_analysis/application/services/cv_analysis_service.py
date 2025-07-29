@@ -130,10 +130,6 @@ class CVAnalysisService:
             
             response = await openai_client._call_chat_completion(prompt)
             
-            # JSON 파싱 (더 안정적인 구현)
-            import json
-            import re
-            
             # JSON 부분만 추출
             json_match = re.search(r'\[.*\]', response, re.DOTALL)
             if json_match:

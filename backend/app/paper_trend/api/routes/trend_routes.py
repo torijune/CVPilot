@@ -18,6 +18,38 @@ def get_trend_service() -> TrendAnalysisService:
     repository = TrendRepositoryImpl()
     return TrendAnalysisService(repository)
 
+@router.get("/paper-trend")
+async def get_paper_trend(
+    interest: str = Query(..., description="관심 분야"),
+    detailed_interests: str = Query("", description="세부 분야 (쉼표로 구분)"),
+    limit: int = Query(10, ge=1, le=100, description="반환할 논문 수"),
+    trend_service: TrendAnalysisService = Depends(get_trend_service)
+):
+    """논문 트렌드 조회"""
+    try:
+        # 세부 분야를 리스트로 변환
+        detailed_interests_list = []
+        if detailed_interests:
+            detailed_interests_list = [interest.strip() for interest in detailed_interests.split(",")]
+        
+        # 트렌드 서비스를 통해 논문 조회
+        papers = await trend_service.get_papers_by_interest(
+            interest=interest,
+            detailed_interests=detailed_interests_list,
+            limit=limit
+        )
+        
+        return {
+            "interest": interest,
+            "detailed_interests": detailed_interests_list,
+            "papers": papers,
+            "total": len(papers)
+        }
+        
+    except Exception as e:
+        logger.error(f"논문 트렌드 조회 실패: {e}")
+        raise HTTPException(status_code=500, detail="논문 트렌드 조회 중 오류가 발생했습니다.")
+
 @router.post("/analyze", response_model=TrendAnalysisResponse)
 async def analyze_trends(
     request: TrendAnalysisRequest,

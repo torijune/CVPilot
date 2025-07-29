@@ -31,7 +31,7 @@ import {
 } from '@mui/icons-material';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { analyzeTrends, getAvailableFields, TrendAnalysisResponse } from '../api/trends';
+import { analyzeTrends, getAvailableFields, TrendAnalysisResponse } from '../../api/trends';
 import { useRouter } from 'next/router';
 
 interface FieldOption {

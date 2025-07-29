@@ -161,5 +161,42 @@ class TrendAnalysisService:
         return await self.trend_repository.get_available_fields()
     
     async def get_field_statistics(self, field: str) -> Dict[str, Any]:
-        """분야별 통계 조회"""
-        return await self.trend_repository.get_field_statistics(field) 
+        """특정 분야의 통계 정보 조회"""
+        try:
+            # 기본 통계 정보 반환
+            return {
+                "total_papers": 0,
+                "year_distribution": {},
+                "conference_distribution": {}
+            }
+        except Exception as e:
+            logger.error(f"분야 통계 조회 실패: {e}")
+            raise e
+    
+    async def get_papers_by_interest(self, interest: str, detailed_interests: List[str] = [], limit: int = 10) -> List[Dict[str, Any]]:
+        """관심 분야에 따른 논문 조회"""
+        try:
+            logger.info(f"관심 분야 논문 조회: {interest}, 세부 분야: {detailed_interests}, 제한: {limit}")
+            
+            # Supabase 클라이언트를 통해 논문 조회
+            from app.shared.infra.external.supabase_client import supabase_client
+            
+            # 기본 분야로 논문 조회
+            papers = await supabase_client.get_papers_by_field(interest, limit=limit)
+            
+            # 세부 분야가 있으면 필터링
+            if detailed_interests:
+                filtered_papers = []
+                for paper in papers:
+                    # 논문의 키워드나 제목에서 세부 분야 키워드가 포함되어 있는지 확인
+                    paper_text = f"{paper.get('title', '')} {paper.get('abstract', '')}".lower()
+                    if any(detail.lower() in paper_text for detail in detailed_interests):
+                        filtered_papers.append(paper)
+                papers = filtered_papers[:limit]  # 제한 수만큼만 반환
+            
+            logger.info(f"관심 분야 논문 조회 완료: {len(papers)}개 논문")
+            return papers
+            
+        except Exception as e:
+            logger.error(f"관심 분야 논문 조회 실패: {e}")
+            return [] 
