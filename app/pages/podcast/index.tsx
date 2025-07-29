@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   Box,
   Container,
@@ -20,6 +22,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from '@mui/material';
 import {
   Podcasts as PodcastIcon,
@@ -31,7 +36,8 @@ import {
   Mic as MicIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { generatePodcast, getPodcastAnalysis, getAvailableFields } from '../../api/podcast';
+import { analyzePaper, generateTTS, getPodcastAnalysis, getAvailableFields } from '../../api/podcast';
+import AudioPlayer from '../../components/AudioPlayer';
 
 interface PodcastResult {
   id: string;
@@ -51,6 +57,7 @@ const PodcastPage: React.FC = () => {
   const [selectedPapers, setSelectedPapers] = useState<any[]>([]);
   const [field, setField] = useState('Machine Learning / Deep Learning (ML/DL)');
   const [loading, setLoading] = useState(false);
+  const [ttsLoading, setTtsLoading] = useState(false);
   const [result, setResult] = useState<PodcastResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [availableFields, setAvailableFields] = useState<string[]>([
@@ -59,8 +66,7 @@ const PodcastPage: React.FC = () => {
     'Multimodal',
     'Machine Learning / Deep Learning (ML/DL)'
   ]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+  const [audioDialogOpen, setAudioDialogOpen] = useState(false);
   const router = useRouter();
 
   // 사용 가능한 분야 목록 로드
@@ -83,16 +89,16 @@ const PodcastPage: React.FC = () => {
     router.push('/');
   };
 
-  const handleGeneratePodcast = async () => {
+  const handleAnalyzePaper = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // 실제 API 호출 (papers 없이 field만 전송하면 DB에서 랜덤으로 가져옴)
-      const response = await generatePodcast(field, []);
+      // 논문 분석만 수행
+      const response = await analyzePaper(field, []);
       
       if (response.success) {
-        // 분석 완료까지 대기 (실제로는 폴링 또는 웹소켓 사용)
+        // 분석 완료까지 대기
         setTimeout(async () => {
           try {
             const analysisResult = await getPodcastAnalysis(response.analysis_id);
@@ -100,9 +106,9 @@ const PodcastPage: React.FC = () => {
           } catch (err) {
             setError('분석 결과를 가져오는데 실패했습니다.');
           }
-        }, 5000); // 5초 후 결과 조회 (실제로는 더 정교한 처리 필요)
+        }, 3000); // 3초 후 결과 조회
       } else {
-        setError('팟캐스트 생성에 실패했습니다.');
+        setError('논문 분석에 실패했습니다.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
@@ -111,35 +117,44 @@ const PodcastPage: React.FC = () => {
     }
   };
 
-  const handlePlayPause = () => {
+  const handleGenerateTTS = async () => {
+    if (!result) return;
+    
+    setTtsLoading(true);
+    setError(null);
+
+    try {
+      // TTS 대본 및 오디오 생성
+      const response = await generateTTS(result.id);
+      
+      if (response.success) {
+        // TTS 생성 완료까지 대기
+        setTimeout(async () => {
+          try {
+            const updatedResult = await getPodcastAnalysis(result.id);
+            console.log('TTS 생성 후 결과:', updatedResult);
+            console.log('오디오 파일 경로:', updatedResult.audio_file_path);
+            setResult(updatedResult);
+          } catch (err) {
+            setError('TTS 결과를 가져오는데 실패했습니다.');
+          }
+        }, 5000); // 5초 후 결과 조회
+      } else {
+        setError('TTS 생성에 실패했습니다.');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+    } finally {
+      setTtsLoading(false);
+    }
+  };
+
+  const handlePlayAudio = () => {
     if (!result?.audio_file_path) {
       console.error('오디오 파일 경로가 없습니다.');
       return;
     }
-
-    if (!audioElement) {
-      // 새로운 오디오 엘리먼트 생성
-      const audio = new Audio(result.audio_file_path);
-      audio.addEventListener('ended', () => setIsPlaying(false));
-      audio.addEventListener('error', (e) => {
-        console.error('오디오 재생 오류:', e);
-        setIsPlaying(false);
-      });
-      setAudioElement(audio);
-    }
-
-    if (isPlaying) {
-      // 일시정지
-      audioElement?.pause();
-      setIsPlaying(false);
-    } else {
-      // 재생
-      audioElement?.play().catch((error) => {
-        console.error('오디오 재생 실패:', error);
-        setIsPlaying(false);
-      });
-      setIsPlaying(true);
-    }
+    setAudioDialogOpen(true);
   };
 
   const handleDownload = () => {
@@ -216,7 +231,7 @@ const PodcastPage: React.FC = () => {
           <Button
             variant="contained"
             startIcon={<PodcastIcon />}
-            onClick={handleGeneratePodcast}
+            onClick={handleAnalyzePaper}
             disabled={loading}
             fullWidth
             sx={{ mb: 2 }}
@@ -224,10 +239,10 @@ const PodcastPage: React.FC = () => {
             {loading ? (
               <>
                 <CircularProgress size={20} sx={{ mr: 1 }} />
-                팟캐스트 생성 중...
+                논문 분석 중...
               </>
             ) : (
-              '팟캐스트 생성'
+              '논문 분석'
             )}
           </Button>
         </Box>
@@ -252,7 +267,7 @@ const PodcastPage: React.FC = () => {
             <Typography variant="body2" color="text.secondary" gutterBottom>
               생성 시간: {new Date(result.created_at).toLocaleString()}
             </Typography>
-            {result.duration_seconds && (
+            {result.duration_seconds && result.duration_seconds > 0 && (
               <Typography variant="body2" color="text.secondary">
                 재생 시간: {formatDuration(result.duration_seconds)}
               </Typography>
@@ -260,28 +275,49 @@ const PodcastPage: React.FC = () => {
           </Box>
 
           <Box sx={{ mb: 3 }}>
-            <Button
-              variant="outlined"
-              startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-              onClick={handlePlayPause}
-              sx={{ mr: 2 }}
-            >
-              {isPlaying ? '일시정지' : '재생'}
-            </Button>
-            <Button
-              variant="outlined"
-              startIcon={<DownloadIcon />}
-              onClick={handleDownload}
-              disabled={!result.audio_file_path}
-            >
-              다운로드
-            </Button>
+            {!result.audio_file_path || result.audio_file_path === "" ? (
+              <Button
+                variant="contained"
+                startIcon={<MicIcon />}
+                onClick={handleGenerateTTS}
+                disabled={ttsLoading}
+                sx={{ mr: 2 }}
+              >
+                {ttsLoading ? (
+                  <>
+                    <CircularProgress size={20} sx={{ mr: 1 }} />
+                    TTS 생성 중...
+                  </>
+                ) : (
+                  'TTS 생성'
+                )}
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="outlined"
+                  startIcon={<PlayArrowIcon />}
+                  onClick={handlePlayAudio}
+                  sx={{ mr: 2 }}
+                >
+                  재생
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<DownloadIcon />}
+                  onClick={handleDownload}
+                  disabled={!result.audio_file_path}
+                >
+                  다운로드
+                </Button>
+              </>
+            )}
           </Box>
 
           <Divider sx={{ my: 2 }} />
 
           <Typography variant="h6" gutterBottom>
-            분석된 논문들
+            분석된 논문
           </Typography>
           <List>
             {result.papers.map((paper, index) => (
@@ -304,13 +340,74 @@ const PodcastPage: React.FC = () => {
           </Typography>
           <Card sx={{ mb: 2 }}>
             <CardContent>
-              <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-                {result.analysis_text}
-              </Typography>
+              <Box sx={{ 
+                '& h1, & h2, & h3, & h4, & h5, & h6': {
+                  color: 'primary.main',
+                  fontWeight: 600,
+                  mb: 2,
+                  mt: 3
+                },
+                '& h1': { fontSize: '1.8rem' },
+                '& h2': { fontSize: '1.6rem' },
+                '& h3': { fontSize: '1.4rem' },
+                '& h4': { fontSize: '1.2rem' },
+                '& h5': { fontSize: '1.1rem' },
+                '& h6': { fontSize: '1rem' },
+                '& p': { mb: 2, lineHeight: 1.6 },
+                '& ul, & ol': { mb: 2, pl: 3 },
+                '& li': { mb: 1 },
+                '& strong': { fontWeight: 600 },
+                '& em': { fontStyle: 'italic' },
+                '& code': { 
+                  backgroundColor: 'grey.100', 
+                  padding: '2px 4px', 
+                  borderRadius: 1,
+                  fontFamily: 'monospace'
+                },
+                '& pre': { 
+                  backgroundColor: 'grey.100', 
+                  padding: 2, 
+                  borderRadius: 1,
+                  overflow: 'auto'
+                },
+                '& blockquote': {
+                  borderLeft: '4px solid',
+                  borderColor: 'primary.main',
+                  pl: 2,
+                  ml: 0,
+                  fontStyle: 'italic',
+                  color: 'text.secondary'
+                }
+              }}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {result.analysis_text}
+                </ReactMarkdown>
+              </Box>
             </CardContent>
           </Card>
         </Paper>
       )}
+
+      {/* 오디오 플레이어 다이얼로그 */}
+      <Dialog
+        open={audioDialogOpen}
+        onClose={() => setAudioDialogOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          팟캐스트 재생
+        </DialogTitle>
+        <DialogContent>
+          {result && (
+            <AudioPlayer
+              audioUrl={result.audio_file_path}
+              title={`${result.field} - 팟캐스트`}
+              onClose={() => setAudioDialogOpen(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* 설명 섹션 */}
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>

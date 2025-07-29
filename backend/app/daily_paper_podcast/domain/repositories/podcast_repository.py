@@ -24,3 +24,8 @@ class PodcastRepository(ABC):
     async def delete_analysis(self, analysis_id: str) -> bool:
         """팟캐스트 분석 결과 삭제"""
         pass
+    
+    @abstractmethod
+    async def update_analysis(self, analysis: PodcastAnalysis) -> bool:
+        """팟캐스트 분석 결과 업데이트"""
+        pass

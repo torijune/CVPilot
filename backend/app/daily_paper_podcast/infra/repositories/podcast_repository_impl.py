@@ -97,6 +97,33 @@ class PodcastRepositoryImpl(PodcastRepository):
             logger.error(f"팟캐스트 분석 목록 조회 실패: {e}")
             return []
     
+    async def update_analysis(self, analysis: PodcastAnalysis) -> bool:
+        """팟캐스트 분석 결과 업데이트"""
+        try:
+            # Supabase에 업데이트할 데이터 구성
+            data = {
+                "field": analysis.field,
+                "papers": analysis.papers,  # JSON으로 저장
+                "analysis_text": analysis.analysis_text,
+                "audio_file_path": analysis.audio_file_path,
+                "duration_seconds": analysis.duration_seconds,
+                "created_at": analysis.created_at.isoformat()
+            }
+            
+            # podcast_analyses 테이블에서 업데이트
+            result = self.supabase_client.client.table("podcast_analyses").update(data).eq("id", analysis.id).execute()
+            
+            if result.data:
+                logger.info(f"팟캐스트 분석 결과 업데이트 완료: {analysis.id}")
+                return True
+            else:
+                logger.warning(f"업데이트할 레코드를 찾을 수 없음: {analysis.id}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"팟캐스트 분석 결과 업데이트 실패: {e}")
+            return False
+    
     async def delete_analysis(self, analysis_id: str) -> bool:
         """팟캐스트 분석 결과 삭제"""
         try:

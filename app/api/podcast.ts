@@ -30,7 +30,43 @@ export interface AvailableFieldsResponse {
   fields: string[];
 }
 
-// 팟캐스트 생성
+// 논문 분석만 수행
+export const analyzePaper = async (field: string, papers: any[]) => {
+  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/analyze`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      field: field,
+      papers: papers
+    }),
+  });
+  
+  if (!response.ok) {
+    throw new Error(`논문 분석 실패: ${response.status}`);
+  }
+  
+  return response.json();
+};
+
+// TTS 대본 및 오디오 생성
+export const generateTTS = async (analysisId: string) => {
+  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/generate-tts/${analysisId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  
+  if (!response.ok) {
+    throw new Error(`TTS 생성 실패: ${response.status}`);
+  }
+  
+  return response.json();
+};
+
+// 팟캐스트 생성 (전체 과정)
 export const generatePodcast = async (field: string, papers: any[]) => {
   const response = await fetch(`${BACKEND_URL}/api/v1/podcast/generate`, {
     method: "POST",

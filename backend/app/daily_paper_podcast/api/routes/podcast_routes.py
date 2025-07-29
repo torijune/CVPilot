@@ -67,13 +67,62 @@ async def get_random_paper(
         logger.error(f"랜덤 논문 조회 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/analyze", response_model=PodcastGenerationResponse)
+async def analyze_paper(
+    request: PodcastGenerationRequest,
+    podcast_service: PodcastService = Depends(get_podcast_service)
+):
+    """논문 분석만 수행"""
+    try:
+        logger.info(f"논문 분석 요청: {request.field} 분야")
+        
+        # 논문 분석만 수행 (TTS 생성 제외)
+        analysis_result = await podcast_service.analyze_paper_only(
+            request.field,
+            request.papers if request.papers else None
+        )
+        
+        return PodcastGenerationResponse(
+            success=True,
+            analysis_id=analysis_result.id,
+            message="논문 분석이 완료되었습니다.",
+            estimated_duration=0
+        )
+        
+    except Exception as e:
+        logger.error(f"논문 분석 실패: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/generate-tts/{analysis_id}", response_model=PodcastGenerationResponse)
+async def generate_tts(
+    analysis_id: str,
+    podcast_service: PodcastService = Depends(get_podcast_service)
+):
+    """TTS 대본 및 오디오 생성"""
+    try:
+        logger.info(f"TTS 생성 요청: {analysis_id}")
+        
+        # 기존 분석 결과를 바탕으로 TTS 생성
+        podcast_analysis = await podcast_service.generate_tts_from_analysis(analysis_id)
+        
+        return PodcastGenerationResponse(
+            success=True,
+            analysis_id=podcast_analysis.id,
+            message="TTS 생성이 완료되었습니다.",
+            estimated_duration=podcast_analysis.duration_seconds
+        )
+        
+    except Exception as e:
+        logger.error(f"TTS 생성 실패: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/generate", response_model=PodcastGenerationResponse)
 async def generate_podcast(
     request: PodcastGenerationRequest,
     background_tasks: BackgroundTasks,
     podcast_service: PodcastService = Depends(get_podcast_service)
 ):
-    """팟캐스트 생성"""
+    """팟캐스트 생성 (전체 과정)"""
     try:
         logger.info(f"팟캐스트 생성 요청: {request.field} 분야")
         

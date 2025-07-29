@@ -144,3 +144,4 @@ yarn-debug.log*
 yarn-error.log*
 
 *.ipynb
+*.claude
