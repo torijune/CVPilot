@@ -29,6 +29,7 @@ from app.paper_trend.api.routes.trend_routes import router as trend_router
 from app.paper_comparsion.api.routes.comparison_routes import router as comparison_router
 from app.cv_analysis.api.routes.cv_routes import router as cv_router
 from app.daily_paper_podcast.api.routes.podcast_routes import router as daily_paper_podcast_router
+from app.cv_QA.api.routes.cv_qa_routes import router as cv_qa_router
 
 # 정적 파일 서빙 설정 (오디오 파일용)
 temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp_audio")
@@ -40,6 +41,7 @@ app.include_router(trend_router, prefix="/api/v1/trends", tags=["trends"])
 app.include_router(comparison_router, prefix="/api/v1/comparison", tags=["comparison"])
 app.include_router(cv_router, prefix="/api/v1/cv", tags=["cv"])
 app.include_router(daily_paper_podcast_router, prefix="/api/v1/podcast", tags=["podcast"])
+app.include_router(cv_qa_router, prefix="/api/v1/cv-qa", tags=["cv_qa"])
 
 @app.get("/")
 async def root():

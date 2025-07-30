@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   Box,
   Typography,
@@ -8,125 +10,177 @@ import {
   Grid,
   Card,
   CardContent,
-  Chip,
+  CardActionArea,
   CircularProgress,
   Alert,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Divider,
-  Avatar
+  Avatar,
+  Container,
+  Stepper,
+  Step,
+  StepLabel
 } from '@mui/material';
 import {
   QuestionAnswer as QuestionAnswerIcon,
   Send as SendIcon,
   Person as PersonIcon,
   SmartToy as SmartToyIcon,
-  Psychology as PsychologyIcon,
-  Home
+  Home,
+  Upload as UploadIcon,
+  Description as DescriptionIcon,
+  Refresh as RefreshIcon,
+  PersonSearch as PersonSearchIcon,
+  SelfImprovement as SelfImprovementIcon,
+  Feedback as FeedbackIcon
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import {
+  uploadCV,
+  createQASession,
+  sendMessage,
+  getNewInterviewQuestions,
+  askSelectedQuestion,
+  QAMessage,
+  QASessionResponse,
+  CVUploadResponse,
+  QAMessageResponse
+} from '../../api/cv-qa';
 
-interface QAMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
-}
-
-interface QASession {
-  id: string;
-  cv_analysis_id: string;
-  messages: QAMessage[];
-  created_at: string;
-}
+const steps = ['CV 업로드', '모드 선택', 'QA 세션'];
 
 const CVQAPage: React.FC = () => {
-  const [cvAnalysisId, setCvAnalysisId] = useState('');
+  // 스텝 관리
+  const [activeStep, setActiveStep] = useState(0);
+  
+  // CV 업로드 관련
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [analysisId, setAnalysisId] = useState('');
+  const [uploadLoading, setUploadLoading] = useState(false);
+  
+  // 모드 선택
+  const [selectedMode, setSelectedMode] = useState<'interview' | 'practice' | null>(null);
+  
+  // QA 세션 관련
+  const [sessionId, setSessionId] = useState('');
+  const [messages, setMessages] = useState<QAMessage[]>([]);
   const [userMessage, setUserMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState<QASession | null>(null);
+  const [messageLoading, setMessageLoading] = useState(false);
+  
+  // Interview 모드 전용
+  const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
+  const [showQuestionSelector, setShowQuestionSelector] = useState(false);
+  const [generatingQuestions, setGeneratingQuestions] = useState(false);
+  
+  // 공통 상태
   const [error, setError] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // 메시지가 추가될 때마다 스크롤
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleGoHome = () => {
     router.push('/');
   };
 
-  const handleStartSession = async () => {
-    if (!cvAnalysisId.trim()) {
-      setError('CV 분석 ID를 입력해주세요.');
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setCvFile(file);
+      setError(null);
+    }
+  };
+
+  const handleUploadCV = async () => {
+    if (!cvFile) {
+      setError('CV 파일을 선택해주세요.');
       return;
     }
 
-    setLoading(true);
+    setUploadLoading(true);
     setError(null);
 
     try {
-      // 실제로는 QA Session API를 호출
-      // 현재는 모의 데이터 사용
-      const mockSession: QASession = {
-        id: 'qa-session-1',
-        cv_analysis_id: cvAnalysisId,
-        messages: [
-          {
-            id: 'msg-1',
-            role: 'assistant',
-            content: '안녕하세요! CV 기반 면접 질의응답을 도와드리겠습니다. 어떤 질문이든 편하게 해주세요.',
-            timestamp: new Date().toISOString()
-          }
-        ],
-        created_at: new Date().toISOString()
-      };
-
-      setSession(mockSession);
+      const result = await uploadCV(cvFile);
+      setAnalysisId(result.analysis_id);
+      setActiveStep(1); // 모드 선택 단계로 이동
     } catch (err) {
-      setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+      setError(err instanceof Error ? err.message : 'CV 업로드 중 오류가 발생했습니다.');
     } finally {
-      setLoading(false);
+      setUploadLoading(false);
+    }
+  };
+
+  const handleModeSelect = async (mode: 'interview' | 'practice') => {
+    setSelectedMode(mode);
+    setError(null);
+
+    try {
+      const sessionResponse = await createQASession({
+        analysis_id: analysisId,
+        mode: mode
+      });
+      
+      setSessionId(sessionResponse.session_id);
+      
+      // 환영 메시지 추가
+      const welcomeMessage: QAMessage = {
+        message_id: 'welcome',
+        role: 'assistant',
+        content: sessionResponse.message,
+        timestamp: new Date().toISOString()
+      };
+      setMessages([welcomeMessage]);
+
+      if (mode === 'interview' && sessionResponse.interview_questions) {
+        setInterviewQuestions(sessionResponse.interview_questions);
+        setShowQuestionSelector(true);
+      }
+
+      setActiveStep(2); // QA 세션 단계로 이동
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'QA 세션 생성 중 오류가 발생했습니다.');
     }
   };
 
   const handleSendMessage = async () => {
-    if (!userMessage.trim() || !session) return;
+    if (!userMessage.trim() || !sessionId) return;
 
     const newUserMessage: QAMessage = {
-      id: `msg-${Date.now()}`,
+      message_id: `msg-${Date.now()}`,
       role: 'user',
       content: userMessage,
       timestamp: new Date().toISOString()
     };
 
     // 사용자 메시지 추가
-    setSession(prev => prev ? {
-      ...prev,
-      messages: [...prev.messages, newUserMessage]
-    } : null);
-
+    setMessages(prev => [...prev, newUserMessage]);
+    const currentMessage = userMessage;
     setUserMessage('');
-    setLoading(true);
+    setMessageLoading(true);
 
     try {
-      // 실제로는 AI 응답 API를 호출
-      // 현재는 모의 응답 사용
-      setTimeout(() => {
-        const aiResponse: QAMessage = {
-          id: `msg-${Date.now() + 1}`,
-          role: 'assistant',
-          content: `좋은 질문이네요! CV를 보니 ${userMessage}에 대한 경험이 있으시군요. 구체적으로 어떤 부분에 대해 더 알고 싶으신가요?`,
-          timestamp: new Date().toISOString()
-        };
+      const response = await sendMessage(sessionId, { message: currentMessage });
+      
+      const aiMessage: QAMessage = {
+        message_id: response.message_id,
+        role: 'assistant',
+        content: response.content,
+        timestamp: response.timestamp || new Date().toISOString(),
+        feedback: response.feedback,
+        follow_up_question: response.follow_up_question
+      };
 
-        setSession(prev => prev ? {
-          ...prev,
-          messages: [...prev.messages, aiResponse]
-        } : null);
-        setLoading(false);
-      }, 1000);
+      setMessages(prev => [...prev, aiMessage]);
     } catch (err) {
       setError(err instanceof Error ? err.message : '메시지 전송 중 오류가 발생했습니다.');
-      setLoading(false);
+    } finally {
+      setMessageLoading(false);
     }
   };
 
@@ -137,237 +191,521 @@ const CVQAPage: React.FC = () => {
     }
   };
 
+  const handleQuestionSelect = async (question: string) => {
+    if (!sessionId) return;
+
+    setShowQuestionSelector(false);
+    setMessageLoading(true);
+
+    try {
+      // 백엔드에 질문 전송하여 AI가 사용자에게 물어보도록 함
+      const response = await askSelectedQuestion(sessionId, question);
+      
+      // AI가 질문하는 메시지 추가
+      const aiQuestionMessage: QAMessage = {
+        message_id: response.message_id,
+        role: 'assistant',
+        content: response.content,
+        timestamp: response.timestamp || new Date().toISOString()
+      };
+
+      setMessages(prev => [...prev, aiQuestionMessage]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '질문 전송 중 오류가 발생했습니다.');
+    } finally {
+      setMessageLoading(false);
+    }
+  };
+
+  const handleGetNewQuestions = async () => {
+    if (!sessionId) return;
+
+    setGeneratingQuestions(true);
+    setError(null);
+
+    try {
+      const response = await getNewInterviewQuestions(sessionId);
+      setInterviewQuestions(response.questions);
+      setShowQuestionSelector(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '새로운 질문 생성 중 오류가 발생했습니다.');
+    } finally {
+      setGeneratingQuestions(false);
+    }
+  };
+
+  const handleRestart = () => {
+    setActiveStep(0);
+    setCvFile(null);
+    setAnalysisId('');
+    setSelectedMode(null);
+    setSessionId('');
+    setMessages([]);
+    setUserMessage('');
+    setInterviewQuestions([]);
+    setShowQuestionSelector(false);
+    setError(null);
+  };
+
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
-      <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3 }}>
-        {/* 헤더 */}
-        <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
-          {/* 홈 버튼 */}
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <QuestionAnswerIcon sx={{ mr: 2, fontSize: 40, color: 'primary.main' }} />
+        <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }}>
+          CV 면접 QA
+        </Typography>
+        <Button
+          variant="outlined"
+          startIcon={<Home />}
+          onClick={handleGoHome}
+        >
+          홈으로
+        </Button>
+      </Box>
+
+      {/* 진행 단계 */}
+      <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+        <Stepper activeStep={activeStep} orientation="horizontal">
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Paper>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      {/* 단계별 컨텐츠 */}
+      {activeStep === 0 && (
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            1. CV 파일을 업로드해주세요
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            PDF, DOCX, TXT 파일을 지원합니다.
+          </Typography>
+
+          <Box sx={{ mb: 3 }}>
+            <input
+              accept=".pdf,.docx,.txt"
+              style={{ display: 'none' }}
+              id="cv-file-input"
+              type="file"
+              onChange={handleFileUpload}
+            />
+            <label htmlFor="cv-file-input">
+              <Button
+                variant="outlined"
+                component="span"
+                startIcon={<DescriptionIcon />}
+                size="large"
+                sx={{ mr: 2 }}
+              >
+                파일 선택
+              </Button>
+            </label>
+
+            {cvFile && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                선택된 파일: {cvFile.name}
+              </Typography>
+            )}
+          </Box>
+
           <Button
-            variant="outlined"
-            startIcon={<Home />}
-            onClick={handleGoHome}
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              color: 'text.primary',
-              borderColor: 'grey.300',
-              '&:hover': {
-                backgroundColor: 'grey.50',
-                borderColor: 'primary.main',
-              },
-            }}
+            variant="contained"
+            size="large"
+            onClick={handleUploadCV}
+            disabled={uploadLoading || !cvFile}
+            startIcon={uploadLoading ? <CircularProgress size={20} /> : <UploadIcon />}
           >
-            홈으로
+            {uploadLoading ? '업로드 중...' : 'CV 업로드 및 분석'}
           </Button>
-          
-          <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
-            CV Q&A
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            CV에 대한 질문을 하고 AI의 답변을 받아보세요
-          </Typography>
-        </Box>
+        </Paper>
+      )}
 
-        {!session ? (
-          // 세션 시작 화면
-          <Grid container spacing={4} justifyContent="center">
+      {activeStep === 1 && (
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            2. 원하는 모드를 선택해주세요
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+            두 가지 모드 중 하나를 선택하여 면접 연습을 시작하세요.
+          </Typography>
+
+          <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Paper elevation={0} sx={{ p: 4, textAlign: 'center' }}>
-                <QuestionAnswerIcon sx={{ fontSize: 64, mb: 2, color: 'primary.main' }} />
-                <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-                  QA 세션 시작
-                </Typography>
-
-                <TextField
-                  fullWidth
-                  label="CV 분석 ID"
-                  value={cvAnalysisId}
-                  onChange={(e) => setCvAnalysisId(e.target.value)}
-                  placeholder="CV 분석에서 받은 ID를 입력하세요"
-                  sx={{ mb: 3 }}
-                />
-
-                <Button
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  onClick={handleStartSession}
-                  disabled={loading || !cvAnalysisId.trim()}
-                  startIcon={loading ? <CircularProgress size={20} /> : <QuestionAnswerIcon />}
-                  sx={{ py: 1.5 }}
+              <Card sx={{ height: '100%' }}>
+                <CardActionArea 
+                  onClick={() => handleModeSelect('interview')}
+                  sx={{ height: '100%', p: 3 }}
                 >
-                  {loading ? '세션 시작 중...' : 'QA 세션 시작'}
-                </Button>
+                  <CardContent sx={{ textAlign: 'center' }}>
+                    <PersonSearchIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                    <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+                      면접관 모드
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      AI가 면접관이 되어 CV를 바탕으로 질문을 던집니다.
+                    </Typography>
+                    <Box component="ul" sx={{ textAlign: 'left', pl: 2 }}>
+                      <li>CV 기반 맞춤형 질문 제공</li>
+                      <li>답변에 대한 피드백</li>
+                      <li>꼬리 질문으로 심화 탐구</li>
+                      <li>실제 면접과 유사한 경험</li>
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
 
-                {error && (
-                  <Alert severity="error" sx={{ mt: 2 }}>
-                    {error}
-                  </Alert>
-                )}
-              </Paper>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%' }}>
+                <CardActionArea 
+                  onClick={() => handleModeSelect('practice')}
+                  sx={{ height: '100%', p: 3 }}
+                >
+                  <CardContent sx={{ textAlign: 'center' }}>
+                    <SelfImprovementIcon sx={{ fontSize: 60, color: 'secondary.main', mb: 2 }} />
+                    <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+                      연습 모드
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      예상 질문을 미리 연습하고 모범 답변을 확인하세요.
+                    </Typography>
+                    <Box component="ul" sx={{ textAlign: 'left', pl: 2 }}>
+                      <li>자유로운 질문 입력</li>
+                      <li>CV 기반 모범 답변 예시</li>
+                      <li>답변 전략과 팁 제공</li>
+                      <li>면접 준비를 위한 조언</li>
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
             </Grid>
           </Grid>
-        ) : (
-          // 채팅 화면
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={8}>
-              <Paper elevation={0} sx={{ height: '70vh', display: 'flex', flexDirection: 'column' }}>
-                {/* 채팅 헤더 */}
-                <Box sx={{ 
-                  p: 3, 
-                  borderBottom: '1px solid',
-                  borderColor: 'grey.200',
-                  bgcolor: 'primary.main',
-                  color: 'white'
-                }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    CV 기반 면접 QA
-                  </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                    세션 ID: {session.id}
-                  </Typography>
-                </Box>
+        </Paper>
+      )}
 
-                {/* 메시지 영역 */}
-                <Box sx={{ 
-                  flex: 1, 
-                  overflow: 'auto', 
-                  p: 3,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 2
-                }}>
-                  {session.messages.map((message) => (
-                    <Box
-                      key={message.id}
+      {activeStep === 2 && (
+        <Box>
+          {/* 사용 방법 안내 - 대화창 위에 배치 */}
+          <Paper elevation={2} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
+            <Typography variant="h6" gutterBottom>
+              사용 방법
+            </Typography>
+            <Box component="ol" sx={{ pl: 2, m: 0 }}>
+              <li>CV 파일을 업로드하여 분석을 시작합니다.</li>
+              <li>원하는 모드를 선택합니다:
+                <ul>
+                  <li><strong>면접관 모드</strong>: AI가 면접관이 되어 질문하고 피드백을 제공</li>
+                  <li><strong>연습 모드</strong>: 예상 질문을 입력하여 모범 답변과 조언을 받음</li>
+                </ul>
+              </li>
+              <li>실시간 채팅으로 면접 연습을 진행합니다.</li>
+              <li>피드백을 통해 답변을 개선해나갑니다.</li>
+            </Box>
+          </Paper>
+
+          {/* 면접 질문 선택 UI (Interview 모드) */}
+          {selectedMode === 'interview' && showQuestionSelector && interviewQuestions.length > 0 && (
+            <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                면접 질문 선택
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                CV를 분석해서 생성된 맞춤형 질문입니다. 선택하거나 직접 질문을 입력하세요.
+              </Typography>
+              <Grid container spacing={2}>
+                {interviewQuestions.map((question, index) => (
+                  <Grid item xs={12} key={index}>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      onClick={() => handleQuestionSelect(question)}
                       sx={{
-                        display: 'flex',
-                        justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
-                        mb: 2
+                        justifyContent: 'flex-start',
+                        textAlign: 'left',
+                        py: 2,
+                        px: 3,
+                        '&:hover': {
+                          bgcolor: 'primary.50'
+                        }
                       }}
                     >
-                      <Box sx={{
-                        maxWidth: '70%',
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: 1
+                      <Typography variant="body2">
+                        {question}
+                      </Typography>
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+              <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center' }}>
+                <Button
+                  variant="text"
+                  onClick={() => setShowQuestionSelector(false)}
+                >
+                  직접 질문 입력
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<RefreshIcon />}
+                  onClick={handleGetNewQuestions}
+                  disabled={generatingQuestions}
+                >
+                  {generatingQuestions ? '생성 중...' : '새로운 질문'}
+                </Button>
+              </Box>
+            </Paper>
+          )}
+
+          {/* 채팅 영역 - 전체 화면 높이로 설정 */}
+          <Paper elevation={3} sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            {/* 헤더 */}
+            <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  {selectedMode === 'interview' ? (
+                    <PersonSearchIcon sx={{ mr: 1, color: 'primary.main' }} />
+                  ) : (
+                    <SelfImprovementIcon sx={{ mr: 1, color: 'secondary.main' }} />
+                  )}
+                  <Typography variant="h6">
+                    {selectedMode === 'interview' ? '면접관 모드' : '연습 모드'}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  {selectedMode === 'interview' && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<RefreshIcon />}
+                      onClick={() => setShowQuestionSelector(true)}
+                    >
+                      질문 선택
+                    </Button>
+                  )}
+                  <Button
+                    size="small"
+                    variant="text"
+                    onClick={handleRestart}
+                  >
+                    다시 시작
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+
+            {/* 메시지 영역 */}
+            <Box sx={{ 
+              flex: 1, 
+              overflow: 'auto', 
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2
+            }}>
+              {messages.map((message) => (
+                <Box
+                  key={message.message_id}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
+                    mb: 1
+                  }}
+                >
+                  <Box sx={{
+                    maxWidth: '80%',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 1
+                  }}>
+                    {message.role === 'assistant' && (
+                      <Avatar sx={{ 
+                        bgcolor: selectedMode === 'interview' ? 'primary.main' : 'secondary.main', 
+                        width: 32, 
+                        height: 32 
                       }}>
-                        {message.role === 'assistant' && (
-                          <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
-                            <SmartToyIcon />
-                          </Avatar>
+                        <SmartToyIcon fontSize="small" />
+                      </Avatar>
+                    )}
+                    
+                    <Box>
+                      <Paper
+                        elevation={1}
+                        sx={{
+                          p: 2,
+                          bgcolor: message.role === 'user' ? 'primary.main' : 'white',
+                          color: message.role === 'user' ? 'white' : 'text.primary',
+                          borderRadius: 2,
+                          mb: 1
+                        }}
+                      >
+                        {message.role === 'user' ? (
+                          <Typography variant="body1">
+                            {message.content}
+                          </Typography>
+                        ) : (
+                          <Box sx={{ 
+                            '& h1, & h2, & h3, & h4, & h5, & h6': { 
+                              color: 'text.primary',
+                              fontWeight: 600,
+                              mb: 1,
+                              mt: 2
+                            },
+                            '& p': { 
+                              color: 'text.primary',
+                              mb: 1
+                            },
+                            '& ul, & ol': { 
+                              pl: 2,
+                              mb: 1
+                            },
+                            '& li': { 
+                              color: 'text.primary',
+                              mb: 0.5
+                            },
+                            '& strong': { 
+                              fontWeight: 600
+                            },
+                            '& em': { 
+                              fontStyle: 'italic'
+                            },
+                            '& blockquote': { 
+                              borderLeft: '4px solid',
+                              borderColor: 'primary.main',
+                              pl: 2,
+                              ml: 0,
+                              my: 1
+                            },
+                            '& code': { 
+                              bgcolor: 'grey.100',
+                              px: 0.5,
+                              py: 0.25,
+                              borderRadius: 0.5,
+                              fontFamily: 'monospace'
+                            }
+                          }}>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {message.content}
+                            </ReactMarkdown>
+                          </Box>
                         )}
-                        
+                      </Paper>
+
+                      {/* Interview 모드 피드백 */}
+                      {message.feedback && (
                         <Paper
                           elevation={1}
                           sx={{
                             p: 2,
-                            bgcolor: message.role === 'user' ? 'primary.main' : 'grey.100',
-                            color: message.role === 'user' ? 'white' : 'text.primary',
+                            bgcolor: 'info.50',
                             borderRadius: 2,
-                            wordBreak: 'break-word'
+                            mb: 1
                           }}
                         >
-                          <Typography variant="body1">
-                            {message.content}
-                          </Typography>
-                          <Typography variant="caption" sx={{ 
-                            opacity: 0.7,
-                            display: 'block',
-                            mt: 1
-                          }}>
-                            {new Date(message.timestamp).toLocaleTimeString()}
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <FeedbackIcon sx={{ mr: 1, color: 'info.main', fontSize: 'small' }} />
+                            <Typography variant="subtitle2" color="info.main">
+                              피드백
+                            </Typography>
+                          </Box>
+                          <Typography variant="body2">
+                            {message.feedback}
                           </Typography>
                         </Paper>
+                      )}
 
-                        {message.role === 'user' && (
-                          <Avatar sx={{ bgcolor: 'secondary.main', width: 32, height: 32 }}>
-                            <PersonIcon />
-                          </Avatar>
-                        )}
-                      </Box>
-                    </Box>
-                  ))}
-
-                  {loading && (
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                        <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
-                          <SmartToyIcon />
-                        </Avatar>
-                        <Paper elevation={1} sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 2 }}>
-                          <CircularProgress size={20} />
+                      {/* Interview 모드 꼬리 질문 */}
+                      {message.follow_up_question && (
+                        <Paper
+                          elevation={1}
+                          sx={{
+                            p: 2,
+                            bgcolor: 'warning.50',
+                            borderRadius: 2
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                            💡 {message.follow_up_question}
+                          </Typography>
                         </Paper>
-                      </Box>
+                      )}
                     </Box>
-                  )}
-                </Box>
 
-                {/* 메시지 입력 */}
-                <Box sx={{ 
-                  p: 3, 
-                  borderTop: '1px solid',
-                  borderColor: 'grey.200'
-                }}>
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField
-                      fullWidth
-                      multiline
-                      rows={2}
-                      placeholder="질문을 입력하세요..."
-                      value={userMessage}
-                      onChange={(e) => setUserMessage(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      disabled={loading}
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={handleSendMessage}
-                      disabled={loading || !userMessage.trim()}
-                      sx={{ minWidth: 56 }}
-                    >
-                      <SendIcon />
-                    </Button>
+                    {message.role === 'user' && (
+                      <Avatar sx={{ bgcolor: 'grey.400', width: 32, height: 32 }}>
+                        <PersonIcon fontSize="small" />
+                      </Avatar>
+                    )}
                   </Box>
                 </Box>
-              </Paper>
-            </Grid>
+              ))}
 
-            {/* 사이드바 */}
-            <Grid item xs={12} md={4}>
-              <Paper elevation={0} sx={{ p: 3, height: 'fit-content' }}>
-                <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                  면접 팁
-                </Typography>
-                
-                <List>
-                  {[
-                    'CV에 있는 프로젝트에 대해 구체적으로 설명할 수 있도록 준비하세요',
-                    '기술 스킬에 대한 깊이 있는 이해를 보여주세요',
-                    '연구 경험이나 논문에 대해 자세히 설명할 수 있어야 합니다',
-                    '약점에 대해서는 개선 계획을 함께 제시하세요',
-                    '최신 기술 트렌드에 대한 관심을 보여주세요'
-                  ].map((tip, index) => (
-                    <ListItem key={index} sx={{ py: 1 }}>
-                      <ListItemIcon sx={{ minWidth: 32 }}>
-                        <PsychologyIcon color="primary" fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText 
-                        primary={tip}
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
-            </Grid>
-          </Grid>
-        )}
-      </Box>
-    </Box>
+              {messageLoading && (
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                    <Avatar sx={{ 
+                      bgcolor: selectedMode === 'interview' ? 'primary.main' : 'secondary.main', 
+                      width: 32, 
+                      height: 32 
+                    }}>
+                      <SmartToyIcon fontSize="small" />
+                    </Avatar>
+                    <Paper elevation={1} sx={{ p: 2, borderRadius: 2 }}>
+                      <CircularProgress size={20} />
+                    </Paper>
+                  </Box>
+                </Box>
+              )}
+              <div ref={messagesEndRef} />
+            </Box>
+
+            {/* 메시지 입력 */}
+            <Box sx={{ 
+              p: 2, 
+              borderTop: '1px solid',
+              borderColor: 'divider'
+            }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  placeholder={
+                    selectedMode === 'interview' 
+                      ? "면접관의 질문에 답변하세요..." 
+                      : "연습하고 싶은 면접 질문을 입력하세요..."
+                  }
+                  value={userMessage}
+                  onChange={(e) => setUserMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  disabled={messageLoading}
+                  variant="outlined"
+                  size="small"
+                />
+                <Button
+                  variant="contained"
+                  onClick={handleSendMessage}
+                  disabled={messageLoading || !userMessage.trim()}
+                  sx={{ minWidth: 48, height: 'fit-content', alignSelf: 'flex-end' }}
+                >
+                  <SendIcon />
+                </Button>
+              </Box>
+            </Box>
+          </Paper>
+        </Box>
+      )}
+
+
+    </Container>
   );
 };
 
-export default CVQAPage; 
+export default CVQAPage;
