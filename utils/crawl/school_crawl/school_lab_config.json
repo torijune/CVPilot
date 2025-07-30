@@ -1,10 +1,63 @@
 {
-  "universities": [],
+  "universities": [
+    {
+      "name": "서울대학교",
+      "abbreviation": "SNU",
+      "departments": [
+        {
+          "name": "컴퓨터공학과",
+          "labs": [
+            {
+              "name": "데이터 마이닝 연구실 (Data Mining Lab.)",
+              "professor": {
+                "name": "강유",
+                "email": "ukang@snu.ac.kr",
+                "title": "교수"
+              },
+              "homepage": "https://datalab.snu.ac.kr/",
+              "research_areas": [
+                "Data Intelligence",
+                "Learning"
+              ],
+              "description": "데이터 마이닝 연구실 (Data Mining Lab.)에서 Data Intelligence, Learning 연구를 수행합니다.",
+              "Recent publications": [
+                {
+                  "title": "SynQ: Accurate Zero-shot Quantization by Synthesis-aware Fine-tuning",
+                  "authors": "강유",
+                  "conference": "ICLR, 2025"
+                },
+                {
+                  "title": "Accurate Link Prediction for Edge-Incomplete Graphs via PU Learning",
+                  "authors": "강유",
+                  "conference": "AAAI, 2025"
+                },
+                {
+                  "title": "Sequentially Diversified and Accurate Recommendations in Chronological Order for a Series of Users",
+                  "authors": "강유",
+                  "conference": "WSDM, 2025"
+                },
+                {
+                  "title": "Fast and Accurate PARAFAC2 Decomposition for Time Range Queries on Irregular Tensors",
+                  "authors": "강유",
+                  "conference": "CIKM, 2024"
+                },
+                {
+                  "title": "FreQuant: A Reinforcement-Learning based Adaptive Portfolio Optimization with Multi-frequency Decomposition",
+                  "authors": "강유",
+                  "conference": "KDD, 2024"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "metadata": {
     "last_updated": "2025-07-30",
     "version": "1.0",
     "description": "대학원 랩실 정보 데이터베이스",
-    "total_universities": 0,
-    "total_labs": 0
+    "total_universities": 1,
+    "total_labs": 1
   }
 }

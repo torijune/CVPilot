@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-주피터 노트북용 대학원 랩실 정보 자동 업데이트 도구
-텍스트 입력을 받아서 JSON 형식으로 변환하고 config 파일에 추가
-"""
-
 import json
 import os
 import re
@@ -330,38 +323,3 @@ def show_status(config_file: str = "school_lab_config.json"):
     """현재 상태 출력"""
     updater = JupyterLabUpdater(config_file)
     updater.print_current_status()
-
-# 사용 예시
-if __name__ == "__main__":
-    # 예시 텍스트
-    example_text = """
-    
-- 대학명: 서울대학교
-- 대학 약어: SNU
-- 학과명: 컴퓨터공학과
-- 랩실명: 데이터 마이닝 연구실 (Data Mining Lab.)
-- 교수명: 강유
-- 교수 이메일: ukang@snu.ac.kr
-- 랩실 홈페이지 url: https://datalab.snu.ac.kr/
-- 랩실 연구 분야(있으면 넣고 없으면 "없음"): Data Intelligence, Learning &
-Reasoning, Financial AI
-- Recent publications: SynQ: Accurate Zero-shot Quantization by Synthesis-aware Fine-tuning, ICLR, 2025
-Accurate Link Prediction for Edge-Incomplete Graphs via PU Learning, AAAI 2025
-Sequentially Diversified and Accurate Recommendations in Chronological Order for a Series of Users, WSDM 2025
-Fast and Accurate PARAFAC2 Decomposition for Time Range Queries on Irregular Tensors, CIKM 2024
-FreQuant: A Reinforcement-Learning based Adaptive Portfolio Optimization with Multi-frequency Decomposition, KDD 2024
-"""
-    
-    print("🎓 주피터 노트북용 랩실 정보 업데이트 도구")
-    print("=" * 50)
-    
-    # 템플릿 출력
-    show_template()
-    
-    # 예시 실행
-    print("\n📝 예시 실행:")
-    success = add_lab_from_text(example_text)
-    
-    if success:
-        print("\n📊 업데이트 후 상태:")
-        show_status() 
