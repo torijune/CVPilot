@@ -5,13 +5,7 @@ from app.daily_paper_podcast.domain.entities.paper import Paper
 from app.daily_paper_podcast.domain.repositories.paper_repository import PaperRepository
 from app.daily_paper_podcast.domain.repositories.podcast_repository import PodcastRepository
 from app.shared.infra.external.openai_client import openai_client
-from app.daily_paper_podcast.application.workflows.nodes.analysis_nodes import (
-    ProblemDefinitionNode,
-    ProposedMethodNode,
-    ExperimentMethodNode,
-    KeyResultsNode,
-    ResearchSignificanceNode
-)
+# 기존 분석 노드들은 더 이상 사용하지 않음 (통합 프롬프트로 대체)
 from app.daily_paper_podcast.infra.services.tts_service import TTSService
 
 logger = logging.getLogger(__name__)
@@ -244,99 +238,71 @@ class PodcastService:
             return None
     
     async def _generate_single_paper_analysis(self, paper: Paper) -> str:
-        """단일 논문에 대한 5단계 분석 수행"""
+        """단일 논문에 대한 통합 분석 수행 (한 번의 LLM 호출)"""
         try:
-            logger.info(f"단일 논문 분석 시작: {paper.title}")
+            logger.info(f"단일 논문 통합 분석 시작: {paper.title}")
             
-            # Paper 객체를 딕셔너리로 변환하여 분석 노드에 전달
-            paper_dict = paper.to_dict()
-            papers_list = [paper_dict]  # 단일 논문을 리스트로 감싸서 기존 인터페이스 유지
+            # 프롬프트 엔지니어링으로 한 번에 모든 분석 수행
+            analysis_text = await self._analyze_paper_with_comprehensive_prompt(paper)
             
-            # 1. 각 단계별 분석 수행 (단일 논문 기준)
-            problem_definition = await ProblemDefinitionNode.analyze(papers_list, paper.field)
-            proposed_method = await ProposedMethodNode.analyze(papers_list, paper.field)
-            experiment_method = await ExperimentMethodNode.analyze(papers_list, paper.field)
-            key_results = await KeyResultsNode.analyze(papers_list, paper.field)
-            research_significance = await ResearchSignificanceNode.analyze(papers_list, paper.field)
-            
-            # 2. 단일 논문 분석 결과 통합
-            merged_analysis = await self._merge_single_paper_analysis(
-                paper, problem_definition, proposed_method, 
-                experiment_method, key_results, research_significance
-            )
-            
-            logger.info("단일 논문 분석 완료")
-            return merged_analysis
+            logger.info("단일 논문 통합 분석 완료")
+            return analysis_text
             
         except Exception as e:
             logger.error(f"단일 논문 분석 실패: {e}")
             raise
     
-    async def _merge_single_paper_analysis(self, paper: Paper, 
-                                         problem_definition: str, proposed_method: str,
-                                         experiment_method: str, key_results: str,
-                                         research_significance: str) -> str:
-        """단일 논문 분석 결과 통합"""
+    async def _analyze_paper_with_comprehensive_prompt(self, paper: Paper) -> str:
+        """포괄적인 프롬프트로 논문을 한 번에 분석"""
         try:
             prompt = f"""
-다음은 {paper.field} 분야의 논문에 대한 5단계 분석 결과입니다.
-이 결과들을 구조화된 논문 분석 리포트로 작성해주세요.
+당신은 AI/ML 분야의 논문을 전문적으로 분석하는 연구자입니다. 
+다음 논문을 체계적이고 깊이 있게 분석해주세요.
 
 ## 분석 대상 논문
-- **제목**: {paper.title}
-- **저자**: {', '.join(paper.authors) if paper.authors else 'N/A'}
-- **학회/저널**: {paper.conference or 'N/A'}
-- **연도**: {paper.year or 'N/A'}
-- **URL**: {paper.url or 'N/A'}
+**제목**: {paper.title}
+**저자**: {', '.join(paper.authors) if paper.authors else 'N/A'}
+**학회/저널**: {paper.conference or 'N/A'}
+**연도**: {paper.year or 'N/A'}
+**분야**: {paper.field}
+**URL**: {paper.url or 'N/A'}
 
-## 5단계 분석 결과
+**초록**:
+{paper.abstract}
 
-### 1. 문제 정의 (Problem Definition)
-{problem_definition}
+## 분석 요구사항
 
-### 2. 제안 방법 (Proposed Method)
-{proposed_method}
-
-### 3. 실험 방법 (Experimental Setup)
-{experiment_method}
-
-### 4. 주요 결과 (Key Results)
-{key_results}
-
-### 5. 연구 의의 (Research Significance)
-{research_significance}
-
-위의 분석 결과를 바탕으로 다음과 같은 구조로 마크다운 형식의 논문 분석 리포트를 작성해주세요:
-
-## 📋 논문 분석 리포트
+다음 구조로 마크다운 형식의 상세한 논문 분석 리포트를 작성해주세요:
 
 ### 📄 논문 정보 (Paper Information)
-- **제목**: {paper.title}
-- **저자**: {', '.join(paper.authors) if paper.authors else 'N/A'}
-- **학회/저널**: {paper.conference or 'N/A'} {paper.year or 'N/A'}
-- **URL**: {paper.url or 'N/A'}
+- 논문의 기본 정보를 정리
+- 저자들의 배경과 연구 분야
+- 학회/저널의 영향력과 중요도
 
 ### 🎯 문제 정의 (Problem Definition)
-- 이 논문이 풀고자 하는 핵심 문제
-- 연구의 배경과 동기
+- 이 논문이 해결하고자 하는 핵심 문제는 무엇인가?
+- 연구의 배경과 동기는 무엇인가?
+- 왜 이 문제가 중요한가?
 
 ### ⚠️ 기존 접근법 한계 (Limitations of Existing Approaches)
-- 기존 방법이 가진 한계/제약/문제점
-- 현재 기술의 부족한 점
+- 기존 연구들이 가진 한계점은 무엇인가?
+- 현재 기술의 부족한 점은?
+- 왜 새로운 접근이 필요한가?
 
 ### 🔬 제안 기법 (Proposed Method)
-- 이 논문에서 제안하는 해결책
-- 구조, 모델, 핵심 아이디어
-- 기술적 혁신점
+- 이 논문에서 제안하는 해결책은 무엇인가?
+- 핵심 아이디어와 기술적 혁신점은?
+- 방법론의 구조와 작동 원리는?
 
 ### 🧪 실험 설계 (Experiment Design)
-- 사용한 데이터셋
-- 평가 메트릭
-- 비교 대상 (SOTA 등)
+- 어떤 데이터셋을 사용했는가?
+- 평가 메트릭은 무엇인가?
+- 비교 대상은 누구인가? (SOTA 등)
 
 ### 📊 주요 성능 (Key Performance)
-- 수치 비교표 또는 핵심 성능 결과 요약
-- 주요 실험 결과
+- 핵심 실험 결과와 성능 지표
+- 기존 방법 대비 개선 사항
+- 수치적 비교 결과
 
 ### 💭 한줄 요약 (One-line Summary)
 - 이 논문을 한 문장으로 요약
@@ -344,34 +310,31 @@ class PodcastService:
 ### 💡 아이디어/확장 (Idea/Extension)
 - 내 연구에 어떻게 적용할 수 있을까?
 - 개선할 수 있는 부분은?
+- 향후 연구 방향은?
 
 ### 🤔 SO WHAT?
 - 이 연구가 왜 중요한가?
-- 어떤 의의를 가지는가?
+- 학문적/실용적 의의는?
+- 산업계에 미치는 영향은?
 
-### 👨‍💼 Reviewer
-- 내가 학회 리뷰어가 됐다 생각하고 리뷰하기
-- 논문의 장단점 분석
+## 작성 가이드라인
+1. **깊이 있는 분석**: 표면적이 아닌 본질적인 내용 분석
+2. **구체적이고 명확한 설명**: 전문용어는 쉽게 풀어서 설명
+3. **비판적 사고**: 장점뿐만 아니라 한계점도 포함
+4. **실용적 관점**: 실제 적용 가능성과 현실적 고려사항
+5. **미래 지향적**: 향후 연구 방향과 발전 가능성
 
-### 🛡️ Defender
-- 내가 논문 저자라고 생각하고 리뷰 방어하기
-- 논문의 가치와 기여도 방어
-
-### 작성 가이드라인
-- 마크다운 형식으로 깔끔하게 정리
-- 각 섹션별로 명확한 구분
-- 객관적이고 분석적인 톤 유지
-- 시각적 구분을 위한 이모지 활용
-- 전문용어는 쉽게 풀어서 설명
-- 총 길이는 약 2000-3000단어 정도
+분석 결과는 마크다운 형식으로 작성하고, 각 섹션은 명확하게 구분해주세요.
 """
 
             response = await openai_client._call_chat_completion(prompt)
             return response
             
         except Exception as e:
-            logger.error(f"단일 논문 분석 결과 통합 실패: {e}")
+            logger.error(f"포괄적 논문 분석 실패: {e}")
             raise
+    
+    # _merge_single_paper_analysis 메서드는 더 이상 사용하지 않음 (통합 프롬프트로 대체)
     
     async def _generate_tts_script(self, paper: Paper, analysis_text: str) -> str:
         """논문 분석 결과를 바탕으로 TTS 대본 생성"""
@@ -389,29 +352,14 @@ class PodcastService:
 ## 논문 분석 결과
 {analysis_text}
 
-위의 분석 결과를 바탕으로 다음과 같은 구조로 팟캐스트용 TTS 대본을 작성해주세요:
+위의 분석 결과를 바탕으로 팟캐스트용 TTS 대본을 작성해주세요.
 
 === 팟캐스트 구성 ===
 1. 인사 및 논문 소개 (30초 - 1분)
-   - 오늘 소개할 논문과 분야 소개
-   - 논문의 기본 정보 (제목, 저자, 학회 등)
-
 2. 연구 배경 및 문제 정의 (2-3분)
-   - 이 연구가 해결하고자 하는 문제는 무엇인가?
-   - 기존 연구의 한계점은?
-
 3. 제안하는 방법론 (3-4분)
-   - 이 논문만의 새로운 접근법은?
-   - 핵심 아이디어와 기술적 혁신점
-
 4. 실험 및 결과 (2-3분)
-   - 어떤 실험을 통해 검증했는가?
-   - 주요 성과와 개선 사항
-
 5. 연구 의의 및 마무리 (1-2분)
-   - 이 연구가 가지는 학문적/실용적 가치
-   - 향후 연구 방향과 응용 가능성
-   - 논문 URL 안내
 
 === 작성 가이드라인 ===
 - 자연스럽고 친근한 톤으로 작성
@@ -420,6 +368,25 @@ class PodcastService:
 - 총 길이는 약 8-12분 정도 (약 1500-2000단어)
 - 청취자가 흥미를 잃지 않도록 생동감 있게 작성
 - 한국어로 작성
+
+=== 중요: 순수 대사만 작성 ===
+- 마크다운 형식, 제목, 개요, 블릿 포인트 등을 절대 사용하지 마세요
+- "인사말:", "1.", "2.", "제목:", "개요:" 같은 텍스트를 포함하지 마세요
+- 순수하게 읽을 수 있는 대사만 작성하세요
+- 마치 실제로 누군가에게 말하는 것처럼 자연스럽게 작성하세요
+
+예시:
+❌ 잘못된 예시:
+"인사말: 안녕하세요. 오늘은..."
+"1. 연구 배경: 이 연구는..."
+"제목: 논문 소개"
+
+✅ 올바른 예시:
+"안녕하세요. 오늘은 AI 분야의 흥미로운 논문을 소개해드리겠습니다..."
+"이 연구는 기존 방법의 한계를 극복하기 위해..."
+"이 논문의 핵심 아이디어는..."
+
+순수한 대사만 작성해주세요.
 """
 
             response = await openai_client._call_chat_completion(prompt)

@@ -34,6 +34,7 @@ import {
   Download as DownloadIcon,
   Home,
   Mic as MicIcon,
+  Warning as WarningIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { analyzePaper, generateTTS, getPodcastAnalysis, getAvailableFields } from '../../api/podcast';
@@ -255,10 +256,23 @@ const PodcastPage: React.FC = () => {
       </Paper>
 
       {result && (
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            생성된 팟캐스트
-          </Typography>
+        <>
+          {/* 경고 카드 */}
+          <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: '#fff5f5' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <WarningIcon sx={{ color: '#d32f2f' }} />
+              <Typography variant="body2" color="#d32f2f">
+                해당 분석 및 팟캐스트는 각 논문의 초록(abstract)만 읽고 AI가 요약한 것입니다. 
+                더 자세하고 정확한 정보는 논문 원문을 참고해주세요.
+              </Typography>
+            </Box>
+          </Paper>
+
+          {/* 생성된 팟캐스트 카드 */}
+          <Paper elevation={3} sx={{ p: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              생성된 팟캐스트
+            </Typography>
           
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" gutterBottom>
@@ -338,54 +352,66 @@ const PodcastPage: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             분석 결과
           </Typography>
-          <Card sx={{ mb: 2 }}>
-            <CardContent>
-              <Box sx={{ 
-                '& h1, & h2, & h3, & h4, & h5, & h6': {
-                  color: 'primary.main',
-                  fontWeight: 600,
-                  mb: 2,
-                  mt: 3
-                },
-                '& h1': { fontSize: '1.8rem' },
-                '& h2': { fontSize: '1.6rem' },
-                '& h3': { fontSize: '1.4rem' },
-                '& h4': { fontSize: '1.2rem' },
-                '& h5': { fontSize: '1.1rem' },
-                '& h6': { fontSize: '1rem' },
-                '& p': { mb: 2, lineHeight: 1.6 },
-                '& ul, & ol': { mb: 2, pl: 3 },
-                '& li': { mb: 1 },
-                '& strong': { fontWeight: 600 },
-                '& em': { fontStyle: 'italic' },
-                '& code': { 
-                  backgroundColor: 'grey.100', 
-                  padding: '2px 4px', 
-                  borderRadius: 1,
-                  fontFamily: 'monospace'
-                },
-                '& pre': { 
-                  backgroundColor: 'grey.100', 
-                  padding: 2, 
-                  borderRadius: 1,
-                  overflow: 'auto'
-                },
-                '& blockquote': {
-                  borderLeft: '4px solid',
-                  borderColor: 'primary.main',
-                  pl: 2,
-                  ml: 0,
-                  fontStyle: 'italic',
-                  color: 'text.secondary'
-                }
-              }}>
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {result.analysis_text}
-                </ReactMarkdown>
-              </Box>
-            </CardContent>
-          </Card>
+          <Box sx={{ 
+            '& h1, & h2, & h3, & h4, & h5, & h6': {
+              color: 'primary.main',
+              fontWeight: 600,
+              mb: 1,
+              mt: 2
+            },
+            '& h1': { fontSize: '1.5rem' },
+            '& h2': { fontSize: '1.3rem' },
+            '& h3': { fontSize: '1.2rem' },
+            '& h4': { fontSize: '1.1rem' },
+            '& h5': { fontSize: '1rem' },
+            '& h6': { fontSize: '1rem' },
+            '& p': { 
+              mb: 1, 
+              lineHeight: 1.5
+            },
+            '& ul, & ol': { 
+              mb: 1, 
+              pl: 2
+            },
+            '& li': { 
+              mb: 0.5
+            },
+            '& strong': { fontWeight: 600 },
+            '& em': { fontStyle: 'italic' },
+            '& code': { 
+              backgroundColor: 'grey.100', 
+              padding: '1px 3px', 
+              borderRadius: 1,
+              fontFamily: 'monospace'
+            },
+            '& pre': { 
+              backgroundColor: 'grey.100', 
+              padding: 1, 
+              borderRadius: 1,
+              overflow: 'auto'
+            },
+            '& blockquote': {
+              borderLeft: '3px solid',
+              borderColor: 'primary.main',
+              pl: 1,
+              ml: 0,
+              fontStyle: 'italic',
+              color: 'text.secondary'
+            },
+            '& a': {
+              color: 'primary.main',
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline'
+              }
+            }
+          }}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {result.analysis_text}
+            </ReactMarkdown>
+          </Box>
         </Paper>
+        </>
       )}
 
       {/* 오디오 플레이어 다이얼로그 */}
