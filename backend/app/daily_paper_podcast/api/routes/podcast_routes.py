@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends, Body
 from typing import List, Optional
 import logging
 
@@ -11,7 +11,11 @@ from ..models.response_models import (
     PodcastAnalysisResponse,
     PodcastListResponse,
     PodcastGenerationResponse,
-    AvailableFieldsResponse
+    AvailableFieldsResponse,
+    ConferencesResponse,
+    ConferenceInfo,
+    PaperPreviewResponse,
+    PaperPreviewInfo
 )
 from ...application.services.podcast_service import PodcastService
 from ...infra.repositories.paper_repository_impl import PaperRepositoryImpl
@@ -50,6 +54,38 @@ async def get_available_fields(
         logger.error(f"분야 목록 조회 실패: {e}")
         raise HTTPException(status_code=500, detail="분야 목록 조회 중 오류가 발생했습니다.")
 
+@router.get("/conferences/{field}", response_model=ConferencesResponse)
+async def get_conferences_by_field(
+    field: str,
+    podcast_service: PodcastService = Depends(get_podcast_service)
+):
+    """분야별 학회 목록 조회"""
+    try:
+        logger.info(f"분야별 학회 목록 조회 요청: {field}")
+        
+        conferences_data = await podcast_service.get_conferences_for_field(field)
+        
+        # ConferenceInfo 객체로 변환
+        conferences = [
+            ConferenceInfo(
+                name=conf['name'],
+                paper_count=conf['paper_count'],
+                latest_year=conf['latest_year'],
+                year_range=conf['year_range']
+            )
+            for conf in conferences_data
+        ]
+        
+        return ConferencesResponse(
+            field=field,
+            conferences=conferences,
+            total_conferences=len(conferences)
+        )
+        
+    except Exception as e:
+        logger.error(f"분야별 학회 목록 조회 실패: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/papers/random/{field}")
 async def get_random_paper(
     field: str,
@@ -65,6 +101,97 @@ async def get_random_paper(
         raise
     except Exception as e:
         logger.error(f"랜덤 논문 조회 실패: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/papers/preview/{field}/{conference}", response_model=PaperPreviewResponse)
+async def get_paper_preview(
+    field: str,
+    conference: str,
+    podcast_service: PodcastService = Depends(get_podcast_service)
+):
+    """특정 분야와 학회의 랜덤 논문 미리보기"""
+    try:
+        logger.info(f"논문 미리보기 요청: {field} - {conference}")
+        
+        preview_data = await podcast_service.get_random_paper_preview(field, conference)
+        
+        if not preview_data:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"{field} 분야의 {conference} 학회에서 논문을 찾을 수 없습니다."
+            )
+        
+        # PaperPreviewInfo 객체로 변환
+        paper_data = preview_data['paper']
+        paper_info = PaperPreviewInfo(
+            id=paper_data['id'],
+            title=paper_data['title'],
+            abstract=paper_data['abstract'],
+            authors=paper_data['authors'],
+            conference=paper_data.get('conference'),
+            year=paper_data.get('year'),
+            field=paper_data['field'],
+            url=paper_data.get('url')
+        )
+        
+        return PaperPreviewResponse(
+            paper=paper_info,
+            field=preview_data['field'],
+            conference=preview_data['conference'],
+            can_reselect=preview_data['can_reselect'],
+            total_papers_in_conference=preview_data['total_papers_in_conference']
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"논문 미리보기 실패: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/papers/reselect/{field}/{conference}", response_model=PaperPreviewResponse)
+async def reselect_paper(
+    field: str,
+    conference: str,
+    current_paper_id: Optional[str] = Body(default=None, embed=True),
+    podcast_service: PodcastService = Depends(get_podcast_service)
+):
+    """같은 조건으로 다른 논문 재선택"""
+    try:
+        logger.info(f"논문 재선택 요청: {field} - {conference}, 현재 논문 ID: {current_paper_id}")
+        
+        preview_data = await podcast_service.reselect_paper(field, conference, current_paper_id)
+        
+        if not preview_data:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"{field} 분야의 {conference} 학회에서 다른 논문을 찾을 수 없습니다."
+            )
+        
+        # PaperPreviewInfo 객체로 변환
+        paper_data = preview_data['paper']
+        paper_info = PaperPreviewInfo(
+            id=paper_data['id'],
+            title=paper_data['title'],
+            abstract=paper_data['abstract'],
+            authors=paper_data['authors'],
+            conference=paper_data.get('conference'),
+            year=paper_data.get('year'),
+            field=paper_data['field'],
+            url=paper_data.get('url')
+        )
+        
+        return PaperPreviewResponse(
+            paper=paper_info,
+            field=preview_data['field'],
+            conference=preview_data['conference'],
+            can_reselect=preview_data['can_reselect'],
+            total_papers_in_conference=preview_data['total_papers_in_conference']
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"논문 재선택 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/analyze", response_model=PodcastGenerationResponse)
@@ -96,22 +223,24 @@ async def analyze_paper(
 @router.post("/generate-tts/{analysis_id}", response_model=PodcastGenerationResponse)
 async def generate_tts(
     analysis_id: str,
+    tts_settings: dict = Body(default={}),
     podcast_service: PodcastService = Depends(get_podcast_service)
 ):
     """TTS 대본 및 오디오 생성"""
     try:
         logger.info(f"TTS 생성 요청: {analysis_id}")
-        
-        # 기존 분석 결과를 바탕으로 TTS 생성
-        podcast_analysis = await podcast_service.generate_tts_from_analysis(analysis_id)
-        
+        logger.info(f"TTS 설정: {tts_settings}")
+
+        # 기존 분석 결과를 바탕으로 TTS 생성 (설정 포함)
+        podcast_analysis = await podcast_service.generate_tts_from_analysis(analysis_id, tts_settings)
+
         return PodcastGenerationResponse(
             success=True,
             analysis_id=podcast_analysis.id,
             message="TTS 생성이 완료되었습니다.",
             estimated_duration=podcast_analysis.duration_seconds
         )
-        
+
     except Exception as e:
         logger.error(f"TTS 생성 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))

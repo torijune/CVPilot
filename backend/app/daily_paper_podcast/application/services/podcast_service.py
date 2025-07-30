@@ -74,7 +74,7 @@ class PodcastService:
             logger.error(f"논문 분석 실패: {e}")
             raise
 
-    async def generate_tts_from_analysis(self, analysis_id: str) -> PodcastAnalysis:
+    async def generate_tts_from_analysis(self, analysis_id: str, tts_settings: dict = None) -> PodcastAnalysis:
         """기존 분석 결과를 바탕으로 TTS 생성"""
         try:
             # 기존 분석 결과 조회
@@ -100,8 +100,8 @@ class PodcastService:
             # TTS 대본 생성
             tts_script = await self._generate_tts_script(paper, analysis.analysis_text)
             
-            # TTS를 통한 오디오 파일 생성
-            audio_file_path = await self.tts_service.generate_audio(tts_script)
+            # TTS 설정을 적용하여 오디오 파일 생성
+            audio_file_path = await self.tts_service.generate_audio(tts_script, tts_settings)
             duration_seconds = await self.tts_service.get_audio_duration(audio_file_path)
             
             # 오디오 파일 경로를 웹 URL로 변환
@@ -210,6 +210,92 @@ class PodcastService:
             return await self.paper_repository.get_all_fields()
         except Exception as e:
             logger.error(f"분야 목록 조회 실패: {e}")
+            raise
+    
+    async def get_conferences_for_field(self, field: str) -> List[Dict[str, Any]]:
+        """분야별 학회 목록 조회 (통계 포함)"""
+        try:
+            logger.info(f"분야별 학회 목록 조회: {field}")
+            
+            # Supabase 클라이언트를 통해 학회 목록 조회
+            from app.shared.infra.external.supabase_client import supabase_client
+            conferences = await supabase_client.get_conferences_by_field(field)
+            
+            logger.info(f"{field} 분야에서 {len(conferences)}개 학회 발견")
+            return conferences
+            
+        except Exception as e:
+            logger.error(f"분야별 학회 목록 조회 실패: {e}")
+            raise
+    
+    async def get_random_paper_preview(self, field: str, conference: str) -> Optional[Dict[str, Any]]:
+        """특정 분야와 학회의 랜덤 논문 미리보기"""
+        try:
+            logger.info(f"랜덤 논문 미리보기: {field} - {conference}")
+            
+            # Supabase 클라이언트를 통해 랜덤 논문 조회
+            from app.shared.infra.external.supabase_client import supabase_client
+            paper_data = await supabase_client.get_random_paper_by_field_and_conference(field, conference)
+            
+            if not paper_data:
+                return None
+            
+            # 해당 학회의 총 논문 수도 함께 조회
+            total_papers = await supabase_client.get_papers_count_by_conference(field, conference)
+            
+            # Paper 엔티티로 변환
+            paper = Paper.create(
+                title=paper_data.get('title', ''),
+                abstract=paper_data.get('abstract', ''),
+                authors=paper_data.get('authors', '').split(', ') if paper_data.get('authors') else [],
+                conference=paper_data.get('conference'),
+                year=paper_data.get('year'),
+                field=paper_data.get('field'),
+                url=paper_data.get('url')
+            )
+            
+            # ID 복원 (문자열로 변환)
+            paper.id = str(paper_data.get('id', ''))
+            
+            result = {
+                'paper': paper.to_dict(),
+                'field': field,
+                'conference': conference,
+                'can_reselect': total_papers > 1,  # 논문이 2개 이상이면 재선택 가능
+                'total_papers_in_conference': total_papers
+            }
+            
+            logger.info(f"논문 미리보기 생성 완료: {paper.title[:50]}...")
+            return result
+            
+        except Exception as e:
+            logger.error(f"랜덤 논문 미리보기 실패: {e}")
+            raise
+    
+    async def reselect_paper(self, field: str, conference: str, current_paper_id: str = None) -> Optional[Dict[str, Any]]:
+        """같은 조건으로 다른 논문 재선택"""
+        try:
+            logger.info(f"논문 재선택: {field} - {conference}")
+            
+            # 최대 10번 시도해서 다른 논문 찾기
+            max_attempts = 10
+            for attempt in range(max_attempts):
+                paper_preview = await self.get_random_paper_preview(field, conference)
+                
+                if not paper_preview:
+                    break
+                
+                # 현재 논문과 다른 논문이면 반환
+                if not current_paper_id or paper_preview['paper']['id'] != current_paper_id:
+                    logger.info(f"재선택 성공 (시도 {attempt + 1}회): {paper_preview['paper']['title'][:50]}...")
+                    return paper_preview
+            
+            # 다른 논문을 찾지 못한 경우, 그냥 아무 논문이나 반환
+            logger.warning(f"재선택에서 다른 논문을 찾지 못함, 기존 로직 사용")
+            return await self.get_random_paper_preview(field, conference)
+            
+        except Exception as e:
+            logger.error(f"논문 재선택 실패: {e}")
             raise
     
     async def get_podcast_analysis(self, analysis_id: str) -> Optional[PodcastAnalysis]:

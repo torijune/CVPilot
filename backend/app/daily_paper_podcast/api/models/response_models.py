@@ -38,4 +38,36 @@ class PodcastGenerationResponse(BaseModel):
 
 class AvailableFieldsResponse(BaseModel):
     """사용 가능한 분야 응답 모델"""
-    fields: List[str] 
+    fields: List[str]
+
+class ConferenceInfo(BaseModel):
+    """학회 정보 모델"""
+    name: str
+    paper_count: int
+    latest_year: int
+    year_range: str
+
+class ConferencesResponse(BaseModel):
+    """분야별 학회 목록 응답 모델"""
+    field: str
+    conferences: List[ConferenceInfo]
+    total_conferences: int
+
+class PaperPreviewInfo(BaseModel):
+    """논문 미리보기 정보 모델"""
+    id: str
+    title: str
+    abstract: str
+    authors: List[str]
+    conference: Optional[str]
+    year: Optional[int]
+    field: str
+    url: Optional[str]
+
+class PaperPreviewResponse(BaseModel):
+    """논문 미리보기 응답 모델"""
+    paper: PaperPreviewInfo
+    field: str
+    conference: str
+    can_reselect: bool
+    total_papers_in_conference: int 

@@ -6,7 +6,6 @@ import {
   Container,
   Typography,
   Paper,
-  TextField,
   Button,
   Card,
   CardContent,
@@ -17,7 +16,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   FormControl,
   InputLabel,
   Select,
@@ -25,52 +23,94 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Grid,
+  CardActionArea,
+  Badge,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
 } from '@mui/material';
 import {
   Podcasts as PodcastIcon,
   PlayArrow as PlayArrowIcon,
-  Pause as PauseIcon,
-  Stop as StopIcon,
   Download as DownloadIcon,
   Home,
   Mic as MicIcon,
   Warning as WarningIcon,
+  Settings as SettingsIcon,
+  School as SchoolIcon,
+  Article as ArticleIcon,
+  Refresh as RefreshIcon,
+  CheckCircle as CheckCircleIcon,
+  ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { analyzePaper, generateTTS, getPodcastAnalysis, getAvailableFields } from '../../api/podcast';
+import { 
+  analyzePaper, 
+  generateTTS, 
+  getPodcastAnalysis, 
+  getAvailableFields,
+  getConferencesByField,
+  getPaperPreview,
+  reselectPaper,
+  ConferenceInfo,
+  PaperPreviewResponse
+} from '../../api/podcast';
 import AudioPlayer from '../../components/AudioPlayer';
 
 interface PodcastResult {
   id: string;
   field: string;
   papers: Array<{
+    id: string;
     title: string;
     abstract: string;
     authors: string[];
-  }>;
+    conference?: string;
+    year?: number;
+    url?: string;
+  }>;  
   analysis_text: string;
   audio_file_path: string;
   duration_seconds: number;
   created_at: string;
 }
 
+const steps = ['분야 선택', '학회 선택', '논문 확인', '분석 완료'];
+
 const PodcastPage: React.FC = () => {
-  const [selectedPapers, setSelectedPapers] = useState<any[]>([]);
-  const [field, setField] = useState('Machine Learning / Deep Learning (ML/DL)');
+  // 스텝 관리
+  const [activeStep, setActiveStep] = useState(0);
+  
+  // 선택된 데이터
+  const [field, setField] = useState('');
+  const [selectedConference, setSelectedConference] = useState<ConferenceInfo | null>(null);
+  const [paperPreview, setPaperPreview] = useState<PaperPreviewResponse | null>(null);
+  
+  // 로딩 상태
   const [loading, setLoading] = useState(false);
   const [ttsLoading, setTtsLoading] = useState(false);
+  const [reselectLoading, setReselectLoading] = useState(false);
+  
+  // 데이터
+  const [availableFields, setAvailableFields] = useState<string[]>([]);
+  const [conferences, setConferences] = useState<ConferenceInfo[]>([]);
   const [result, setResult] = useState<PodcastResult | null>(null);
+  
+  // UI 상태
   const [error, setError] = useState<string | null>(null);
-  const [availableFields, setAvailableFields] = useState<string[]>([
-    'Natural Language Processing (NLP)',
-    'Computer Vision (CV)',
-    'Multimodal',
-    'Machine Learning / Deep Learning (ML/DL)'
-  ]);
   const [audioDialogOpen, setAudioDialogOpen] = useState(false);
+  const [showTtsSettings, setShowTtsSettings] = useState(false);
+  const [ttsSettings, setTtsSettings] = useState({
+    voice: 'ko-KR-Neural2-A',
+    speed: 0.9,
+    gender: 'FEMALE'
+  });
+  
   const router = useRouter();
 
-  // 사용 가능한 분야 목록 로드
+  // 분야 목록 로드
   useEffect(() => {
     const loadFields = async () => {
       try {
@@ -80,23 +120,78 @@ const PodcastPage: React.FC = () => {
         }
       } catch (err) {
         console.error('분야 목록 로드 실패:', err);
-        // API 호출 실패 시 기본 분야 목록 유지
+        setAvailableFields([
+          'Natural Language Processing (NLP)',
+          'Computer Vision (CV)',
+          'Multimodal',
+          'Machine Learning / Deep Learning (ML/DL)'
+        ]);
       }
     };
     loadFields();
   }, []);
 
-  const handleGoHome = () => {
-    router.push('/');
-  };
-
-  const handleAnalyzePaper = async () => {
+  // 분야 선택 핸들러
+  const handleFieldSelect = async (selectedField: string) => {
+    setField(selectedField);
     setLoading(true);
     setError(null);
-
+    
     try {
-      // 논문 분석만 수행
-      const response = await analyzePaper(field, []);
+      const response = await getConferencesByField(selectedField);
+      setConferences(response.conferences);
+      setActiveStep(1);
+    } catch (err) {
+      setError('학회 목록을 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 학회 선택 핸들러
+  const handleConferenceSelect = async (conference: ConferenceInfo) => {
+    setSelectedConference(conference);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await getPaperPreview(field, conference.name);
+      setPaperPreview(response);
+      setActiveStep(2);
+    } catch (err) {
+      setError('논문 미리보기를 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 논문 재선택 핸들러
+  const handleReselectPaper = async () => {
+    if (!selectedConference || !paperPreview) return;
+    
+    setReselectLoading(true);
+    setError(null);
+    
+    try {
+      const response = await reselectPaper(field, selectedConference.name, paperPreview.paper.id);
+      setPaperPreview(response);
+    } catch (err) {
+      setError('논문 재선택에 실패했습니다.');
+    } finally {
+      setReselectLoading(false);
+    }
+  };
+
+  // 논문 분석 시작 핸들러
+  const handleStartAnalysis = async () => {
+    if (!paperPreview) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // 선택된 논문으로 분석 요청
+      const response = await analyzePaper(field, [paperPreview.paper]);
       
       if (response.success) {
         // 분석 완료까지 대기
@@ -104,10 +199,11 @@ const PodcastPage: React.FC = () => {
           try {
             const analysisResult = await getPodcastAnalysis(response.analysis_id);
             setResult(analysisResult);
+            setActiveStep(3);
           } catch (err) {
             setError('분석 결과를 가져오는데 실패했습니다.');
           }
-        }, 3000); // 3초 후 결과 조회
+        }, 3000);
       } else {
         setError('논문 분석에 실패했습니다.');
       }
@@ -118,6 +214,7 @@ const PodcastPage: React.FC = () => {
     }
   };
 
+  // TTS 생성 핸들러
   const handleGenerateTTS = async () => {
     if (!result) return;
     
@@ -125,21 +222,17 @@ const PodcastPage: React.FC = () => {
     setError(null);
 
     try {
-      // TTS 대본 및 오디오 생성
-      const response = await generateTTS(result.id);
+      const response = await generateTTS(result.id, ttsSettings);
       
       if (response.success) {
-        // TTS 생성 완료까지 대기
         setTimeout(async () => {
           try {
             const updatedResult = await getPodcastAnalysis(result.id);
-            console.log('TTS 생성 후 결과:', updatedResult);
-            console.log('오디오 파일 경로:', updatedResult.audio_file_path);
             setResult(updatedResult);
           } catch (err) {
             setError('TTS 결과를 가져오는데 실패했습니다.');
           }
-        }, 5000); // 5초 후 결과 조회
+        }, 5000);
       } else {
         setError('TTS 생성에 실패했습니다.');
       }
@@ -150,17 +243,28 @@ const PodcastPage: React.FC = () => {
     }
   };
 
+  // 다시 시작 핸들러
+  const handleRestart = () => {
+    setActiveStep(0);
+    setField('');
+    setSelectedConference(null);
+    setPaperPreview(null);
+    setResult(null);
+    setError(null);
+    setConferences([]);
+  };
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
   const handlePlayAudio = () => {
-    if (!result?.audio_file_path) {
-      console.error('오디오 파일 경로가 없습니다.');
-      return;
-    }
+    if (!result?.audio_file_path) return;
     setAudioDialogOpen(true);
   };
 
   const handleDownload = () => {
     if (result?.audio_file_path) {
-      // 실제 다운로드 로직 구현 필요
       const link = document.createElement('a');
       link.href = result.audio_file_path;
       link.download = `podcast_${result.field.replace(/\s+/g, '_')}.mp3`;
@@ -173,20 +277,6 @@ const PodcastPage: React.FC = () => {
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
-
-  // 모의 논문 데이터 (실제로는 논문 선택 UI에서 가져옴)
-  const mockPapers = [
-    {
-      title: 'Attention Is All You Need',
-      abstract: 'We propose a new simple network architecture, the Transformer, based solely on attention mechanisms...',
-      authors: ['Ashish Vaswani', 'Noam Shazeer', 'Niki Parmar']
-    },
-    {
-      title: 'BERT: Pre-training of Deep Bidirectional Transformers',
-      abstract: 'We introduce a new language representation model called BERT...',
-      authors: ['Jacob Devlin', 'Ming-Wei Chang', 'Kenton Lee']
-    }
-  ];
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -204,60 +294,219 @@ const PodcastPage: React.FC = () => {
         </Button>
       </Box>
 
+      {/* 진행 단계 */}
       <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          팟캐스트 생성
-        </Typography>
-        
-        <Box sx={{ mb: 3 }}>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>분야 선택</InputLabel>
-            <Select
-              value={field}
-              label="분야 선택"
-              onChange={(e) => setField(e.target.value)}
-            >
-              {availableFields.map((f) => (
-                <MenuItem key={f} value={f}>
-                  {f}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            선택된 분야: {field}
-          </Typography>
-
-          <Button
-            variant="contained"
-            startIcon={<PodcastIcon />}
-            onClick={handleAnalyzePaper}
-            disabled={loading}
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            {loading ? (
-              <>
-                <CircularProgress size={20} sx={{ mr: 1 }} />
-                논문 분석 중...
-              </>
-            ) : (
-              '논문 분석'
-            )}
-          </Button>
-        </Box>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+        <Stepper activeStep={activeStep} orientation="horizontal">
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
       </Paper>
 
-      {result && (
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      {/* 단계별 컨텐츠 */}
+             {activeStep === 0 && (
+         <Paper elevation={3} sx={{ p: 3 }}>
+           <Typography variant="h6" gutterBottom>
+             1. 관심 분야를 선택해주세요
+           </Typography>
+           <Grid container spacing={2}>
+             {availableFields.map((fieldOption) => (
+               <Grid item xs={12} sm={6} md={4} key={fieldOption}>
+                 <Card>
+                   <CardActionArea onClick={() => handleFieldSelect(fieldOption)} disabled={loading}>
+                     <CardContent>
+                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                         <SchoolIcon sx={{ mr: 1, color: 'primary.main' }} />
+                         <Typography variant="h6" component="div">
+                           {fieldOption.split(' (')[0]}
+                         </Typography>
+                       </Box>
+                       <Typography variant="body2" color="text.secondary">
+                         {fieldOption}
+                       </Typography>
+                     </CardContent>
+                   </CardActionArea>
+                 </Card>
+               </Grid>
+             ))}
+           </Grid>
+           {loading && (
+             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+               <CircularProgress />
+             </Box>
+           )}
+           
+           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+             <Button
+               variant="text"
+               onClick={handleGoHome}
+               startIcon={<Home />}
+             >
+               홈으로 돌아가기
+             </Button>
+           </Box>
+         </Paper>
+       )}
+
+             {activeStep === 1 && (
+         <Paper elevation={3} sx={{ p: 3 }}>
+           <Typography variant="h6" gutterBottom>
+             2. 학회를 선택해주세요
+           </Typography>
+           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+             선택된 분야: {field}
+           </Typography>
+           <Grid container spacing={2}>
+             {conferences.map((conference) => (
+               <Grid item xs={12} sm={6} md={4} key={conference.name}>
+                 <Card>
+                   <CardActionArea onClick={() => handleConferenceSelect(conference)} disabled={loading}>
+                     <CardContent>
+                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                         <Badge badgeContent={conference.paper_count} color="primary" max={9999}>
+                           <SchoolIcon sx={{ mr: 1, color: 'primary.main' }} />
+                         </Badge>
+                         <Typography variant="h6" component="div" sx={{ ml: 1 }}>
+                           {conference.name.split(' (')[0]}
+                         </Typography>
+                       </Box>
+                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                         논문 수: {conference.paper_count}개
+                       </Typography>
+                       <Typography variant="body2" color="text.secondary">
+                         연도: {conference.year_range} (최신: {conference.latest_year})
+                       </Typography>
+                     </CardContent>
+                   </CardActionArea>
+                 </Card>
+               </Grid>
+             ))}
+           </Grid>
+           {loading && (
+             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+               <CircularProgress />
+             </Box>
+           )}
+           
+           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+             <Button
+               variant="text"
+               onClick={() => setActiveStep(0)}
+               startIcon={<ArrowForwardIcon sx={{ transform: 'rotate(180deg)' }} />}
+             >
+               분야 다시 선택
+             </Button>
+           </Box>
+         </Paper>
+       )}
+
+      {activeStep === 2 && paperPreview && (
+        <Paper elevation={3} sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            3. 선택된 논문을 확인해주세요
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            분야: {field} | 학회: {selectedConference?.name.split(' (')[0]}
+          </Typography>
+          
+          <Card sx={{ mb: 3 }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
+                <ArticleIcon sx={{ mr: 1, color: 'primary.main', mt: 0.5 }} />
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+                    {paperPreview.paper.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    저자: {paperPreview.paper.authors.join(', ')}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    {paperPreview.paper.conference} ({paperPreview.paper.year})
+                  </Typography>
+                  <Typography variant="body2" sx={{ mb: 2 }}>
+                    {paperPreview.paper.abstract}
+                  </Typography>
+                  {paperPreview.paper.url && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      href={paperPreview.paper.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      원문 보기
+                    </Button>
+                  )}
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Button
+              variant="contained"
+              startIcon={<CheckCircleIcon />}
+              onClick={handleStartAnalysis}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <CircularProgress size={20} sx={{ mr: 1 }} />
+                  분석 중...
+                </>
+              ) : (
+                '이 논문으로 분석하기'
+              )}
+            </Button>
+            
+            {paperPreview.can_reselect && (
+              <Button
+                variant="outlined"
+                startIcon={<RefreshIcon />}
+                onClick={handleReselectPaper}
+                disabled={reselectLoading}
+              >
+                {reselectLoading ? (
+                  <>
+                    <CircularProgress size={20} sx={{ mr: 1 }} />
+                    재선택 중...
+                  </>
+                ) : (
+                  '다른 논문 보기'
+                )}
+              </Button>
+            )}
+            
+                         <Button
+               variant="text"
+               onClick={() => setActiveStep(1)}
+             >
+               학회 다시 선택
+             </Button>
+             <Button
+               variant="text"
+               onClick={() => setActiveStep(0)}
+             >
+               분야 다시 선택
+             </Button>
+          </Box>
+
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+            이 학회에는 총 {paperPreview.total_papers_in_conference}개의 논문이 있습니다.
+          </Typography>
+        </Paper>
+      )}
+
+      {activeStep === 3 && result && (
         <>
-          {/* 경고 카드 */}
           <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: '#fff5f5' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <WarningIcon sx={{ color: '#d32f2f' }} />
@@ -268,149 +517,230 @@ const PodcastPage: React.FC = () => {
             </Box>
           </Paper>
 
-          {/* 생성된 팟캐스트 카드 */}
           <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              생성된 팟캐스트
-            </Typography>
-          
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              분야: {result.field}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              생성 시간: {new Date(result.created_at).toLocaleString()}
-            </Typography>
-            {result.duration_seconds && result.duration_seconds > 0 && (
-              <Typography variant="body2" color="text.secondary">
-                재생 시간: {formatDuration(result.duration_seconds)}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6">
+                생성된 팟캐스트
               </Typography>
-            )}
-          </Box>
-
-          <Box sx={{ mb: 3 }}>
-            {!result.audio_file_path || result.audio_file_path === "" ? (
               <Button
-                variant="contained"
-                startIcon={<MicIcon />}
-                onClick={handleGenerateTTS}
-                disabled={ttsLoading}
-                sx={{ mr: 2 }}
+                variant="outlined"
+                onClick={handleRestart}
+                startIcon={<RefreshIcon />}
               >
-                {ttsLoading ? (
-                  <>
-                    <CircularProgress size={20} sx={{ mr: 1 }} />
-                    TTS 생성 중...
-                  </>
-                ) : (
-                  'TTS 생성'
-                )}
+                다시 시작
               </Button>
-            ) : (
-              <>
-                <Button
-                  variant="outlined"
-                  startIcon={<PlayArrowIcon />}
-                  onClick={handlePlayAudio}
-                  sx={{ mr: 2 }}
-                >
-                  재생
-                </Button>
-                <Button
-                  variant="outlined"
-                  startIcon={<DownloadIcon />}
-                  onClick={handleDownload}
-                  disabled={!result.audio_file_path}
-                >
-                  다운로드
-                </Button>
-              </>
-            )}
-          </Box>
-
-          <Divider sx={{ my: 2 }} />
-
-          <Typography variant="h6" gutterBottom>
-            분석된 논문
-          </Typography>
-          <List>
-            {result.papers.map((paper, index) => (
-              <ListItem key={index} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                <ListItemText
-                  primary={paper.title}
-                  secondary={`저자: ${paper.authors.join(', ')}`}
-                />
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {paper.abstract.substring(0, 200)}...
+            </Box>
+          
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                분야: {result.field}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                생성 시간: {new Date(result.created_at).toLocaleString()}
+              </Typography>
+              {result.duration_seconds && result.duration_seconds > 0 && (
+                <Typography variant="body2" color="text.secondary">
+                  재생 시간: {formatDuration(result.duration_seconds)}
                 </Typography>
-              </ListItem>
-            ))}
-          </List>
+              )}
+            </Box>
 
-          <Divider sx={{ my: 2 }} />
+            {/* TTS 설정 UI */}
+            {showTtsSettings && (
+              <Paper elevation={2} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
+                <Typography variant="h6" gutterBottom>
+                  TTS 설정
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                  <FormControl sx={{ minWidth: 200 }}>
+                    <InputLabel>음성 선택</InputLabel>
+                    <Select
+                      value={ttsSettings.voice}
+                      label="음성 선택"
+                      onChange={(e) => setTtsSettings({...ttsSettings, voice: e.target.value})}
+                    >
+                      <MenuItem value="ko-KR-Neural2-A">여성 음성 A</MenuItem>
+                      <MenuItem value="ko-KR-Neural2-B">여성 음성 B</MenuItem>
+                      <MenuItem value="ko-KR-Neural2-C">남성 음성 C</MenuItem>
+                      <MenuItem value="ko-KR-Neural2-D">남성 음성 D</MenuItem>
+                    </Select>
+                  </FormControl>
+                  
+                  <FormControl sx={{ minWidth: 150 }}>
+                    <InputLabel>속도</InputLabel>
+                    <Select
+                      value={ttsSettings.speed}
+                      label="속도"
+                      onChange={(e) => setTtsSettings({...ttsSettings, speed: e.target.value})}
+                    >
+                      <MenuItem value={0.5}>매우 느림</MenuItem>
+                      <MenuItem value={0.7}>느림</MenuItem>
+                      <MenuItem value={0.9}>보통</MenuItem>
+                      <MenuItem value={1.1}>빠름</MenuItem>
+                      <MenuItem value={1.3}>매우 빠름</MenuItem>
+                    </Select>
+                  </FormControl>
+                  
+                  <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>성별</InputLabel>
+                    <Select
+                      value={ttsSettings.gender}
+                      label="성별"
+                      onChange={(e) => setTtsSettings({...ttsSettings, gender: e.target.value})}
+                    >
+                      <MenuItem value="FEMALE">여성</MenuItem>
+                      <MenuItem value="MALE">남성</MenuItem>
+                      <MenuItem value="NEUTRAL">중성</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Paper>
+            )}
 
-          <Typography variant="h6" gutterBottom>
-            분석 결과
-          </Typography>
-          <Box sx={{ 
-            '& h1, & h2, & h3, & h4, & h5, & h6': {
-              color: 'primary.main',
-              fontWeight: 600,
-              mb: 1,
-              mt: 2
-            },
-            '& h1': { fontSize: '1.5rem' },
-            '& h2': { fontSize: '1.3rem' },
-            '& h3': { fontSize: '1.2rem' },
-            '& h4': { fontSize: '1.1rem' },
-            '& h5': { fontSize: '1rem' },
-            '& h6': { fontSize: '1rem' },
-            '& p': { 
-              mb: 1, 
-              lineHeight: 1.5
-            },
-            '& ul, & ol': { 
-              mb: 1, 
-              pl: 2
-            },
-            '& li': { 
-              mb: 0.5
-            },
-            '& strong': { fontWeight: 600 },
-            '& em': { fontStyle: 'italic' },
-            '& code': { 
-              backgroundColor: 'grey.100', 
-              padding: '1px 3px', 
-              borderRadius: 1,
-              fontFamily: 'monospace'
-            },
-            '& pre': { 
-              backgroundColor: 'grey.100', 
-              padding: 1, 
-              borderRadius: 1,
-              overflow: 'auto'
-            },
-            '& blockquote': {
-              borderLeft: '3px solid',
-              borderColor: 'primary.main',
-              pl: 1,
-              ml: 0,
-              fontStyle: 'italic',
-              color: 'text.secondary'
-            },
-            '& a': {
-              color: 'primary.main',
-              textDecoration: 'none',
-              '&:hover': {
-                textDecoration: 'underline'
+            <Box sx={{ mb: 3 }}>
+              {!result.audio_file_path || result.audio_file_path === "" ? (
+                <>
+                  <Button
+                    variant="contained"
+                    startIcon={<MicIcon />}
+                    onClick={handleGenerateTTS}
+                    disabled={ttsLoading}
+                    sx={{ mr: 2 }}
+                  >
+                    {ttsLoading ? (
+                      <>
+                        <CircularProgress size={20} sx={{ mr: 1 }} />
+                        TTS 생성 중...
+                      </>
+                    ) : (
+                      'TTS 생성'
+                    )}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<SettingsIcon />}
+                    onClick={() => setShowTtsSettings(!showTtsSettings)}
+                  >
+                    TTS 설정
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="outlined"
+                    startIcon={<PlayArrowIcon />}
+                    onClick={handlePlayAudio}
+                    sx={{ mr: 2 }}
+                  >
+                    재생
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<DownloadIcon />}
+                    onClick={handleDownload}
+                    disabled={!result.audio_file_path}
+                  >
+                    다운로드
+                  </Button>
+                </>
+              )}
+            </Box>
+
+            <Divider sx={{ my: 2 }} />
+
+            <Typography variant="h6" gutterBottom>
+              분석된 논문
+            </Typography>
+            <List>
+              {result.papers.map((paper, index) => (
+                <ListItem key={index} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <ListItemText
+                    primary={paper.title}
+                    secondary={`저자: ${paper.authors.join(', ')}`}
+                  />
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    {paper.abstract.substring(0, 200)}...
+                  </Typography>
+                  {paper.url && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      href={paper.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ mt: 1 }}
+                    >
+                      원문 보기
+                    </Button>
+                  )}
+                </ListItem>
+              ))}
+            </List>
+
+            <Divider sx={{ my: 2 }} />
+
+            <Typography variant="h6" gutterBottom>
+              분석 결과
+            </Typography>
+            <Box sx={{ 
+              '& h1, & h2, & h3, & h4, & h5, & h6': {
+                color: 'primary.main',
+                fontWeight: 600,
+                mb: 1,
+                mt: 2
+              },
+              '& h1': { fontSize: '1.5rem' },
+              '& h2': { fontSize: '1.3rem' },
+              '& h3': { fontSize: '1.2rem' },
+              '& h4': { fontSize: '1.1rem' },
+              '& h5': { fontSize: '1rem' },
+              '& h6': { fontSize: '1rem' },
+              '& p': { 
+                mb: 1, 
+                lineHeight: 1.5
+              },
+              '& ul, & ol': { 
+                mb: 1, 
+                pl: 2
+              },
+              '& li': { 
+                mb: 0.5
+              },
+              '& strong': { fontWeight: 600 },
+              '& em': { fontStyle: 'italic' },
+              '& code': { 
+                backgroundColor: 'grey.100', 
+                padding: '1px 3px', 
+                borderRadius: 1,
+                fontFamily: 'monospace'
+              },
+              '& pre': { 
+                backgroundColor: 'grey.100', 
+                padding: 1, 
+                borderRadius: 1,
+                overflow: 'auto'
+              },
+              '& blockquote': {
+                borderLeft: '3px solid',
+                borderColor: 'primary.main',
+                pl: 1,
+                ml: 0,
+                fontStyle: 'italic',
+                color: 'text.secondary'
+              },
+              '& a': {
+                color: 'primary.main',
+                textDecoration: 'none',
+                '&:hover': {
+                  textDecoration: 'underline'
+                }
               }
-            }
-          }}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {result.analysis_text}
-            </ReactMarkdown>
-          </Box>
-        </Paper>
+            }}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {result.analysis_text}
+              </ReactMarkdown>
+            </Box>
+          </Paper>
         </>
       )}
 
@@ -435,26 +765,29 @@ const PodcastPage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 설명 섹션 */}
+      {/* 사용 방법 */}
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
         <Typography variant="h6" gutterBottom>
-          사용 방법
+          새로운 사용 방법
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           1. 원하는 AI 분야를 선택하세요
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          2. "팟캐스트 생성" 버튼을 클릭하세요
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          2. 해당 분야의 학회 목록에서 관심있는 학회를 선택하세요
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          3. 시스템이 해당 분야의 랜덤 논문들을 분석하여 팟캐스트를 생성합니다
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          3. 랜덤으로 선택된 논문을 확인하고, 마음에 들지 않으면 다른 논문을 선택하세요
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          4. 마음에 드는 논문을 찾았다면 분석을 시작하세요
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          4. 생성된 분석 결과를 확인하고 오디오 파일을 다운로드할 수 있습니다
+          5. 생성된 분석 결과를 확인하고 TTS로 음성 파일을 생성할 수 있습니다
         </Typography>
       </Paper>
     </Container>
   );
 };
 
-export default PodcastPage; 
+export default PodcastPage;

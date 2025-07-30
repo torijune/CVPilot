@@ -34,7 +34,7 @@ class TTSService:
             logger.error(f"Google Cloud TTS 클라이언트 초기화 실패: {e}")
             self.client = None
     
-    async def generate_audio(self, text: str, filename: str = None) -> str:
+    async def generate_audio(self, text: str, tts_settings: dict = None, filename: str = None) -> str:
         """텍스트를 오디오 파일로 변환 (Google Cloud TTS 사용)"""
         try:
             if not filename:
@@ -49,20 +49,40 @@ class TTSService:
                 logger.error("Google Cloud TTS 클라이언트가 초기화되지 않았습니다.")
                 raise Exception("TTS 클라이언트 초기화 실패")
             
+            # 기본 설정
+            default_settings = {
+                'voice': 'ko-KR-Neural2-A',
+                'speed': 0.9,
+                'gender': 'FEMALE'
+            }
+            
+            # 사용자 설정과 기본 설정 병합
+            if tts_settings:
+                settings = {**default_settings, **tts_settings}
+            else:
+                settings = default_settings
+            
             # Synthesis 입력 값 설정
             synthesis_input = texttospeech.SynthesisInput(text=text)
+            
+            # 성별 설정
+            gender_map = {
+                'FEMALE': texttospeech.SsmlVoiceGender.FEMALE,
+                'MALE': texttospeech.SsmlVoiceGender.MALE,
+                'NEUTRAL': texttospeech.SsmlVoiceGender.NEUTRAL
+            }
             
             # 목소리 및 언어 설정 (한국어)
             voice = texttospeech.VoiceSelectionParams(
                 language_code="ko-KR",
-                name="ko-KR-Neural2-A",  # 고품질 한국어 음성
-                ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
+                name=settings.get('voice', 'ko-KR-Neural2-A'),
+                ssml_gender=gender_map.get(settings.get('gender', 'FEMALE'), texttospeech.SsmlVoiceGender.FEMALE)
             )
             
             # 오디오 설정 (MP3 출력, 고품질)
             audio_config = texttospeech.AudioConfig(
                 audio_encoding=texttospeech.AudioEncoding.MP3,
-                speaking_rate=0.9,  # 약간 빠르게 (0.25 ~ 4.0)
+                speaking_rate=settings.get('speed', 0.9),  # 사용자 설정 또는 기본값
                 pitch=0.0,  # 기본 피치
                 volume_gain_db=0.0  # 기본 볼륨
             )
@@ -79,6 +99,7 @@ class TTSService:
                 out.write(response.audio_content)
             
             logger.info(f"Google Cloud TTS 파일 생성 완료: {file_path}")
+            logger.info(f"사용된 TTS 설정: {settings}")
             return file_path
             
         except Exception as e:

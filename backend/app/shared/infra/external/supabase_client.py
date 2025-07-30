@@ -144,6 +144,124 @@ class SupabaseClient:
             logger.error(f"분야 목록 조회 실패: {e}")
             raise
     
+    async def get_conferences_by_field(self, field: str) -> List[Dict[str, Any]]:
+        """분야별 학회 목록 조회 (논문 수 통계 포함) - 모든 데이터 가져오기"""
+        try:
+            # 페이지네이션을 사용하여 모든 데이터 가져오기
+            all_papers = []
+            page_size = 1000  # Supabase 기본 제한
+            page = 0
+            
+            while True:
+                try:
+                    # 해당 분야의 논문들을 페이지네이션으로 가져오기
+                    result = self.client.table("papers").select("conference, year").eq("field", field).range(page * page_size, (page + 1) * page_size - 1).execute()
+                    papers = result.data
+                    
+                    if not papers:
+                        break
+                    
+                    all_papers.extend(papers)
+                    logger.info(f"{field} 분야: {page + 1}페이지 로드 완료 ({len(papers)}개 논문)")
+                    
+                    # 다음 페이지로
+                    page += 1
+                    
+                    # 안전장치: 너무 많은 페이지를 로드하지 않도록 제한
+                    if page > 50:  # 최대 50페이지 (50,000개 논문)
+                        logger.warning(f"{field} 분야: 최대 페이지 수에 도달하여 중단")
+                        break
+                        
+                except Exception as e:
+                    logger.warning(f"{field} 분야 {page + 1}페이지 로드 실패: {e}")
+                    break
+            
+            logger.info(f"{field} 분야: 총 {len(all_papers)}개 논문 로드 완료")
+            
+            # 학회별 통계 계산
+            conference_stats = {}
+            for paper in all_papers:
+                conference = paper.get('conference')
+                year = paper.get('year')
+                
+                if conference:
+                    if conference not in conference_stats:
+                        conference_stats[conference] = {
+                            'name': conference,
+                            'paper_count': 0,
+                            'latest_year': 0,
+                            'years': set()
+                        }
+                    
+                    conference_stats[conference]['paper_count'] += 1
+                    if year and year > conference_stats[conference]['latest_year']:
+                        conference_stats[conference]['latest_year'] = year
+                    if year:
+                        conference_stats[conference]['years'].add(year)
+            
+            # 결과 정리 (논문 수 내림차순 정렬)
+            conferences = []
+            for conf_name, stats in conference_stats.items():
+                conferences.append({
+                    'name': conf_name,
+                    'paper_count': stats['paper_count'],
+                    'latest_year': stats['latest_year'],
+                    'year_range': f"{min(stats['years'])}-{max(stats['years'])}" if stats['years'] else "N/A"
+                })
+            
+            # 논문 수로 정렬 (내림차순)
+            conferences.sort(key=lambda x: x['paper_count'], reverse=True)
+            
+            logger.info(f"{field} 분야에서 {len(conferences)}개 학회 발견")
+            return conferences
+            
+        except Exception as e:
+            logger.error(f"분야별 학회 목록 조회 실패: {e}")
+            raise
+    
+    async def get_random_paper_by_field_and_conference(self, field: str, conference: str) -> Optional[Dict[str, Any]]:
+        """분야와 학회 조건에 맞는 랜덤 논문 조회 (최적화된 버전)"""
+        try:
+            # 먼저 해당 조건의 논문 수를 확인
+            count_result = self.client.table("papers").select("id", count="exact").eq("field", field).eq("conference", conference).execute()
+            total_count = count_result.count if count_result.count is not None else 0
+            
+            if total_count == 0:
+                logger.warning(f"{field} 분야의 {conference} 학회에서 논문을 찾을 수 없습니다.")
+                return None
+            
+            # 랜덤 오프셋 계산
+            import random
+            random_offset = random.randint(0, max(0, total_count - 1))
+            
+            # 랜덤 오프셋으로 1개 논문 조회
+            result = self.client.table("papers").select("*").eq("field", field).eq("conference", conference).range(random_offset, random_offset).execute()
+            
+            if not result.data:
+                # 폴백: 첫 번째 논문 조회
+                result = self.client.table("papers").select("*").eq("field", field).eq("conference", conference).limit(1).execute()
+            
+            if not result.data:
+                logger.warning(f"{field} 분야의 {conference} 학회에서 논문을 찾을 수 없습니다.")
+                return None
+            
+            selected_paper = result.data[0]
+            logger.info(f"{field} 분야 {conference} 학회에서 논문 선택: {selected_paper.get('title', 'N/A')[:50]}...")
+            return selected_paper
+            
+        except Exception as e:
+            logger.error(f"분야별 학회 랜덤 논문 조회 실패: {e}")
+            raise
+    
+    async def get_papers_count_by_conference(self, field: str, conference: str) -> int:
+        """특정 분야와 학회의 논문 수 조회"""
+        try:
+            result = self.client.table("papers").select("id", count="exact").eq("field", field).eq("conference", conference).execute()
+            return result.count if result.count is not None else 0
+        except Exception as e:
+            logger.error(f"학회별 논문 수 조회 실패: {e}")
+            raise
+    
     async def get_field_statistics(self, field: str) -> Dict[str, Any]:
         """분야별 통계 조회"""
         try:
