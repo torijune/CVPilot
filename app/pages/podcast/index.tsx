@@ -70,7 +70,7 @@ interface PodcastResult {
     conference?: string;
     year?: number;
     url?: string;
-  }>;  
+  }>;
   analysis_text: string;
   audio_file_path: string;
   duration_seconds: number;
@@ -188,7 +188,7 @@ const PodcastPage: React.FC = () => {
     
     setLoading(true);
     setError(null);
-    
+
     try {
       // 선택된 논문으로 분석 요청
       const response = await analyzePaper(field, [paperPreview.paper]);
@@ -314,7 +314,7 @@ const PodcastPage: React.FC = () => {
       {/* 단계별 컨텐츠 */}
              {activeStep === 0 && (
          <Paper elevation={3} sx={{ p: 3 }}>
-           <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom>
              1. 관심 분야를 선택해주세요
            </Typography>
            <Grid container spacing={2}>
@@ -331,7 +331,7 @@ const PodcastPage: React.FC = () => {
                        </Box>
                        <Typography variant="body2" color="text.secondary">
                          {fieldOption}
-                       </Typography>
+        </Typography>
                      </CardContent>
                    </CardActionArea>
                  </Card>
@@ -388,7 +388,7 @@ const PodcastPage: React.FC = () => {
                    </CardActionArea>
                  </Card>
                </Grid>
-             ))}
+              ))}
            </Grid>
            {loading && (
              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
@@ -416,7 +416,7 @@ const PodcastPage: React.FC = () => {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             분야: {field} | 학회: {selectedConference?.name.split(' (')[0]}
           </Typography>
-          
+
           <Card sx={{ mb: 3 }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
@@ -451,15 +451,15 @@ const PodcastPage: React.FC = () => {
           </Card>
 
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            <Button
-              variant="contained"
+          <Button
+            variant="contained"
               startIcon={<CheckCircleIcon />}
               onClick={handleStartAnalysis}
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <CircularProgress size={20} sx={{ mr: 1 }} />
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <CircularProgress size={20} sx={{ mr: 1 }} />
                   분석 중...
                 </>
               ) : (
@@ -478,10 +478,10 @@ const PodcastPage: React.FC = () => {
                   <>
                     <CircularProgress size={20} sx={{ mr: 1 }} />
                     재선택 중...
-                  </>
-                ) : (
+              </>
+            ) : (
                   '다른 논문 보기'
-                )}
+            )}
               </Button>
             )}
             
@@ -496,8 +496,8 @@ const PodcastPage: React.FC = () => {
                onClick={() => setActiveStep(0)}
              >
                분야 다시 선택
-             </Button>
-          </Box>
+          </Button>
+        </Box>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
             이 학회에는 총 {paperPreview.total_papers_in_conference}개의 논문이 있습니다.
@@ -520,8 +520,8 @@ const PodcastPage: React.FC = () => {
           <Paper elevation={3} sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6">
-                생성된 팟캐스트
-              </Typography>
+              생성된 팟캐스트
+            </Typography>
               <Button
                 variant="outlined"
                 onClick={handleRestart}
@@ -531,19 +531,19 @@ const PodcastPage: React.FC = () => {
               </Button>
             </Box>
           
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                분야: {result.field}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              분야: {result.field}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              생성 시간: {new Date(result.created_at).toLocaleString()}
+            </Typography>
+            {result.duration_seconds && result.duration_seconds > 0 && (
+              <Typography variant="body2" color="text.secondary">
+                재생 시간: {formatDuration(result.duration_seconds)}
               </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                생성 시간: {new Date(result.created_at).toLocaleString()}
-              </Typography>
-              {result.duration_seconds && result.duration_seconds > 0 && (
-                <Typography variant="body2" color="text.secondary">
-                  재생 시간: {formatDuration(result.duration_seconds)}
-                </Typography>
-              )}
-            </Box>
+            )}
+          </Box>
 
             {/* TTS 설정 UI */}
             {showTtsSettings && (
@@ -597,70 +597,70 @@ const PodcastPage: React.FC = () => {
               </Paper>
             )}
 
-            <Box sx={{ mb: 3 }}>
-              {!result.audio_file_path || result.audio_file_path === "" ? (
-                <>
-                  <Button
-                    variant="contained"
-                    startIcon={<MicIcon />}
-                    onClick={handleGenerateTTS}
-                    disabled={ttsLoading}
-                    sx={{ mr: 2 }}
-                  >
-                    {ttsLoading ? (
-                      <>
-                        <CircularProgress size={20} sx={{ mr: 1 }} />
-                        TTS 생성 중...
-                      </>
-                    ) : (
-                      'TTS 생성'
-                    )}
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    startIcon={<SettingsIcon />}
-                    onClick={() => setShowTtsSettings(!showTtsSettings)}
-                  >
-                    TTS 설정
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="outlined"
-                    startIcon={<PlayArrowIcon />}
-                    onClick={handlePlayAudio}
-                    sx={{ mr: 2 }}
-                  >
-                    재생
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    startIcon={<DownloadIcon />}
-                    onClick={handleDownload}
-                    disabled={!result.audio_file_path}
-                  >
-                    다운로드
-                  </Button>
-                </>
-              )}
-            </Box>
+          <Box sx={{ mb: 3 }}>
+            {!result.audio_file_path || result.audio_file_path === "" ? (
+              <>
+                <Button
+                  variant="contained"
+                  startIcon={<MicIcon />}
+                  onClick={handleGenerateTTS}
+                  disabled={ttsLoading}
+                  sx={{ mr: 2 }}
+                >
+                  {ttsLoading ? (
+                    <>
+                      <CircularProgress size={20} sx={{ mr: 1 }} />
+                      TTS 생성 중...
+                    </>
+                  ) : (
+                    'TTS 생성'
+                  )}
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<SettingsIcon />}
+                  onClick={() => setShowTtsSettings(!showTtsSettings)}
+                >
+                  TTS 설정
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outlined"
+                  startIcon={<PlayArrowIcon />}
+                  onClick={handlePlayAudio}
+                  sx={{ mr: 2 }}
+                >
+                  재생
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<DownloadIcon />}
+                  onClick={handleDownload}
+                  disabled={!result.audio_file_path}
+                >
+                  다운로드
+                </Button>
+              </>
+            )}
+          </Box>
 
-            <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2 }} />
 
-            <Typography variant="h6" gutterBottom>
-              분석된 논문
-            </Typography>
-            <List>
-              {result.papers.map((paper, index) => (
-                <ListItem key={index} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                  <ListItemText
-                    primary={paper.title}
-                    secondary={`저자: ${paper.authors.join(', ')}`}
-                  />
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {paper.abstract.substring(0, 200)}...
-                  </Typography>
+          <Typography variant="h6" gutterBottom>
+            분석된 논문
+          </Typography>
+          <List>
+            {result.papers.map((paper, index) => (
+              <ListItem key={index} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                <ListItemText
+                  primary={paper.title}
+                  secondary={`저자: ${paper.authors.join(', ')}`}
+                />
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  {paper.abstract.substring(0, 200)}...
+                </Typography>
                   {paper.url && (
                     <Button
                       size="small"
@@ -673,74 +673,74 @@ const PodcastPage: React.FC = () => {
                       원문 보기
                     </Button>
                   )}
-                </ListItem>
-              ))}
-            </List>
+              </ListItem>
+            ))}
+          </List>
 
-            <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2 }} />
 
-            <Typography variant="h6" gutterBottom>
-              분석 결과
-            </Typography>
-            <Box sx={{ 
-              '& h1, & h2, & h3, & h4, & h5, & h6': {
-                color: 'primary.main',
-                fontWeight: 600,
-                mb: 1,
-                mt: 2
-              },
-              '& h1': { fontSize: '1.5rem' },
-              '& h2': { fontSize: '1.3rem' },
-              '& h3': { fontSize: '1.2rem' },
-              '& h4': { fontSize: '1.1rem' },
-              '& h5': { fontSize: '1rem' },
-              '& h6': { fontSize: '1rem' },
-              '& p': { 
-                mb: 1, 
-                lineHeight: 1.5
-              },
-              '& ul, & ol': { 
-                mb: 1, 
-                pl: 2
-              },
-              '& li': { 
-                mb: 0.5
-              },
-              '& strong': { fontWeight: 600 },
-              '& em': { fontStyle: 'italic' },
-              '& code': { 
-                backgroundColor: 'grey.100', 
-                padding: '1px 3px', 
-                borderRadius: 1,
-                fontFamily: 'monospace'
-              },
-              '& pre': { 
-                backgroundColor: 'grey.100', 
-                padding: 1, 
-                borderRadius: 1,
-                overflow: 'auto'
-              },
-              '& blockquote': {
-                borderLeft: '3px solid',
-                borderColor: 'primary.main',
-                pl: 1,
-                ml: 0,
-                fontStyle: 'italic',
-                color: 'text.secondary'
-              },
-              '& a': {
-                color: 'primary.main',
-                textDecoration: 'none',
-                '&:hover': {
-                  textDecoration: 'underline'
-                }
+          <Typography variant="h6" gutterBottom>
+            분석 결과
+          </Typography>
+          <Box sx={{ 
+            '& h1, & h2, & h3, & h4, & h5, & h6': {
+              color: 'primary.main',
+              fontWeight: 600,
+              mb: 1,
+              mt: 2
+            },
+            '& h1': { fontSize: '1.5rem' },
+            '& h2': { fontSize: '1.3rem' },
+            '& h3': { fontSize: '1.2rem' },
+            '& h4': { fontSize: '1.1rem' },
+            '& h5': { fontSize: '1rem' },
+            '& h6': { fontSize: '1rem' },
+            '& p': { 
+              mb: 1, 
+              lineHeight: 1.5
+            },
+            '& ul, & ol': { 
+              mb: 1, 
+              pl: 2
+            },
+            '& li': { 
+              mb: 0.5
+            },
+            '& strong': { fontWeight: 600 },
+            '& em': { fontStyle: 'italic' },
+            '& code': { 
+              backgroundColor: 'grey.100', 
+              padding: '1px 3px', 
+              borderRadius: 1,
+              fontFamily: 'monospace'
+            },
+            '& pre': { 
+              backgroundColor: 'grey.100', 
+              padding: 1, 
+              borderRadius: 1,
+              overflow: 'auto'
+            },
+            '& blockquote': {
+              borderLeft: '3px solid',
+              borderColor: 'primary.main',
+              pl: 1,
+              ml: 0,
+              fontStyle: 'italic',
+              color: 'text.secondary'
+            },
+            '& a': {
+              color: 'primary.main',
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline'
               }
-            }}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {result.analysis_text}
-              </ReactMarkdown>
-            </Box>
-          </Paper>
+            }
+          }}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {result.analysis_text}
+            </ReactMarkdown>
+          </Box>
+        </Paper>
         </>
       )}
 
@@ -790,4 +790,4 @@ const PodcastPage: React.FC = () => {
   );
 };
 
-export default PodcastPage;
+export default PodcastPage; 

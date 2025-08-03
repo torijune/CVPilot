@@ -131,9 +131,9 @@ const CVQAPage: React.FC = () => {
       // 환영 메시지 추가
       const welcomeMessage: QAMessage = {
         message_id: 'welcome',
-        role: 'assistant',
+            role: 'assistant',
         content: sessionResponse.message,
-        timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString()
       };
       setMessages([welcomeMessage]);
 
@@ -169,12 +169,12 @@ const CVQAPage: React.FC = () => {
       
       const aiMessage: QAMessage = {
         message_id: response.message_id,
-        role: 'assistant',
+          role: 'assistant',
         content: response.content,
         timestamp: response.timestamp || new Date().toISOString(),
         feedback: response.feedback,
         follow_up_question: response.follow_up_question
-      };
+        };
 
       setMessages(prev => [...prev, aiMessage]);
     } catch (err) {
@@ -254,10 +254,10 @@ const CVQAPage: React.FC = () => {
         <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }}>
           CV 면접 QA
         </Typography>
-        <Button
-          variant="outlined"
-          startIcon={<Home />}
-          onClick={handleGoHome}
+          <Button
+            variant="outlined"
+            startIcon={<Home />}
+            onClick={handleGoHome}
         >
           홈으로
         </Button>
@@ -358,7 +358,7 @@ const CVQAPage: React.FC = () => {
                       <li>답변에 대한 피드백</li>
                       <li>꼬리 질문으로 심화 탐구</li>
                       <li>실제 면접과 유사한 경험</li>
-                    </Box>
+        </Box>
                   </CardContent>
                 </CardActionArea>
               </Card>
@@ -398,7 +398,7 @@ const CVQAPage: React.FC = () => {
           <Paper elevation={2} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
             <Typography variant="h6" gutterBottom>
               사용 방법
-            </Typography>
+                </Typography>
             <Box component="ol" sx={{ pl: 2, m: 0 }}>
               <li>CV 파일을 업로드하여 분석을 시작합니다.</li>
               <li>원하는 모드를 선택합니다:
@@ -426,7 +426,7 @@ const CVQAPage: React.FC = () => {
                   <Grid item xs={12} key={index}>
                     <Button
                       variant="outlined"
-                      fullWidth
+                  fullWidth
                       onClick={() => handleQuestionSelect(question)}
                       sx={{
                         justifyContent: 'flex-start',
@@ -499,42 +499,42 @@ const CVQAPage: React.FC = () => {
                   </Button>
                 </Box>
               </Box>
-            </Box>
+                </Box>
 
-            {/* 메시지 영역 */}
-            <Box sx={{ 
-              flex: 1, 
-              overflow: 'auto', 
+                {/* 메시지 영역 */}
+                <Box sx={{ 
+                  flex: 1, 
+                  overflow: 'auto', 
               p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2
-            }}>
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2
+                }}>
               {messages.map((message) => (
-                <Box
+                    <Box
                   key={message.message_id}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
+                      sx={{
+                        display: 'flex',
+                        justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
                     mb: 1
-                  }}
-                >
-                  <Box sx={{
+                      }}
+                    >
+                      <Box sx={{
                     maxWidth: '80%',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 1
-                  }}>
-                    {message.role === 'assistant' && (
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 1
+                      }}>
+                        {message.role === 'assistant' && (
                       <Avatar sx={{ 
                         bgcolor: selectedMode === 'interview' ? 'primary.main' : 'secondary.main', 
                         width: 32, 
                         height: 32 
                       }}>
                         <SmartToyIcon fontSize="small" />
-                      </Avatar>
-                    )}
-                    
+                          </Avatar>
+                        )}
+                        
                     <Box>
                       <Paper
                         elevation={1}
@@ -638,68 +638,68 @@ const CVQAPage: React.FC = () => {
                       )}
                     </Box>
 
-                    {message.role === 'user' && (
+                        {message.role === 'user' && (
                       <Avatar sx={{ bgcolor: 'grey.400', width: 32, height: 32 }}>
                         <PersonIcon fontSize="small" />
-                      </Avatar>
-                    )}
-                  </Box>
-                </Box>
-              ))}
+                          </Avatar>
+                        )}
+                      </Box>
+                    </Box>
+                  ))}
 
               {messageLoading && (
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                     <Avatar sx={{ 
                       bgcolor: selectedMode === 'interview' ? 'primary.main' : 'secondary.main', 
                       width: 32, 
                       height: 32 
                     }}>
                       <SmartToyIcon fontSize="small" />
-                    </Avatar>
+                        </Avatar>
                     <Paper elevation={1} sx={{ p: 2, borderRadius: 2 }}>
-                      <CircularProgress size={20} />
-                    </Paper>
-                  </Box>
-                </Box>
-              )}
+                          <CircularProgress size={20} />
+                        </Paper>
+                      </Box>
+                    </Box>
+                  )}
               <div ref={messagesEndRef} />
-            </Box>
+                </Box>
 
-            {/* 메시지 입력 */}
-            <Box sx={{ 
+                {/* 메시지 입력 */}
+                <Box sx={{ 
               p: 2, 
-              borderTop: '1px solid',
+                  borderTop: '1px solid',
               borderColor: 'divider'
-            }}>
+                }}>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={2}
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={2}
                   placeholder={
                     selectedMode === 'interview' 
                       ? "면접관의 질문에 답변하세요..." 
                       : "연습하고 싶은 면접 질문을 입력하세요..."
                   }
-                  value={userMessage}
-                  onChange={(e) => setUserMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                      value={userMessage}
+                      onChange={(e) => setUserMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
                   disabled={messageLoading}
                   variant="outlined"
                   size="small"
-                />
-                <Button
-                  variant="contained"
-                  onClick={handleSendMessage}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={handleSendMessage}
                   disabled={messageLoading || !userMessage.trim()}
                   sx={{ minWidth: 48, height: 'fit-content', alignSelf: 'flex-end' }}
-                >
-                  <SendIcon />
-                </Button>
-              </Box>
-            </Box>
-          </Paper>
+                    >
+                      <SendIcon />
+                    </Button>
+                  </Box>
+                </Box>
+              </Paper>
         </Box>
       )}
 
@@ -708,4 +708,4 @@ const CVQAPage: React.FC = () => {
   );
 };
 
-export default CVQAPage;
+export default CVQAPage; 

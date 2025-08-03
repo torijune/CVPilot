@@ -91,7 +91,7 @@ app/.env.local
 *.env
 
 /backend/node_modules/
-/backend/.env*
+/backend/*.env
 /backend/.DS_Store
 /backend/coverage/
 /backend/build/
@@ -142,6 +142,7 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.ipynb
 
 *.claude
 cvpilot-467501-80776d682808.json

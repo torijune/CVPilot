@@ -30,6 +30,8 @@ from app.paper_comparsion.api.routes.comparison_routes import router as comparis
 from app.cv_analysis.api.routes.cv_routes import router as cv_router
 from app.daily_paper_podcast.api.routes.podcast_routes import router as daily_paper_podcast_router
 from app.cv_QA.api.routes.cv_qa_routes import router as cv_qa_router
+from app.shared.api.routes.lab_search_routes import router as lab_search_router
+from app.lab_analysis.api.routes.lab_analysis_routes import router as lab_analysis_router
 
 # 정적 파일 서빙 설정 (오디오 파일용)
 temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp_audio")
@@ -42,6 +44,8 @@ app.include_router(comparison_router, prefix="/api/v1/comparison", tags=["compar
 app.include_router(cv_router, prefix="/api/v1/cv", tags=["cv"])
 app.include_router(daily_paper_podcast_router, prefix="/api/v1/podcast", tags=["podcast"])
 app.include_router(cv_qa_router, prefix="/api/v1/cv-qa", tags=["cv_qa"])
+app.include_router(lab_search_router, prefix="/api/v1/labs", tags=["lab_search"])
+app.include_router(lab_analysis_router, prefix="/api/v1/lab-analysis", tags=["lab_analysis"])
 
 @app.get("/")
 async def root():
@@ -55,13 +59,17 @@ async def root():
             "CV Analysis",
             "CV Feedback",
             "CV QA",
-            "Daily Paper Podcast"
+            "Daily Paper Podcast",
+            "Lab Search",
+            "Lab Analysis"
         ],
         "endpoints": {
             "trends": "/api/v1/trends",
             "comparison": "/api/v1/comparison",
             "cv": "/api/v1/cv",
-            "podcast": "/api/v1/podcast"
+            "podcast": "/api/v1/podcast",
+            "labs": "/api/v1/labs",
+            "lab_analysis": "/api/v1/lab-analysis"
         }
     }
 

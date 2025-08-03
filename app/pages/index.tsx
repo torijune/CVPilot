@@ -24,6 +24,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import SpeedIcon from "@mui/icons-material/Speed";
+import BusinessIcon from "@mui/icons-material/Business";
 
 const features = [
   {
@@ -73,14 +74,22 @@ const features = [
     color: "linear-gradient(135deg, #FCE7F3 0%, #FBCFE8 100%)",
     borderColor: "#EC4899",
     path: "/podcast"
+  },
+  {
+    icon: <BusinessIcon sx={{ fontSize: 40, color: '#6366F1' }} />,
+    title: "연구실 분석",
+    description: "AI가 연구실의 최신 연구 동향을 분석하여 인사이트를 제공합니다.",
+    color: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)",
+    borderColor: "#6366F1",
+    path: "/lab_analysis"
   }
 ];
 
 const stats = [
-  { number: "19,817", label: "분석된 논문" },
-  { number: "500+", label: "추천된 교수진" },
+  { number: "19,817", label: "분석 가능한 AI 논문" },
+  { number: "141", label: "분석 가능한 AI 교수" },
   { number: "95%", label: "만족도" },
-  { number: "24/7", label: "실시간 분석" }
+  { number: "24/7", label: "실시간 분석 가능" }
 ];
 
 export default function HomePage() {

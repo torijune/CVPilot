@@ -1,0 +1,416 @@
+{
+  "university": "KAIST",
+  "department": "Graduate School of AI",
+  "crawled_at": "2025-07-30 21:28:01",
+  "total_professors": 69,
+  "professors": [
+    {
+      "name": "정송",
+      "research_area": "강화학습, 분산학습",
+      "email": "songchong@kaist.ac.kr",
+      "website": "https://sites.google.com/a/kaist.edu/song-chong"
+    },
+    {
+      "name": "김범준",
+      "research_area": "로보틱스, 기계학습, 플래닝",
+      "email": "beomjoon.kim@kaist.ac.kr",
+      "website": "https://beomjoonkim.github.io"
+    },
+    {
+      "name": "김승룡",
+      "research_area": "컴퓨터비전, 기계학습",
+      "email": "seungryong.kim@kaist.ac.kr",
+      "website": "https://cvlab.kaist.ac.kr/"
+    },
+    {
+      "name": "김현우",
+      "research_area": "언어모델, 추론, 인지, 사회적 인공지능",
+      "email": "hyunwookim.ai@gmail.com",
+      "website": "https://coco-kaist.github.io"
+    },
+    {
+      "name": "서민준",
+      "research_area": "자연어 처리, 지식 베이스, 대규모 기계학습",
+      "email": "minjoon@kaist.ac.kr",
+      "website": "https://seominjoon.github.io"
+    },
+    {
+      "name": "신기정",
+      "research_area": "데이터마이닝, 그래프 알고리즘",
+      "email": "kijungs@kaist.ac.kr",
+      "website": "https://kijungs.github.io"
+    },
+    {
+      "name": "신진우",
+      "research_area": "기계학습",
+      "email": "jinwoos@kaist.ac.kr",
+      "website": "http://alinlab.kaist.ac.kr/shin.html"
+    },
+    {
+      "name": "심현정",
+      "research_area": "컴퓨터 비전, 기계학습",
+      "email": "kateshim@kaist.ac.kr",
+      "website": "https://sites.google.com/view/cvml-kaist"
+    },
+    {
+      "name": "안성수",
+      "research_area": "분자 대상 기계학습",
+      "email": "sungsoo.ahn@kaist.ac.kr",
+      "website": "https://sites.google.com/view/sungsooahn0215"
+    },
+    {
+      "name": "양은호",
+      "research_area": "기계학습, 인공지능",
+      "email": "eunhoy@kaist.ac.kr",
+      "website": "https://mli.kaist.ac.kr"
+    },
+    {
+      "name": "예종철",
+      "research_area": "의료인공지능, 컴퓨터 비전, 생성 모델",
+      "email": "jong.ye@kaist.ac.kr",
+      "website": "https://bispl.weebly.com"
+    },
+    {
+      "name": "오성준",
+      "research_area": "Machine Learning, Artificial Intelligence, Safety and Trustworthiness",
+      "email": "coallaoh@gmail.com",
+      "website": "http://seongjoonoh.com/"
+    },
+    {
+      "name": "윤세영",
+      "research_area": "기계학습, 통계적 추론",
+      "email": "yunseyoung@kaist.ac.kr",
+      "website": "http://fbsqkd.github.io"
+    },
+    {
+      "name": "윤철희",
+      "research_area": "최적화, 기계학습 및 심층학습 이론",
+      "email": "chulhee.yun@kaist.ac.kr",
+      "website": "https://chulheeyun.github.io"
+    },
+    {
+      "name": "이기민",
+      "research_area": "인공지능, 강화형 기계 학습",
+      "email": "kiminlee@kaist.ac.kr",
+      "website": "https://sites.google.com/view/kiminlee"
+    },
+    {
+      "name": "이주호",
+      "research_area": "기계학습, 인공지능, 베이지안 모델",
+      "email": "juholee@kaist.ac.kr",
+      "website": "https://juho-lee.github.io"
+    },
+    {
+      "name": "임재환",
+      "research_area": "기계학습, 로봇러닝, 강화학습, 컴퓨터 비전",
+      "email": "joe.lim@kaist.ac.kr",
+      "website": "https://www.clvrai.com"
+    },
+    {
+      "name": "주재걸",
+      "research_area": "컴퓨터 비전, 자연어 처리, 데이터 시각화 분석",
+      "email": "jchoo@kaist.ac.kr",
+      "website": "https://sites.google.com/site/jaegulchoo"
+    },
+    {
+      "name": "최윤재",
+      "research_area": "기계학습, 헬스케어, 자연어 처리",
+      "email": "edwardchoi@kaist.ac.kr",
+      "website": "http://mp2893.com"
+    },
+    {
+      "name": "최재식",
+      "research_area": "추론 및 예측, 설명가능 인공지능",
+      "email": "jaesik.choi@kaist.ac.kr",
+      "website": "https://gsai.kaist.ac.kr/ http://sailab.kaist.ac.kr"
+    },
+    {
+      "name": "황성주",
+      "research_area": "기계학습, 인공지능(시각인식, 언어이해 등)",
+      "email": "sjhwang82@kaist.ac.kr",
+      "website": "http://www.sungjuhwang.com"
+    },
+    {
+      "name": "James Thorne",
+      "research_area": "자연어 처리, 사실검증",
+      "email": "thorne@kaist.ac.kr",
+      "website": "https://jamesthorne.com"
+    },
+    {
+      "name": "강금석",
+      "research_area": "인공지능 비즈니스 전략, 디지털 혁신 전략, 비즈니스 애널리틱스, 정보시스템",
+      "email": "keumkang@kaist.ac.kr",
+      "website": "https://gsai.kaist.ac.kr/#1568688814687-d7d055a8-17e3"
+    },
+    {
+      "name": "금동석",
+      "research_area": "자율주행 AI, 3D 컴퓨터 비전",
+      "email": "dskum@kaist.ac.kr",
+      "website": "http://vdclab.kaist.ac.kr/"
+    },
+    {
+      "name": "김정남",
+      "research_area": "AI 편향성, AI 사회적 영향, AI 가버넌스와 규제",
+      "email": "layinformatics@kaist.ac.kr",
+      "website": "https://futures.kaist.ac.kr/ko/?c=184&s=&cidx1=41&gp=1&gbn=viewok&ix=3334"
+    },
+    {
+      "name": "김주호",
+      "research_area": "인간-AI 상호작용, 인간-컴퓨터 상호작용, AI 어플리케이션 설계",
+      "email": "juhokim@kaist.ac.kr",
+      "website": "https://juhokim.com/"
+    },
+    {
+      "name": "김준모",
+      "research_area": "딥러닝, 컴퓨터 비전",
+      "email": "junmo.kim@kaist.ac.kr",
+      "website": "http://siit.kaist.ac.kr"
+    },
+    {
+      "name": "김태균",
+      "research_area": "컴퓨터 비전, 머신러닝",
+      "email": "kimtaekyun@kaist.ac.kr",
+      "website": "https://sites.google.com/view/tkkim/"
+    },
+    {
+      "name": "김현우",
+      "research_area": "범용인공지능, 컴퓨터비전, AI기반 과학",
+      "email": "hyunwoojkim@kaist.ac.kr",
+      "website": "http://mlv.kaist.ac.kr"
+    },
+    {
+      "name": "김희영",
+      "research_area": "응용통계, 기계학습",
+      "email": "heeyoungkim@kaist.ac.kr",
+      "website": "https://istat.kaist.ac.kr/"
+    },
+    {
+      "name": "남주한",
+      "research_area": "음악 인공지능/머신러닝, 음악 정보 검색, 오디오 신호 처리",
+      "email": "juhannam@kaist.ac.kr",
+      "website": "http://mac.kaist.ac.kr"
+    },
+    {
+      "name": "노용만",
+      "research_area": "멀티모달 학습, 인공지능을 위한 시각, 음성 및 언어 통합, 컴퓨터 비전 및 멀티미디어",
+      "email": "ymro@kaist.ac.kr",
+      "website": "https://www.ivylab.kaist.ac.kr/ivylab-ivllab"
+    },
+    {
+      "name": "문재균",
+      "research_area": "분산 및 탈중앙화 저장소/통신/머신러닝",
+      "email": "jmoon@kaist.edu",
+      "website": "http://comstolab.kaist.ac.kr/"
+    },
+    {
+      "name": "문일철",
+      "research_area": "깊은 생성 모델, 확률 그래프 모델",
+      "email": "icmoon@kaist.ac.kr",
+      "website": "https://aai.kaist.ac.kr/xe2/ "
+    },
+    {
+      "name": "박노성",
+      "research_area": "인공지능·정보서비스, 소셜 컴퓨팅",
+      "email": "noseong@kaist.ac.kr",
+      "website": "https://sites.google.com/view/noseong"
+    },
+    {
+      "name": "박대형",
+      "research_area": "로보틱스, 기계학습, 강화학습",
+      "email": "daehyung@kaist.ac.kr",
+      "website": "https://gsai.kaist.ac.kr/ https://rirolab.kaist.ac.kr/"
+    },
+    {
+      "name": "박종세",
+      "research_area": "인공지능 시스템, 인공지능 반도체 구조",
+      "email": "jongse@kaist.ac.kr",
+      "website": "https://jongse-park.github.io/"
+    },
+    {
+      "name": "박진규",
+      "research_area": "인공지능 기반 동적시스템 모델링 및 제어",
+      "email": "jinkyoo.park@kaist.ac.kr",
+      "website": "http://silab.kaist.ac.kr/"
+    },
+    {
+      "name": "박찬영",
+      "research_area": "데이터 마이닝, 그래프 기계학습",
+      "email": "cy.park@kaist.ac.kr",
+      "website": "http://dsail.kaist.ac.kr/"
+    },
+    {
+      "name": "서창호",
+      "research_area": "기계학습, 정보이론",
+      "email": "chsuh@kaist.ac.kr",
+      "website": "http://csuh.kaist.ac.kr"
+    },
+    {
+      "name": "성민혁",
+      "research_area": "컴퓨터 비전, 컴퓨터 그래픽스, 기하학적 데이터 처리",
+      "email": "mhsung@kaist.ac.kr",
+      "website": "https://mhsung.github.io/"
+    },
+    {
+      "name": "성영철",
+      "research_area": "강화학습",
+      "email": "ycsung@kaist.ac.kr",
+      "website": "https://sites.google.com/view/sisrelkaist "
+    },
+    {
+      "name": "손훈",
+      "research_area": "인공지능 기반 구조물 건전성 모니터링",
+      "email": "hoonsohn@kaist.ac.kr",
+      "website": "http://ssslab.kaist.ac.kr"
+    },
+    {
+      "name": "안성진",
+      "research_area": "기계학습, 강화학습, 로봇학습",
+      "email": "sungjin.ahn@kaist.ac.kr",
+      "website": "https://sungjinahn.com/"
+    },
+    {
+      "name": "오원석",
+      "research_area": "인공지능 경제성 분석, 인간지능과 인공지능 협업, 데이터 애널리틱스",
+      "email": "wonseok.oh@kaist.ac.kr",
+      "website": "https://www.business.kaist.ac.kr/faculty/ohws"
+    },
+    {
+      "name": "오태현",
+      "research_area": "멀티모달학습, 컴퓨터비전, 그래픽스, 오디오 및 스피치 처리, 기계학습",
+      "email": "taehyun.oh@kaist.ac.kr",
+      "website": "https://ami.kaist.ac.kr"
+    },
+    {
+      "name": "오혜연",
+      "research_area": "자연언어처리",
+      "email": "alice.oh@kaist.ac.kr",
+      "website": "http://uilab.kr"
+    },
+    {
+      "name": "유민수",
+      "research_area": "인공지능 컴퓨터 시스템 구조",
+      "email": "minsoo.rhu@gmail.com",
+      "website": "https://sites.google.com/view/kaist-via"
+    },
+    {
+      "name": "유재민",
+      "research_area": "데이터마이닝, 머신러닝, 그래프신경망",
+      "email": "jaemin@kaist.ac.kr",
+      "website": "https://dai.kaist.ac.kr"
+    },
+    {
+      "name": "윤국진",
+      "research_area": "컴퓨터 비전",
+      "email": "kjyoon@kaist.ac.kr",
+      "website": "http://vi.kaist.ac.kr"
+    },
+    {
+      "name": "윤성의",
+      "research_area": "컴퓨터 비전, 로봇틱스, 그래픽스",
+      "email": "sungeui@kaist.ac.kr",
+      "website": "https://sgvr.kaist.ac.kr/~sungeui/ "
+    },
+    {
+      "name": "윤윤진",
+      "research_area": "모빌리티",
+      "email": "yoonjin@kaist.ac.kr",
+      "website": "https://true.kaist.ac.kr"
+    },
+    {
+      "name": "이상완",
+      "research_area": "계산신경과학, 뇌 기반 인공지능",
+      "email": "sangwan@kaist.ac.kr",
+      "website": "https://aibrain.kaist.ac.kr/"
+    },
+    {
+      "name": "이재길",
+      "research_area": "딥러닝 기반 빅데이터 분석, 대규모 분산 딥러닝",
+      "email": "jaegil@kaist.ac.kr",
+      "website": "https://dm.kaist.ac.kr/jaegil"
+    },
+    {
+      "name": "이지환",
+      "research_area": "전략 경영, 글로벌 전략, ESG",
+      "email": "jihwanlee@kaist.ac.kr",
+      "website": "https://www.business.kaist.ac.kr/faculty/jihwanlee"
+    },
+    {
+      "name": "전준",
+      "research_area": "과학기술사회학, AI 정책, 혼합연구방법론",
+      "email": "junejeon@kaist.ac.kr",
+      "website": "http://www.junejeon.com"
+    },
+    {
+      "name": "정명수",
+      "research_area": "미래 메모리 및 가속 기술을 갖춘 AI 데이터센터 구조",
+      "email": "m.jung@kaist.ac.kr",
+      "website": "https://camelab.org/"
+    },
+    {
+      "name": "정준선",
+      "research_area": "머신러닝, 음성신호처리, 컴퓨터비전",
+      "email": "joonsc@kaist.ac.kr",
+      "website": "http://mm.kaist.ac.kr"
+    },
+    {
+      "name": "정혜원",
+      "research_area": "기계학습, 수학적 데이터과학, 정보이론",
+      "email": "hwchung@kaist.ac.kr",
+      "website": "http://iids.kaist.ac.kr"
+    },
+    {
+      "name": "최한림",
+      "research_area": "자율화, 다중 에이전트 시스템",
+      "email": "hanlimc@kaist.ac.kr",
+      "website": "https://gsai.kaist.ac.kr/ http://lics.kaist.ac.kr "
+    },
+    {
+      "name": "한동수",
+      "research_area": "인공지능 컴퓨터 시스템 및 네트워킹",
+      "email": "dhan.ee@kaist.ac.kr",
+      "website": "http://ina.kaist.ac.kr"
+    },
+    {
+      "name": "홍승훈",
+      "research_area": "컴퓨터 비전, 머신 러닝",
+      "email": "seunghoon.hong@kaist.ac.kr",
+      "website": "https://maga33.github.io/"
+    },
+    {
+      "name": "한지영",
+      "research_area": "AI 저널리즘",
+      "email": "jiyoung.han@kaist.ac.kr",
+      "website": "https://futures.kaist.ac.kr/ko/?c=184&s=&cidx1=41&gp=1&gbn=viewok&ix=2962"
+    },
+    {
+      "name": "황보제민",
+      "research_area": "강화학습, 보행 로봇, 물리엔진",
+      "email": "jhwangbo@kaist.ac.kr",
+      "website": "https://www.railab.kaist.ac.kr/"
+    },
+    {
+      "name": "황의종",
+      "research_area": "빅데이터 – 인공지능 융합, 빅데이터 분석, 빅데이터 시스템",
+      "email": "swhang@kaist.ac.kr",
+      "website": "http://stevenwhang.com"
+    },
+    {
+      "name": "황지영",
+      "research_area": "그래프 기계학습, 데이터 마이닝, 빅데이터",
+      "email": "jjwhang@kaist.ac.kr",
+      "website": "http://bdi-lab.kaist.ac.kr/"
+    },
+    {
+      "name": "민원기",
+      "research_area": "인공지능 거버넌스",
+      "email": "donchang@kaist.ac.kr",
+      "website": "https://gsai.kaist.ac.kr/#1571900728255-60063f1f-7f05"
+    },
+    {
+      "name": "한동윤",
+      "research_area": "딥러닝, ​컴퓨터 비전, ​기계학습",
+      "email": "dongyoon.han@navercorp.com",
+      "website": "https://dongyoonhan.github.io/"
+    }
+  ]
+}

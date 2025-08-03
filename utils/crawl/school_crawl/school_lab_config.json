@@ -51,13 +51,200 @@
           ]
         }
       ]
+    },
+    {
+      "name": "고려대학교",
+      "abbreviation": "KU",
+      "departments": [
+        {
+          "name": "컴퓨터학과",
+          "labs": [
+            {
+              "name": "Intelligent Data Science and Applications Lab (데이터과학 및 응용 연구실)",
+              "professor": {
+                "name": "강성구",
+                "email": "seongku@postech.ac.kr",
+                "title": "교수"
+              },
+              "homepage": "https://www.idea.korea.ac.kr/",
+              "research_areas": [
+                "데이터 과학",
+                "인공지능",
+                "대형 언어 모델",
+                "추천 시스템",
+                "정보 검색",
+                "데이터/웹 마이닝"
+              ],
+              "description": "Intelligent Data Science and Applications Lab (데이터과학 및 응용 연구실)에서 데이터 과학, 인공지능, 대형 언어 모델, 추천 시스템, 정보 검색, 데이터/웹 마이닝 연구를 수행합니다.",
+              "Recent publications": [
+                {
+                  "title": "Continual Recommender Systems",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "DeepRetrieval: Hacking Real Search Engines and Retrievers with Large Language Models via Reinforcement Learning",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Imagine All The Relevance: Scenario-Profiled Indexing with Knowledge Expansion for Dense Retrieval",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Delving into Instance-Dependent Label Noise in Graph Data: A Comprehensive Study and Benchmark",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Embracing Plasticity: Balancing Stability and Plasticity in Continual Recommender Systems",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Personalized Preference Reasoning with Large Language Models for Accurate and Explainable Recommendation",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Uncertainty Quantification and Decomposition for LLM-based Recommendation",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Chain-of-Factors Paper-Reviewer Matching",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Improving Scientific Document Retrieval with Concept Coverage-based Query Set Generation",
+                  "authors": "강성구",
+                  "conference": "Unknown"
+                }
+              ]
+            },
+            {
+              "name": "Data Mining and Information Systems Lab (데이터마이닝 및 인포메이션시스템 랩)",
+              "professor": {
+                "name": "강재우",
+                "email": ": kangj@korea.ac.kr",
+                "title": "교수"
+              },
+              "homepage": "https://dmis.korea.ac.kr/",
+              "research_areas": [
+                "AI",
+                "머신러닝(ML)을 활용한 생물정보학",
+                "신약 개발",
+                "생물의학 텍스트 마이닝 분야 문제 해결"
+              ],
+              "description": "Data Mining and Information Systems Lab (데이터마이닝 및 인포메이션시스템 랩)에서 AI, 머신러닝(ML)을 활용한 생물정보학, 신약 개발, 생물의학 텍스트 마이닝 분야 문제 해결 연구를 수행합니다.",
+              "Recent publications": [
+                {
+                  "title": "Small language models learn enhanced reasoning skills from medical textbooks",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "BADGER: biologically-aware interpretable differential gene expression ranking model",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Augmenting Biomedical Named Entity Recognition with General-domain Resources",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "MolPLA: A Molecular Pre-training Framework for Learning Cores, R-Groups and their Linker Joints",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "ETHIC: Evaluating Large Language Models on Long-Context Tasks with High Information Coverage",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Rationale-Guided Retrieval Augmented Generation for Medical Question Answering",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Ask Optimal Questions: Aligning Large Language Models with Retriever's Preference in Conversational Search",
+                  "authors": "강재우",
+                  "conference": "Unknown"
+                }
+              ]
+            },
+            {
+              "name": "IIIXR (Intelligent Immersive Interactive Extended Reality) Lab",
+              "professor": {
+                "name": "강형엽",
+                "email": "siamiz_hkang@korea.ac.kr",
+                "title": "교수"
+              },
+              "homepage": "https://iiixr.korea.ac.kr/home",
+              "research_areas": [
+                "뉴럴 컴퓨터 그래픽스",
+                "가상 에이전트",
+                "확장 현실(XR)",
+                "인간-컴퓨터 상호작용(HCI)"
+              ],
+              "description": "IIIXR (Intelligent Immersive Interactive Extended Reality) Lab에서 뉴럴 컴퓨터 그래픽스, 가상 에이전트, 확장 현실(XR), 인간-컴퓨터 상호작용(HCI) 연구를 수행합니다.",
+              "Recent publications": [
+                {
+                  "title": "ForceGrip: Reference-Free Curriculum Learning for Realistic Grip Force Control in VR Hand Manipulation",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Visual Interfaces to Mitigate Eye Problems in a Virtual Environment via Triggering Eye Blinking and Movement",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "Shaping the Future of VR Hand Interactions: Lessons Learned from Modern Methods",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "REVECA: Adaptive Planning and Trajectory-based Validation in Cooperative Language Agents Using Information Relevance and Relative Proximity",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "P-Hologen: An End-to-End Generative Framework for Phase-Only Holograms",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "3DStyleGLIP: Part-Tailored Text-Guided 3D Neural Stylization",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "DARAM: Dynamic Avatar-Human Motion Remapping Technique for Realistic Virtual Stair Ascending Motions",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                },
+                {
+                  "title": "VR-HandNet: A Visually and Physically Plausible Hand Manipulation System in Virtual Reality",
+                  "authors": "강형엽",
+                  "conference": "Unknown"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "metadata": {
-    "last_updated": "2025-07-30",
+    "last_updated": "2025-07-31",
     "version": "1.0",
     "description": "대학원 랩실 정보 데이터베이스",
-    "total_universities": 1,
-    "total_labs": 1
+    "total_universities": 3,
+    "total_labs": 8
   }
 }

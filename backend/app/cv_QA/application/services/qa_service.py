@@ -313,8 +313,8 @@ CV 원본 내용:
 
 JSON 배열 형태로 5개의 질문만 반환해주세요:
 ["질문1", "질문2", "질문3", "질문4", "질문5"]
-"""
-
+            """
+            
             response = await openai_client._call_chat_completion(prompt)
             
             # JSON 파싱 시도

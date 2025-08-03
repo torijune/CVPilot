@@ -1,0 +1,2549 @@
+{
+  "universities": [
+    {
+      "name": "성균관대학교",
+      "labs": [
+        {
+          "professor": "고영중",
+          "url": "https://nlplab-skku.github.io/",
+          "publications": [
+            "DAPI: Domain Adaptive Toxicity Probe Vector Intervention, for Fine-Grained Detoxification",
+            "Hyper-QKSG: Framework for Automating Query Generation and Knowledge-Snippet Extraction from Tables and Lists",
+            "RAC: Retrieval-augmented Conversation Dataset for Open-domain Question Answering in Conversational Settings",
+            "Topic-Informed Dialogue Summarization using Topic Distribution and Prompt-based Modeling",
+            "Contrastively Pretrained Vision-Language Transformers and Domain Adaptation Methods for Multimodal TOD Systems",
+            "Statistical and Generative Models with Subtitle Extraction for Next Product Title Generation",
+            "Never Too Late to Learn: Regularizing Gender Bias in Coreference Resolution"
+          ],
+          "research_areas": [
+            "자연어처리",
+            "빅데이터분석",
+            "기계학습(딥러닝)"
+          ]
+        },
+        {
+          "professor": "고종환",
+          "url": "https://iris.skku.edu/",
+          "publications": [
+            "Row-Column Hybrid Grouping for Fault-Resilient Multi-Bit Weight Representation on IMC Arrays",
+            "MSQ: Memory-Efficient Bit Sparsification Quantization",
+            "Multi-Frame ISP: Enhancing Vision-Based Tasks with RAW and Infrared Videos",
+            "TruncQuant: Truncation-Ready Quantization for DNNs with Flexible Weight Bit Precision",
+            "Do Not Mimic My Voice : Speaker Identity Unlearning for Zero-Shot Text-to-Speech",
+            "Mixed Binary Supporting Electrolyte Approach for Enhanced Synaptic Functionality in One-shot Integrable Electropolymerized Synaptic Transistors",
+            "GAROS: Genetic Algorithm-Aided Row-Skipping for Shift and Duplicate Kernel Mapping in Processing-In-Memory Architectures"
+          ],
+          "research_areas": [
+            "딥러닝 최적화",
+            "음성/영상처리",
+            "IoT 시스템 설계"
+          ]
+        },
+        {
+          "professor": "공배선",
+          "url": "https://home.skku.edu/~isdlab/",
+          "publications": [
+            "How to Build a Memristive Integrate-and-Fire Model for Spiking Neuronal Signal Generation",
+            "Linearity Enhancement of VCO-Based Continuous-Time Delta-Sigma ADCs Using Digital Feedback Residue Quantization",
+            "High-Speed Column Driver IC Having Buffer Amplifier with Embedded Isolation Switch and Compact Adaptive Biasing for Flat-Panel Displays",
+            "In-sensor reservoir computing for language learning via two-dimensional memristors",
+            "High-Speed Rail-to-Rail Class-AB Buffer Amplifier with Compact, Adaptive Biasing for FPD Applications",
+            "A Minimum Energy Tracking Loop with Accurate Energy Sensing and Hierarchical Tracking"
+          ],
+          "research_areas": [
+            "IC design",
+            "neuromorphic HW설계"
+          ]
+        },
+        {
+          "professor": "김광수",
+          "url": "https://appliedai.skku.edu/appliedailab/index.do",
+          "publications": [
+            "One-Step Generalization Ratio Guided Optimization for Domain Generalization",
+            "Federated Learning for Feature Generalization with Convex Constraints",
+            "CSTA: CNN-based Spatiotemporal Attention for Video Summarization",
+            "Acoustic NLOS Imaging with Cross-Modal Knowledge Distillation",
+            "Generalized Facial Manipulation Detection with Edge Region Feature Extraction",
+            "A Daily Tourism Demand Prediction Framework Based on Multi-head Attention CNN: The Case of The Foreign Entrant in South Korea",
+            "Canine Behavior Interpretation Framework using Deep Graph Model"
+          ],
+          "research_areas": [
+            "Computer Vision",
+            "Domain Adaptaion",
+            "Federeated Learning",
+            "AI Applications"
+          ]
+        },
+        {
+          "professor": "김유성",
+          "url": "https://sites.google.com/view/yskim525",
+          "publications": [
+            "Self-Supervised Risk Factor Model using Dual Recurrent State Space Models",
+            "Graph-Assisted Stitching for Offline Hierarchical Reinforcement Learning",
+            "Implementation of Reinforcement Learning for Enhanced Pressure Control in a 190,000-Barrel Crude Distillation Unit: The First Full-Scale Commercial Deployment",
+            "Prediction of intraoperative hypotension using deep learning models based on non-invasive monitoring devices",
+            "Novelty-aware Graph Traversal and Expansion for Hierarchical Reinforcement Learning",
+            "Self-supervised One-Stage Learning for RF-based Multi-Person Pose Estimation",
+            "Cross-Domain Semantic Segmentation on Inconsistent Taxonomy using Vision Language Models",
+            "Learning Visual Clue for UWB-based Multi-Person Pose Estimation"
+          ],
+          "research_areas": [
+            "기계학습",
+            "강화학습",
+            "시스템 최적화"
+          ]
+        },
+        {
+          "professor": "민동문",
+          "url": "https://dongmoon-min.github.io/",
+          "publications": [
+            "SuperSFQ: A Full-Stack Hardware Design to Realize Practical Superconducting Processors",
+            "LANCER: Low-Overhead, Accurate, and Non-Destructive Calibration for Real-World Fault-Tolerant Quantum Applications",
+            "SuperCore: An Ultra-Fast Superconducting Processor for Cryogenic Applications",
+            "CoolDC: A Cost-Effective Immersion-Cooled Datacenters with Workload-Aware Temperature Scaling",
+            "A Fault-Tolerant Million Qubit-Scale Distributed Quantum Computer",
+            "Fast, Light-Weight, and Accurate Performance Evaluation using Representative Datacenter Behaviors",
+            "QIsim: Architecting 10+K Qubit QC Interfaces Toward Quantum Supremacy"
+          ],
+          "research_areas": [
+            "Cryogenic/Quantum Computing",
+            "Computer Architecture and System"
+          ]
+        },
+        {
+          "professor": "박진영",
+          "url": "https://hli.skku.edu/",
+          "publications": [
+            "Text Overlap: An LLM with Human-like Conversational Behaviors",
+            "Unintended Harms of Value-Aligned LLMs: Psychological and Empirical Insights",
+            "Dialogue response coherency evaluation with feature sensitive negative sample using multi list-wise ranking loss",
+            "Self-Training Meets Consistency: Improving LLMs' Reasoning with Consistency-Driven Rationale Evaluation",
+            "KpopMT: Translation Dataset with Terminology for Kpop Fandom"
+          ],
+          "research_areas": [
+            "Machine Learning",
+            "Natural Language Processing",
+            "Data Science"
+          ]
+        },
+        {
+          "professor": "박현진",
+          "url": "https://mipskku.wixsite.com/mipl",
+          "publications": [
+            "Information Theory for Locally Adaptive Registrations",
+            "Methods for quantifying lesion change from interval liver examinations",
+            "Effects of voxel dimension, anisotropy and data set orientation on data set distribution",
+            "Improved Motion Correction by Joint Mapping of Slices to an Anatomical Volume Demonstrated by Simulated fMRI Time Series",
+            "Joint registration of multiple images using entropic graphs",
+            "Local mismatch location and spatial scale detection in image registration",
+            "Registration methods for histological slides and ex vivo MRI of prostate",
+            "Quantitative growth measurement of lesions in hepatic interval CT exams",
+            "Lack of tumor hypoxia in primary prostate cancer as demonstrated by 18F-FAZA PET/CT and immunohistochemistry"
+          ],
+          "research_areas": [
+            "기계학습 기반 의료 영상처리"
+          ]
+        },
+        {
+          "professor": "박호건",
+          "url": "https://learndatalab.github.io/",
+          "publications": [
+            "Complex Reasoning in Knowledge Graph Question Answering Through Query Graph Approximation",
+            "Harnessing Influence Function in Explaining Graph Neural Networks",
+            "AI-integrated Optoelectronic Nose for Real-time Detection of Toxic Industrial Chemicals",
+            "Self-supervised Adversarial Purification for Graph Neural Networks",
+            "Enhancing Inductive Numerical Reasoning in Knowledge Graphs with Relation-Aware Relative Numeric Encoding",
+            "Large Language Models Are Better Logical Fallacy Reasoners with Counterargument, Explanation, and Goal-Aware Prompt Formulation",
+            "Balancing Graph Embedding Smoothness in Self-Supervised Learning via Information-Theoretic Decomposition",
+            "AudioGenX: Explainability on Text-to-Audio Generative Models"
+          ],
+          "research_areas": [
+            "Machine Learning",
+            "Explainable AI",
+            "Knowledge Discovery",
+            "Social Networks"
+          ]
+        },
+        {
+          "professor": "서의성",
+          "url": "http://csl.skku.edu/",
+          "publications": [
+            "AWUPF Rediscovered: Atomic Writes to Unleash Pivotal Fault-Tolerance in SSDs",
+            "Cloud Reamer: Enabling Inference Services in Training Clusters",
+            "An Adaptive Zone-Grouping Scheme Enabling General-Purpose File Systems on ZNS SSDs",
+            "Persistent Memory I/O-Aware Task Placement for Mitigating Resource Contention",
+            "A Secure, Fast, and Resource-Efficient Serverless Platform with Function REWIND",
+            "We Ain't Afraid of No File Fragmentation: Cause and Prevention of Its Performance Impact on Modern Flash SSDs",
+            "Revitalizing Buffered I/O: Optimization of Page Reclaim and I/O Throttling",
+            "DaCapo: An On-Device Learning Scheme for Memory-Constrained Embedded Systems",
+            "Energy-Harvesting-Aware Adaptive Inference of Deep Neural Networks in Embedded Systems"
+          ],
+          "research_areas": [
+            "Deep Learning Training Cloud Systems",
+            "Training/Inference Acceleration Systems"
+          ]
+        },
+        {
+          "professor": "신동군",
+          "url": "http://nyx.skku.ac.kr/",
+          "publications": [
+            "D2FS: Device-Driven Filesystem Garbage Collection",
+            "Optimizing Stream Separation Using Event Logs in FDP Storage Devices",
+            "Delayed TRIM for Reducing Trim Overhead"
+          ],
+          "research_areas": [
+            "On-device Machine Learning",
+            "DNN Compression"
+          ]
+        },
+        {
+          "professor": "심규홍",
+          "url": "https://sites.google.com/view/slpr",
+          "publications": [
+            "Understanding the Role of Self-attention for Efficient Speech Recognition",
+            "Leveraging Adapter for Parameter-Efficient ASR Encoder",
+            "Knowledge Distillation from Non-streaming to Streaming ASR Encoder using Auxiliary Non-streaming Layer",
+            "InfiniPot: Infinite Context Processing on Memory-Constrained LLMs"
+          ],
+          "research_areas": [
+            "Speech and language AI",
+            "Multimodal generative AI",
+            "On-device and personalized AI"
+          ]
+        },
+        {
+          "professor": "우사이먼",
+          "url": "https://dash.skku.edu/",
+          "publications": [
+            "Learning Interpersonal Similarities in Multiple Fingers via Fingerprint Landmark-Aware Recognition Network",
+            "From Prediction to Explanation: Multimodal, Explainable, and Interactive Deepfake Detection Framework for Non-Expert Users",
+            "PromptFlare: Prompt-Generalized Defense via Cross-Attention Decoy in Diffusion-Based Inpainting",
+            "SpecXNet: A Dual-Domain Convolutional Network for Robust Deepfake Detection",
+            "Combating Dataset Misalignment for Robust AI-Generated Image Detection in the Real World",
+            "DIA: The Adversarial Exposure of Deterministic Inversion in Diffusion Models",
+            "Translation of Text Embedding via Delta Vector to Suppress Strongly Entangled Content in Text-to-Image Diffusion Models",
+            "SpecGuard: Spectral Projection-based Advanced InvisibleWatermarking",
+            "HiDF: A Human-Indistinguishable Deepfake Dataset",
+            "SEE: Spherical Embedding Expansion for Improving Deep Metric Learning (Extended Abstract)",
+            "Binh M. Le and"
+          ],
+          "research_areas": [
+            "데이터사이언스",
+            "인공지능 보안",
+            "기계학습"
+          ]
+        },
+        {
+          "professor": "이강윤",
+          "url": "https://www.iclab.co.kr/",
+          "publications": [
+            "Wide Load Range, High Current Accuracy Low Drop-Out Regulator With Load Tracking Compensation and Dual Soft-Start for Wireless Charging System",
+            "A Low Power Memory-Integrated Hardware BNN-MLP Model on an FPGA for Current Signals in a Biosensor",
+            "A Reference Voltage Loop Operation Based ZQ Calibration Technique for Multi-Load High-Capacity NAND Flash Memory Interface",
+            "Design of a High Efficiency Bi-Directional Four-Switch Buck-Boost Converter With HV Gate Driver for Multi-Cell Battery Power Bank Applications",
+            "A Design of a 100-MHz Fully Integrated Digital Pulse Width Modulation Three-Level Buck Converter Using Package Bond-Wire Inductor",
+            "100 nW Wake Up Receiver with -42.3 dBm Sensitivity for Real-Time Location Systems",
+            "Design of a High-Gain Multi-Input LNA with 16.4 Degree Phase Shift Within the 32 dB Gain Range",
+            "A Design of High-Efficiency RF/Solar/Triboelectric/Electromagnetic Energy Harvesting System",
+            "A 92.7% Peak Efficiency Self-Starting Boost Converter with MPPT and Phase Frequency Detector Based Multi Current Detector for Energy Harvesting Systems with a Minimum Input Source Impedance of 1 kOhm"
+          ],
+          "research_areas": [
+            "- Recent publications:"
+          ]
+        },
+        {
+          "professor": "이선재",
+          "url": "https://sites.google.com/view/fclab-skku",
+          "publications": [
+            "VeriSafeAgent: Safeguarding Mobile GUI Agent via Logic-based Action Verification",
+            "MobileGPT: Augmenting LLM wih Human-like Memory for Mobile Task Automation",
+            "FLUID-IoT: Flexible and Granular Access Control in Shared IoT Environments via-UI-Level Control Distribution",
+            "Supporting Flexible and Transparent User Interface Distribution across Mobile Devices",
+            "It is Okay to be Distracted: How Real-time Transcriptions Facilitate Online Meeting with Distraction",
+            "A-Mash: Providing Single-App Illusion for Multi-App Use through User-centric UI Mashup",
+            "MixMax: Leveraging Heterogeneous Batteries to Alleviate Low Battery Experience"
+          ],
+          "research_areas": [
+            "Agentic AI Systems",
+            "Mobile Computing",
+            "Human-Computer Interaction (HCI)"
+          ]
+        },
+        {
+          "professor": "이승원",
+          "url": "https://sites.google.com/view/mbd-lab",
+          "publications": [
+            "Risk of anxiety disorders after epilepsy diagnosis: A nationwide retrospective cohort study",
+            "Risk of depression in persistent blue light deprivation following cataract surgery: a population-based cohort study",
+            "Epidemiology and Future Burden of Vertebral Fractures: Insights from the Global Burden of Disease 1990–2021",
+            "Exudative AMD Risk Following Blue Light-Filtering IOL Implantation: A Population-Based Study According to Non-Exudative AMD Status",
+            "Exploring the Role of Artificial Intelligence in Smart Healthcare: A Capability and Function-Oriented Review",
+            "Advancing genome-based precision medicine: a review on machine learning applications for rare genetic disorders",
+            "Dual-task hierarchical feature refinement and fusion network for precise segmentation of surgical tools and polyps in endoscopy",
+            "Time-Dependent Risk of Dementia Following Epilepsy Diagnosis: A Nationwide Cohort Study in South Korea"
+          ],
+          "research_areas": [
+            "의료 인공지능",
+            "의료 시계열처리",
+            "디지털 헬스/스마트 의료기기"
+          ]
+        },
+        {
+          "professor": "이종욱",
+          "url": "https://dial.skku.edu/",
+          "publications": [
+            "GRAM: Generative Recommendation via Semantic-aware Multi-granular Late Fusion",
+            "HELIOS: Harmonizing Early Fusion, Late Fusion, and LLM Reasoning for Multi-Granular Table-Text Retrieval",
+            "Why is Normalization Necessary for Linear Recommenders?",
+            "Linear Item-Item Models with Neural Knowledge for Session-based Recommendation",
+            "DIFF: Dual Side-Information Filtering and Fusion for Sequential Recommendation",
+            "DUET: Dually guided knowledge distillation from explicit feedback",
+            "Empowering Retrieval-based Conversational Recommendation with Contrasting User Preferences",
+            "Temporal Linear Item-Item Model for Sequential Recommendation",
+            "From Reading to Compressing: Exploring the Multi-document Reader for Prompt Compression"
+          ],
+          "research_areas": [
+            "추천 시스템",
+            "정보검색",
+            "자연어 처리",
+            "기계학습"
+          ]
+        },
+        {
+          "professor": "이준호",
+          "url": "https://vision.skku.ac.kr/",
+          "publications": [
+            "Visual defect obfuscation based self-supervised anomaly detection",
+            "Boost-up Efficiency of Defective Solar Panel Detection with Pre-trained Attention Recycling",
+            "Real-Time Deep Recognition of Standardized Liver Ultrasound Scan Locations",
+            "Cross modal facial image synthesis using a collaborative bidirectional style transfer network",
+            "Exploiting an Intermediate Latent Space between Photo and Sketch for Face Photo-Sketch Recognition",
+            "Effective removal of user-selected foreground object from facial images using a novel GAN-based network",
+            "A novel GAN-based network for unmasking of masked face",
+            "Interactive Removal of Microphone Object in Facial Images"
+          ],
+          "research_areas": [
+            "Computer Vision",
+            "Deep Leartning (GAN)"
+          ]
+        },
+        {
+          "professor": "이지형",
+          "url": "https://iislab.skku.edu/",
+          "publications": [
+            "TAG: A Simple Yet Effective Temporal-Aware Approach for Zero-Shot Video Temporal Grounding",
+            "Stabilizing Open-Set Test-Time Adaptation via Primary-Auxiliary Filtering and Knowledge-Integrated Prediction",
+            "DCG-SQL: Enhancing In-Context Learning for Text-to-SQL with Deep Contextual Schema Link Graph",
+            "Q-FAKER: Query-free Hard Black-box Attack via Controlled Generation",
+            "SALAD: Improving Robustness and Generalization through Contrastive Learning with Structure-Aware and LLM-Driven Augmented Data",
+            "CoRAC: Integrating Selective API Document Retrieval with Question Semantic Intent for Code Question Answering",
+            "DeCAP: Context-Aware Prompt Generation for Debiased Zero-shot Question Answering in Large Language Models"
+          ],
+          "research_areas": [
+            "컴퓨터비전",
+            "자연어처리",
+            "연합학습",
+            "추천시스템"
+          ]
+        },
+        {
+          "professor": "이한국",
+          "url": "https://hankook.github.io/",
+          "publications": [
+            "Learning Equi-angular Representations for Online Continual Learning",
+            "Few-shot Anomaly Detection via Personalization",
+            "Projection Regret: Reducing Background Bias for Novelty Detection via Diffusion Models",
+            "Diffusion-based Semantic-Discrepant Outlier Generation for Out-of-Distribution Detection",
+            "Mixed-Curvature Transformers for Graph Representation Learning",
+            "Fragment-based Multi-view Molecular Contrastive Learning",
+            "Enhancing Multiple Reliability Measures via Nuisance-extended Information Bottleneck"
+          ],
+          "research_areas": [
+            "Machine/Deep Learning",
+            "(Self-supervised) Representation Learning",
+            "Efficient Neural Network Architectures"
+          ]
+        },
+        {
+          "professor": "전일용",
+          "url": "https://www.midasl.ch/",
+          "publications": [
+            "Improvement of NeRF (Neural Radiance Field) using depth information",
+            "Improved and efficient inter-vehicle distance estimation using road gradients of ego and target vehicles",
+            "Momentum-Net for Low-Dose CT Image Reconstruction",
+            "Incorporating Handcrafted Filters in Convolutional Analysis Operator Learning for Ill-Posed Inverse Problems",
+            "Improved low count quantitative SPECT reconstruction with a trained deep learning based regularizer",
+            "Graphene-Based Transparent Photodetector Array for Multiplane Imaging",
+            "Fast and convergent iterative image recovery using trained convolutional neural networks"
+          ],
+          "research_areas": [
+            "인공지능 및 기계학습 이론",
+            "영상처리",
+            "컴퓨터비전",
+            "자율주행"
+          ]
+        },
+        {
+          "professor": "정윤경",
+          "url": "https://inglab.github.io/",
+          "publications": [
+            "Comparing generative and retrieval-based chatbots in answering patient questions regarding age-related macular degeneration and diabetic retinopathy",
+            "Evaluating Unsupervised Deep Learning Models for Network Intrusion Detection Using Real Security Event Data",
+            "Analysis of Autoencoders for Network Intrusion Detection",
+            "A Fast and Efficient Stochastic Opposition-Based Learning for Differential Evolution in Numerical Optimization, Swarm and Evolutionary Computation",
+            "Extracting and Clustering of Story Events from a Story Corpus",
+            "Advanced Cauchy Mutation for Differential Evolution in Numerical Optimization"
+          ],
+          "research_areas": [
+            "스토리 생성",
+            "자연어 분석"
+          ]
+        },
+        {
+          "professor": "조재민",
+          "url": "https://idclab.skku.edu/",
+          "publications": [
+            "GhostUMAP2: Measuring and Analyzing (r,d)-Stability of UMAP"
+          ],
+          "research_areas": [
+            "Human-AI Interaciton",
+            "Information Visualization"
+          ]
+        },
+        {
+          "professor": "조형민",
+          "url": "http://cpl.skku.edu/cplpage/",
+          "publications": [
+            "SPARQ: An Accelerator Architecture for Large Language Models with Joint Sparsity and Quantization Techniques",
+            "GraphAccel: An In-Storage Accelerator for Efficient Graph-Based Vector Similarity Search Using Page Packing and Speculative Search Optimization",
+            "Detecting Cache-based Side-Channel Attacks by Leveraging Mesh Interconnect Traffic Monitoring",
+            "ES4D: Accelerating Exact Similarity Search for High-Dimensional Vectors via Vector Slicing and In-SSD Computation",
+            "Know Your Neighbor: Physically Locating Xeon Processor Cores on the Core Tile Grid",
+            "FA3C: FPGA-Accelerated Deep Reinforcement Learning",
+            "Cross-layer resilience in low-voltage digital systems: key insights",
+            "CLEAR: Cross-Layer Exploration for Architecting Resilience: Combining Hardware and Software Techniques To Tolerate Soft Errors in Processor Cores"
+          ],
+          "research_areas": [
+            "Machine Learning Accelerators",
+            "Processor Security",
+            "Hardware Reliability"
+          ]
+        },
+        {
+          "professor": "차수영",
+          "url": "https://sal.skku.edu/",
+          "publications": [
+            "TopSeed: Learning Seed Selection Strategies for Symbolic Execution from Scratch",
+            "FeatMaker: Automated Feature Engineering for Search Strategy of Symbolic Execution",
+            "Learning Seed-Adaptive Mutation Strategies for Greybox Fuzzing",
+            "Enhancing Dynamic Symbolic Execution by Automatically Learning Search Heuristics",
+            "SymTuner: Maximizing the Power of Symbolic Execution by Adaptively Tuning External Parameters",
+            "Making Symbolic Execution Promising by Learning Aggressive State-Pruning Strategy",
+            "Effective White-Box Testing of Deep Neural Networks with Adaptive Neuron-Selection Strategy",
+            "Concolic Testing with Adaptively Changing Search Heuristics",
+            "A Scalable Learning Algorithm for Data-Driven Program Analysis"
+          ],
+          "research_areas": [
+            "Software Analysis Techniques for safe and Reliable Software"
+          ]
+        },
+        {
+          "professor": "추현승",
+          "url": "http://monet.skku.edu/main/",
+          "publications": [
+            "Self-Propagative Multi-Task Learning for Predicting Cardiometabolic Risk Factors",
+            "Dynamic Network Optimization with Deep Learning and Deployment of Intelligent Reflecting Surfaces",
+            "Spatiotemporal Traffic Analysis: Deep Hybrid Approach for Resource and Cyberattacks Prediction",
+            "Optimizing 3D Flight Paths for Multiple UAVs with Connectivity Management in Urban Delivery Systems",
+            "NDAS: Noise-Decomposed Abnormal Segmentation for Robust Medical Image Retrieval",
+            "Integrating Temporal Analysis with Hybrid Machine Learning and Deep Learning Models for Enhanced Air Quality Prediction",
+            "Deep Learning for Drug Response Prediction with Gene Expression Data"
+          ],
+          "research_areas": [
+            "데이터 딥러닝",
+            "지능형 네트워킹"
+          ]
+        },
+        {
+          "professor": "한태희",
+          "url": "https://idealab.skku.edu/",
+          "publications": [
+            "BTCP:Binary Temporal Convolutional Network-based Data Prefetcher for Low Inference Latency and Storage Overhead",
+            "Expanding the PDE Cache by Exploiting Underutilized TLB Entries for Data-Intensive Workloads",
+            "Deep learning-based material decomposition of iodine and calcium in mobile photon counting detector CT",
+            "OWBM: OSNR-Aware Wavelength Allocation and Branching Methods for Multicast Routing in Custom Topology-Based Optical Network-on-Chips",
+            "RISC-V R-Extension: Advancing Efficiency with Rented-Pipeline for Edge DNN Processing",
+            "RL-Based Cache Replacement: A Modern Interpretation of Belady’s Algorithm With Bypass Mechanism and Access Type Analysis",
+            "SFAO: Sign-Flipping-Aware Optimization for Early-Stopping of Binarized Neural Networks"
+          ],
+          "research_areas": [
+            "인공지능 기반 차세대 시스템",
+            "반도체 구조 및 설계 기법"
+          ]
+        },
+        {
+          "professor": "허재필",
+          "url": "https://sites.google.com/site/vclabskku/",
+          "publications": [
+            "Prototypes are Balanced Units for Efficient and Effective Partially Relevant Video Retrieval",
+            "Selective Contrastive Learning for Weakly Supervised Affordance Grounding",
+            "Fine-Tuning Visual Autogressive Models for Subject-Driven Generation",
+            "Translation of Text Embedding via Delta Vector to Suppress Strongly Entangled Content in Text-to-Image Diffusion Models",
+            "Auto-Encoded Supervision for Perceptual Image Super-Resolution",
+            "Temporal Alignment-Free Video Matching for Few-shot Action Recognition",
+            "Prediction-Feedback DETR for Temporal Action Detection",
+            "Ambiguity-Restrained Text-Video Representation Learning for Partially Relevant Video Retrieval",
+            "Bridging the Semantic Granularity Gap Between Text and Frame Representations for Partially Relevant Video Retrieval",
+            "Foreground-Covering Prototype Generation and Matching for SAM-Aided Few-Shot Segmentation",
+            "GSGAN: Adversarial Learning for Hierarchical Generation of 3D Gaussian Splats",
+            "Activating Self-Attention for Multi-Scene Absolute Pose Regression",
+            "Progressive Proxy Anchor Propagation for Unsupervised Semantic Segmentation"
+          ],
+          "research_areas": [
+            "컴퓨터 비전"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KAIST",
+      "labs": [
+        {
+          "professor": "정송",
+          "url": "https://sites.google.com/a/kaist.edu/song-chong/professor?authuser=0",
+          "publications": [
+            "Merging Language Models in Latent Space",
+            "DPM: Dual Preferences-based Multi-Agent Reinforcement Learning",
+            "AoRA: AI-on-RAN Architecture for Backhaul-free Edge Inference",
+            "Diffusion-based Neural Network Weights Generation",
+            "MA^2E: Addressing Partial Observability in Multi-Agent Reinforcement Learning with Masked Auto-Encoder",
+            "Instruction-Guided Autoregressive Neural Network Parameter Generation",
+            "Preference Alignment with Flow Matching"
+          ],
+          "research_areas": [
+            "Reinforcement Learning",
+            "Distributed Learning"
+          ]
+        },
+        {
+          "professor": "김범준",
+          "url": "https://beomjoonkim.github.io",
+          "publications": [
+            "PRESTO: Fast motion planning using diffusion models based on key-configuration environment representation",
+            "Prime the Search: Using Large Language Models for Guiding Geometric Task and Motion Planning by Warm-starting Tree Search",
+            "CORN: Contact-based Object Representation for Nonprehensile Manipulation of General Unseen Objects",
+            "An Intuitive Multi-Frequency Feature Representation for SO(3)-Equivariant Networks",
+            "Open X-Embodiment: robotic learning datasets and RT-X models"
+          ],
+          "research_areas": [
+            "로보틱스",
+            "기계학습",
+            "플래닝"
+          ]
+        },
+        {
+          "professor": "김승룡",
+          "url": "https://cvlab.kaist.ac.kr/",
+          "publications": [
+            "Learning to Track Any Points from Human Motio",
+            "PLOT: Pseudo-Labeling via Video Object Tracking for Scalable Monocular 3D Object Detection",
+            "Vid-CamEdit: Video Camera Trajectory Editing with Generative Rendering from Estimated Geometry",
+            "Emergent Temporal Correspondences from Video Diffusion Transformers",
+            "Active Test-time Vision-Language Navigation",
+            "MoAI: Aligned Novel View Image and Geometry Synthesis via Cross-modal Attention Instillation"
+          ],
+          "research_areas": [
+            "컴퓨터비전",
+            "기계학습"
+          ]
+        },
+        {
+          "professor": "김현우",
+          "url": "https://coco-kaist.github.io",
+          "publications": [
+            "Hypothesis-Driven Theory-of-Mind Reasoning for Large Language Models",
+            "HAICOSYSTEM: An Ecosystem for Sandboxing Safety Risks in Human-AI Interactions",
+            "Socratic-MCTS: Test-Time Visual Reasoning by Asking the Right Questions",
+            "Retro-Search: Exploring Untaken Paths for Deeper and Efficient Reasoning",
+            "A False Sense of Privacy: Evaluating Textual Data Sanitization Beyond Surface-level Privacy Leakage",
+            "Alpaca against Vicuna: Using LLMs to Uncover Memorization of LLMs",
+            "Perceptions to Beliefs: Exploring Precursory Inferences for Theory of Mind in Large Language Models",
+            "Is this the real life? Is this just fantasy? The Misleading Success of Simulating Social Interactions With LLMs",
+            "Deal, or no deal (or who knows)? Forecasting Uncertainty in Conversations using LLMs"
+          ],
+          "research_areas": [
+            "언어모델",
+            "추론",
+            "인지",
+            "사회적 인공지능"
+          ]
+        },
+        {
+          "professor": "서민준",
+          "url": "https://seominjoon.github.io",
+          "publications": [
+            "How Do Large Language Models Acquire Factual Knowledge During Pretraining?",
+            "Aligning to Thousands of Preferences via System Message Generalization",
+            "Prometheus 2: An Open Source Language Model Specialized in Evaluating Other Language Models",
+            "Hierarchical Deconstruction of LLM Reasoning: A Graph-Based Framework for Analyzing Knowledge Utilization",
+            "Exploring the Practicality of Generative Retrieval on Dynamic Corpora",
+            "On Efficient Language and Vision Assistants for Visually-Situated Natural Language Understanding: What Matters in Reading and Reasoning",
+            "Rethinking the Role of Proxy Rewards in Language Model Alignment",
+            "Self-Explore to Avoid the Pit: Improving the Reasoning Capabilities of Language Models with Fine-grained Rewards",
+            "Semiparametric Token-Sequence Co-Supervision"
+          ],
+          "research_areas": [
+            "자연어 처리",
+            "지식 베이스",
+            "대규모 기계학습"
+          ]
+        },
+        {
+          "professor": "신기정",
+          "url": "https://kijungs.github.io",
+          "publications": [
+            "SkySearch: Satellite Video Search at Scale",
+            "RL4CO: an Extensive Reinforcement Learning for Combinatorial Optimization Benchmark",
+            "On Measuring Unnoticeability of Graph Adversarial Attacks: Observations, New Measure, and Applications",
+            "Mitigating Over-Squashing in Graph Neural Networks by Spectrum-Preserving Sparsification",
+            "KGMEL: Knowledge Graph-Enhanced Multimodal Entity Linking",
+            "MARIOH: Multiplicity-Aware Hypergraph Reconstruction",
+            "Simple yet Effective Node Property Prediction on Edge Streams under Distribution Shifts",
+            "Multi-Behavior Recommender Systems: A Survey",
+            "TiGer: Self-Supervised Purification for Time-evolving Graphs",
+            "Kronecker Generative Models for Power-Law Patterns in Real-World Hypergraphs"
+          ],
+          "research_areas": [
+            "데이터마이닝",
+            "그래프 알고리즘"
+          ]
+        },
+        {
+          "professor": "신진우",
+          "url": "alinlab.kaist.ac.kr/shin.html",
+          "publications": [
+            "Test-Time Adaptation with Binary Feedback",
+            "ReVISE: Learning to Refine at Test-Time via Intrinsic Self-Verification",
+            "PRIME: Deep Imbalanced Regression with Proxies",
+            "Peri-LN: Revisiting Layer Normalization in the Transformer Architecture",
+            "StarFT: Robust Fine-tuning of Zero-shot Models via Spuriosity Alignment",
+            "Enhancing LLM Agent Safety via Causal Influence Prompting",
+            "Debiasing Online Preference Learning via Preference Feature Preservation",
+            "Silent Branding Attack: Trigger-free Data Poisoning Attack on Text-to-Image Diffusion Models"
+          ],
+          "research_areas": [
+            "기계학습"
+          ]
+        },
+        {
+          "professor": "심현정",
+          "url": "https://sites.google.com/view/cvml-kaist",
+          "publications": [
+            "Scribble-Guided Diffusion for Training-free Text-to-Image Generation",
+            "I0T: Embedding Standardization Method Towards Zero Modality Gap",
+            "Fine-Grained Image-Text Correspondence with Cost Aggregation for Open-Vocabulary Part Segmentation",
+            "Classifier-guided CLIP Distillation for Unsupervised Multi-label Classification",
+            "No Thing, Nothing: Highlighting Safety-Critical Classes for Robust LiDAR Semantic Segmentation in Adverse Weather",
+            "DGQ: Distribution-Aware Group Quantization for Text-to-Image Diffusion Models",
+            "DreamCatalyst: Fast and High-Quality 3D Editing via Controlling Editability and Identity Preservation",
+            "Label-Augmented Dataset Distillation",
+            "Evaluating Image Hallucination in Text-to-Image Generation with Question-Answering",
+            "Understanding Multi-Granularity for Open-Vocabulary Part Segmentation"
+          ],
+          "research_areas": [
+            "컴퓨터 비전",
+            "기계학습"
+          ]
+        },
+        {
+          "professor": "안성수",
+          "url": "https://sites.google.com/view/sungsooahn0215",
+          "publications": [
+            "Improving Chemical Understanding of LLMs via SMILES Parsing",
+            "MT-Mol: Multi Agent System with Tool-based Reasoning for Molecular Optimization",
+            "High-order Equivariant Flow Matching for Density Functional Theory Hamiltonian Prediction",
+            "Search-Based Correction of Reasoning Chains for Language Models",
+            "Energy-based Generator Matching: A Neural Sampler for General State Space",
+            "On Scalable and Efficient Training of Diffusion Samplers",
+            "Learning Flexible Forward Trajectories for Masked Molecular Diffusion",
+            "Self-Training LLMs with Reasoning-Level Confidence",
+            "Flexible MOF Generation with Torsion-Aware Flow Matching",
+            "Can LLMs Generate Diverse Molecules? Towards Alignment with Structural Diversity",
+            "Learning Collective Variables from Time-lagged Generation"
+          ],
+          "research_areas": [
+            "분자 대상 기계학습"
+          ]
+        },
+        {
+          "professor": "양은호",
+          "url": "https://mli.kaist.ac.kr/",
+          "publications": [
+            "Early Timestep Zero-Shot Candidate Selection for Instruction-Guided Image Editing",
+            "HybridLinker: Topology-Guided Posterior Sampling for Enhanced Diversity and Validity in 3D Molecular Linker Generation",
+            "DeltaSHAP: Explaining Prediction Evolutions in Online Patient Monitoring with Shapley Values",
+            "R-VLM: Region-Aware Vision Language Model for Precise GUI Grounding",
+            "TIMING: Temporality-Aware Integrated Gradients for Time Series Explanation",
+            "Playing the Fool: Jailbreaking LLMs and Multimodal LLMs with Out-of-Distribution Strategy",
+            "Preserve or Modify? Context-Aware Evaluation for Balancing Preservation and Modification in Text-Guided Image Editing",
+            "Deep Learning-Based Landmark Detection Model for Multiple Foot Deformity Classification: A Dual-Center Study",
+            "Divide and Translate: Compositional First-Order Logic Translation and Verification for Complex Logical Reasoning",
+            "LANTERN: Accelerating Visual Autoregressive Models with Relaxed Speculative Decoding",
+            "ReBind: Enhancing Ground-state Molecular Conformation Prediction via Force-Based Graph Rewiring"
+          ],
+          "research_areas": [
+            "기계학습",
+            "인공지능"
+          ]
+        },
+        {
+          "professor": "예종철",
+          "url": "https://bispl.weebly.com/",
+          "publications": [
+            "Reangle-A-Video: 4D Video Generation as Video-to-Video Translation",
+            "VISION-XL: High Definition Video Inverse Problem Solver using Latent Image Diffusion Models",
+            "Free2Guide: Training-Free Text-to-Video Alignment using Image LVLM",
+            "FlowDPS : Flow-Driven Posterior Sampling for Inverse Problems",
+            "Inference-Time Diffusion Model Distillation",
+            "Boost-and-Skip: A Simple Guidance-Free Diffusion for Minority Generation",
+            "LDMol: Text-to-Molecule Diffusion Model with Structurally Informative Latent Space Space Surpass the AR Models",
+            "Minority-Focused Text-to-Image Generation via Prompt Optimization"
+          ],
+          "research_areas": [
+            "의료인공지능",
+            "컴퓨터 비전",
+            "생성 모델"
+          ]
+        },
+        {
+          "professor": "오성준",
+          "url": "https://coallaoh.github.io/",
+          "publications": [
+            "Does Data Scaling Lead to Visual Compositional Generalization?",
+            "On the rankability of visual embeddings",
+            "Leaky Thoughts: Large Reasoning Models Are Not Private Thinkers",
+            "C-SEO Bench: Does Conversational SEO Work?",
+            "Diffusion Classifiers Understand Compositionality, but Conditions Apply",
+            "Does Data Scaling Lead to Visual Compositional Generalization?",
+            "Are We Done with Object-Centric Learning?",
+            "Mitigating Shortcut Learning with Diffusion Counterfactuals and Diverse Ensembles",
+            "CLIP Behaves like a Bag-of-Words Model Cross-modally but not Uni-modally",
+            "DiCoTTA: Domain-invariant Learning for Continual Test-time Adaptation",
+            "Scaling Up Membership Inference: When and How Attacks Succeed on Large Language Models",
+            "Intermediate Layer Classifiers for OOD Generalization",
+            "Do Deep Neural Network Solutions Form a Star Domain?"
+          ],
+          "research_areas": [
+            "Machine Learning",
+            "Artificial Intelligence",
+            "Safety and Trustworthiness"
+          ]
+        },
+        {
+          "professor": "윤세영",
+          "url": "https://fbsqkd.github.io/",
+          "publications": [
+            "Large language models are reasoning teachers"
+          ],
+          "research_areas": [
+            "기계학습",
+            "통계적 추론"
+          ]
+        },
+        {
+          "professor": "윤철희",
+          "url": "https://chulheeyun.github.io/",
+          "publications": [
+            "Implicit Bias and Loss of Plasticity in Matrix Completion: Depth Promotes Low-Rank Solutions",
+            "The Cost of Robustness: Tighter Bounds on Parameter Complexity for Robust Memorization in ReLU Nets",
+            "From Linear to Nonlinear: Provable Weak-to-Strong Generalization through Feature Learning",
+            "Provable Benefit of Random Permutations over Uniform Sampling in Stochastic Coordinate Descent",
+            "Through the River: Understanding the Benefit of Schedule-Free Methods for Language Model Training",
+            "Understanding Sharpness Dynamics in NN Training with a Minimalist Example: The Effects of Dataset Difficulty, Depth, Stochasticity, and More",
+            "Incremental Gradient Descent with Small Epoch Counts is Surprisingly Slow on Ill-Conditioned Problems",
+            "Lightweight Dataset Pruning without Full Training via Example Difficulty and Prediction Uncertainty"
+          ],
+          "research_areas": [
+            "최적화",
+            "기계학습 및 심층학습 이론"
+          ]
+        },
+        {
+          "professor": "이기민",
+          "url": "https://sites.google.com/view/kiminlee",
+          "publications": [
+            "Benchmarking Mobile Device Control Agents across Diverse Configurations",
+            "Understanding Impact of Human Feedback via Influence Functions",
+            "What Really Matters in Many-Shot Attacks? An Empirical Study of Long-Context Vulnerabilities in LLMs",
+            "Silent Branding Attack: Trigger-free Data Poisoning Attack on Text-to-Image Diffusion Models",
+            "Enhancing LLM Agent Safety via Causal Influence Prompting",
+            "When LLMs Go Online: The Emerging Threat of Web-Enabled LLMs",
+            "Learning to Contextualize Web Pages for Enhanced Decision Making by LLM Agents",
+            "Automated Filtering of Human Feedback Data for Aligning Text-to-Image Diffusion Models",
+            "DiffusionGuard: A Robust Defense Against Malicious Diffusion-based Image Editing",
+            "Subtask-Aware Visual Reward Learning from Segmented Demonstrations",
+            "Spread Preference Annotation: Direct Preference Judgment for Efficient LLM Alignment"
+          ],
+          "research_areas": [
+            "인공지능",
+            "강화형 기계 학습"
+          ]
+        },
+        {
+          "professor": "이주호",
+          "url": "https://juho-lee.github.io/",
+          "publications": [
+            "Bayesian neural scaling laws extrapolation with prior-fitted networks",
+            "Ensemble distribution distillation via flow matching",
+            "Active learning with selective time-step acquisition for PDEs",
+            "StarFT: robust fine-tuning of zero-shot models via spuriosity alignment",
+            "Parameter expanded stochastic gradient Markov chain Monte Carlo",
+            "Dimension agnostic neural processes",
+            "Variational Bayesian pseudo-coreset",
+            "Amortized control of continuous state space Feynman-Kac model for irregular time series",
+            "Learning diverse attacks on large language models for robust red-teaming and safety tuning",
+            "HarmAug: effective data augmentation for knowledge distillation of safety guard Models",
+            "Model fusion through Bayesian optimization in language model fine-tuning"
+          ],
+          "research_areas": [
+            "기계학습",
+            "인공지능",
+            "베이지안 모델"
+          ]
+        },
+        {
+          "professor": "임재환",
+          "url": "https://www.clvrai.com/",
+          "publications": [
+            "Subtask-Aware Visual Reward Learning from Segmented Demonstrations",
+            "QMP: Q-switch Mixture of Policies for Multi-Task Behavior Sharing",
+            "EXTRACT: Efficient Policy Learning by Extracting Transferrable Robot Skills from Offline Data",
+            "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+            "DROID: A Large-Scale In-the-Wild Robot Manipulation Dataset",
+            "SPRINT: Scalable Policy Pre-Training via Language Instruction Relabeling"
+          ],
+          "research_areas": [
+            "기계학습",
+            "로봇러닝",
+            "강화학습",
+            "컴퓨터 비전"
+          ]
+        },
+        {
+          "professor": "주재걸",
+          "url": "https://sites.google.com/site/jaegulchoo",
+          "publications": [
+            "Attend-and-Refine: Interactive Keypoint Estimation and Quantitative Cervical Vertebrae Analysis for Bone Age Assessment",
+            "Machine Learning-based Classification of Adrenal Tumors Using Clinical, Hormonal, and Body Composition Data",
+            "PromptDresser: Improving the Quality and Controllability of Virtual Try-On via Generative Textual Prompt and Prompt-aware Mask",
+            "Fair Generation without Unfair Distortions: Debiasing Text-to-Image Generation with Entanglement-Free Attention",
+            "Opt-Out: Investigating Entity-Level Unlearning for Large Language Models via Optimal Transport",
+            "Revisiting LLMs as Zero-Shot Time Series Forecasters: Small Noise Can Break Large Models",
+            "Exploring In-context Example Generation for Machine Translation",
+            "To Chat or Task: a Multi-turn Dialogue Generation Framework for Task-Oriented Dialogue Systems",
+            "Hyperspherical Normalization for Scalable Deep Reinforcement Learning"
+          ],
+          "research_areas": [
+            "컴퓨터 비전",
+            "자연어 처리",
+            "데이터 시각화 분석"
+          ]
+        },
+        {
+          "professor": "최윤재",
+          "url": "http://mp2893.com",
+          "publications": [
+            "A Large-Scale Real-World Evaluation of an LLM-Based Virtual Teaching Assistant",
+            "A deep-learning algorithm using real-time collected intraoperative vital sign signals for predicting acute kidney injury after major non-cardiac surgeries: A modelling study",
+            "LabTOP: A Unified Model for Lab Test Outcome Prediction on Electronic Health Records",
+            "Towards Predicting Temporal Changes in a Patient's Chest X-ray Images based on Electronic Health Records",
+            "Comparing Neural Language Models for Medical Concept Representation and Patient Trajectory Prediction",
+            "Ensembling Large Language Models with Process Reward-Guided Tree Search for Better Complex Reasoning",
+            "Single Ground Truth Is Not Enough: Add Linguistic Variability to Aspect-based Sentiment Analysis Evaluation",
+            "EHRCon: Dataset for Checking Consistency between Unstructured Notes and Structured Tables in Electronic Health Records"
+          ],
+          "research_areas": [
+            "기계학습",
+            "헬스케어",
+            "자연어 처리"
+          ]
+        },
+        {
+          "professor": "최재식",
+          "url": "https://sailab.kaist.ac.kr/",
+          "publications": [
+            "Deep-DFVAR: Dynamic Factor Vector Autoregression with Deep Learning for Regional House Price Index Forecasting",
+            "Granular Concept Circuits: Toward a Fine-Grained Circuit Discovery for Concept Representations",
+            "Context-aware Negative Sampling for Sequential Recommendation",
+            "Example-Based Concept Analysis Framework for Deep Weather Forecast Models",
+            "Counterfactual Activation Editing for Post-hoc Prosody and Mispronunciation Correction in TTS Models",
+            "Deontological Keyword Bias: The Impact of Modal Verbs on Normative Judgments of Language Models",
+            "Local Manifold Approximation and Projection for Manifold-Aware Diffusion Planning",
+            "Enhancing Creative Generation on Stable Diffusion-based Models",
+            "An Automated Method to Correct Artifacts in Neural Text-to-Speech Models"
+          ],
+          "research_areas": [
+            "추론 및 예측",
+            "설명가능 인공지능"
+          ]
+        },
+        {
+          "professor": "황성주",
+          "url": "http://www.sungjuhwang.com/",
+          "publications": [
+            "Efficient Long Context Language Model Retrieval with Compression",
+            "VideoRAG: Retrieval-Augmented Generation over Video Corpus",
+            "SafeRoute: Adaptive Model Selection for Efficient and Accurate Safety Guardrails in Large Language Models",
+            "AutoML-Agent: A Multi-Agent LLM Framework for Full-Pipeline AutoML",
+            "Bayesian Neural Scaling Laws Extrapolation with Prior-Fitted Networks",
+            "VideoICL: Confidence-based Iterative In-context Learning for Out-of-Distribution Video Understanding",
+            "Silent Branding Attack: Trigger-free Data Poisoning Attack on Text-to-Image Diffusion Models",
+            "ResearchAgent: Iterative Research Idea Generation over Scientific Literature with Large Language Models",
+            "A Training-Free Sub-quadratic Cost Transformer Model Serving Framework with Hierarchically Pruned Attention"
+          ],
+          "research_areas": [
+            "기계학습",
+            "인공지능(시각인식",
+            "언어이해 등)"
+          ]
+        },
+        {
+          "professor": "James Thorne",
+          "url": "https://jamesthorne.com/",
+          "publications": [
+            "On the Role of Relevance in Natural Language Processing Tasks",
+            "FEVEROUS: Fact Extraction and VERification Over Unstructured and Structured information",
+            "Evidence-based Factual Error Correction",
+            "Database Reasoning over Text",
+            "Evidence-based Verification for Real World Information Needs",
+            "KILT: a Benchmark for Knowledge Intensive Language Tasks",
+            "From Natural Language Processing to Neural Databases",
+            "Elastic weight consolidation for better bias inoculation"
+          ],
+          "research_areas": [
+            "자연어 처리",
+            "사실검증"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "연세대학교",
+      "labs": [
+        {
+          "professor": "이영운",
+          "url": "https://youngwoon.github.io/",
+          "publications": [
+            "UniSkill: Imitating Human Videos via Cross-Embodiment Skill Representations",
+            "Model-based Offline Reinforcement Learning with Lower Expectile Q-Learning",
+            "TLDR: Unsupervised Goal-Conditioned RL via Temporal Distance-Aware Representations",
+            "The Power of the Senses: Generalizable Manipulation from Vision and Touch through Masked Multimodal Learning",
+            "HumanoidBench: Simulated Humanoid Benchmark for Whole-Body Locomotion and Manipulation",
+            "DROID: A Large-Scale In-the-Wild Robot Manipulation Dataset",
+            "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+            "DreamSmooth: Improving Model-based Reinforcement Learning via Reward Smoothing"
+          ]
+        },
+        {
+          "professor": "김선주",
+          "url": "https://www.ciplab.kr/",
+          "publications": [
+            "CRAIM: Caption-Based Autonomous Driving Scene Retrieval via Inclusive Text Matching",
+            "Training-Free Acceleration of Video LLMs via Multi-Granular Spatio-Temporal Token Merging",
+            "CCMNet: Leveraging Calibrated Color Correction Matrices for Cross-Camera Color Constancy",
+            "Open-ended Hierarchical Streaming Video Understanding with Vision Language Models",
+            "Representing 3D Shapes with 64 Latent Vectors for 3D Diffusion Models",
+            "ExploreGS: Explorable 3D Scene Reconstruction with Virtual Camera Samplings and Diffusion Priors",
+            "Seam360GS: Seamless 360° Gaussian Splatting from Real-World Omnidirectional Images",
+            "Bayesian Neural Scaling Laws Extrapolation with Prior-Fitted Networks",
+            "Omni-RGPT: Unifying Image and Video Region-level Understanding via Token Marks",
+            "ORIDa: Object-centric Real-world Image Composition Dataset",
+            "Latent space Super-Resolution for Higher-Resolution Image Generation with Diffusion Models",
+            "AAAI 2025",
+            "Robust and Consistent Online Video Instance Segmentation via Instance Mask Propagation",
+            "Exploring Scalability of Self-Training for Open-Vocabulary Temporal Action Localization",
+            "ACCV 2024",
+            "CLIP-Guided Attribute Aware Pretraining for Generalizable Image Quality Assessment"
+          ]
+        },
+        {
+          "professor": "한요섭",
+          "url": "https://toc.yonsei.ac.kr/",
+          "publications": [
+            "Characterizations of M-equivalence and weak M-relation",
+            "Advanced Code Time Complexity Prediction Approach Using Contrastive Learning",
+            "On the Decidability of Infix Inclusion Problem",
+            "Simon's Congruence Pattern Matching",
+            "ARED: Automata-based Runtime Estimation for Distributed Systems using Deep Learning",
+            "On Simon's Congruence Closure of a String",
+            "An Empirical Study on Multimodal Activity Clustering of Android Applications",
+            "Deciding path size of nondeterministic (and input-driven) pushdown automata"
+          ]
+        },
+        {
+          "professor": "김영석",
+          "url": "https://hpcp.yonsei.ac.kr/",
+          "publications": [
+            "LATPC: Accelerating GPU Address Translation Using Locality-Aware TLB Prefetching and MSHR Compression",
+            "GCStack+GCScaler: Fast and Accurate GPU Performance Analyses Using Fine-Grained Stall Cycle Accounting and Interval Analysis",
+            "SPID-Join: A Skew-resistant Processing-in-DIMM Join Algorithm Exploiting the Bank- and Rank-level Parallelisms of DIMMs",
+            "PIM-CARE: A Compiler-Assisted Dynamic Resource Allocation Framework for Real-world DRAM PIM",
+            "IntervalSim++: Enhanced Interval Simulation for Unbalanced Processor Designs",
+            "GCStack: A GPU Cycle Accounting Mechanism for Providing Accurate Insight Into GPU Performance"
+          ]
+        },
+        {
+          "professor": "박상현",
+          "url": "http://delab.yonsei.ac.kr/",
+          "publications": [
+            "A study on Classification based Concurrent API Calls and Optimal Model Combination for Tool Augmented LLMs for AI Agent",
+            "An Efficient and Noise-Robust Framework for High-Dimensional Tuning in Big Data Analytics",
+            "Exploring the potential of compound-protein complex structure-free models in virtual screening using BlendNet",
+            "PIDiff: Physics Informed Diffusion Model for Protein Pocket-Specific 3D Molecular Generation",
+            "Time-series to Image-transformed Adversarial Autoencoder for Anomaly Detection",
+            "A study on deep learning model based on global–local structure for crowd flow prediction"
+          ]
+        },
+        {
+          "professor": "이원석",
+          "url": "http://database.yonsei.ac.kr",
+          "publications": [],
+          "research_areas": [
+            "빅데이터 분석",
+            "스트림 자율 학습",
+            "재현데이터(익명데이터) 처리",
+            "영상 인식",
+            "클라우드-엣지"
+          ]
+        },
+        {
+          "professor": "이동하",
+          "url": "https://diyonsei.notion.site/",
+          "publications": [
+            "HIPPO-Video: Simulating Watch Histories with Large Language Models for Personalized Video Highlighting",
+            "Imagine All The Relevance: Scenario-Profiled Indexing with Knowledge Expansion for Dense Retrieval",
+            "LLMs Think, But Not In Your Flow: Reasoning-Level Personalization for Black-Box Large Language Models",
+            "MT-RAIG: Novel Benchmark and Evaluation Framework for Retrieval-Augmented Insight Generation over Multiple Tables",
+            "Rethinking Reward Model Evaluation Through the Lens of Reward Overoptimization",
+            "Review-driven Personalized Preference Reasoning with Large Language Models for  Recommendation"
+          ],
+          "research_areas": [
+            "Text Mining & NLP Applications",
+            "Reasoning over Knowledge Graph",
+            "Information Retrieval & Recommendation"
+          ]
+        },
+        {
+          "professor": "이경우",
+          "url": "http://dclab.yonsei.ac.kr/",
+          "publications": [
+            "FluidTrack: Investigating Child-Parent Collaborative Tracking for Pediatric Voiding Dysfunction Management",
+            "Maintaining Sanity: Algorithm-based Comprehensive Fault Tolerance for CNNs",
+            "Simulating Spatial Disorientation in Pilots: Integrated VR and Rotating Chair-Based Approach",
+            "Passive Indoor Localization using IR-UWB Radars without Location Information",
+            "CNN-Based Children Counting in Real-World Using Multiple IR-UWB Radars"
+          ],
+          "research_areas": [
+            "소프트 에러",
+            "신뢰성",
+            "결함 감내성",
+            "사물인터넷 기반 의료서비스",
+            "머신러닝 기반 의료서비스",
+            "인공신경망 가속기"
+          ]
+        },
+        {
+          "professor": "유영재",
+          "url": "https://mirlab.yonsei.ac.kr/",
+          "publications": [
+            "G1yphD3c0de: Towards Safer Language Models on Visually Perturbed Texts",
+            "Verifying the Verifiers: Unveiling Pitfalls and Potentials in Fact Verifiers",
+            "HIPPO-VIDEO : Simulating Watch Histories with Large Language Models for History-Driven Video Highlighting",
+            "V.I.P.: Iterative Online Preference Distillation for Efficient Video Diffusion Models",
+            "DisCoRD: Discrete Tokens to Continuous Motion via Rectified Flow Decoding",
+            "VAGUE: Visual Contexts Clarify Ambiguous Expressions"
+          ],
+          "research_areas": [
+            "자연어처리",
+            "시각-언어 처리",
+            "멀티모달 학습",
+            "상식 추론"
+          ]
+        },
+        {
+          "professor": "한승재",
+          "url": "http://mnet.yonsei.ac.kr/",
+          "publications": [
+            "\"Collision avoidance by mitigating uncertain packet loss in multi-hop wireless IoT networks”",
+            "“Use of edge resources for DNN model maintenance in 5G IoT networks”",
+            "“Adaptive cloud resource allocation for large-scale crowdsourced multimedia live streaming services”",
+            "“Cloning-based virtual machine pre-provisioning for resource constrained edge cloud server”",
+            "“Contention alleviation in WiFi networks by using light-weight machine learning model\"",
+            "“Collision-free optimal packet scheduling algorithm for multi-hop wireless IoT networks”"
+          ],
+          "research_areas": [
+            "클라우드-엣지 컴퓨팅",
+            "사물인터넷",
+            "실내 위치 예측",
+            "분산학습",
+            "딥강화학습",
+            "소프트웨어 정의 네트워킹"
+          ]
+        },
+        {
+          "professor": "차호정",
+          "url": "https://mobed.yonsei.ac.kr/index.php?mid=Homepage",
+          "publications": [
+            "\"Ember: Task Wakeup Sequence-Based Energy Optimization for Mobile Web Browsing,\"",
+            "\"SecureRide: Detecting Safety-threatening Behavior of E-Scooters Using Battery Information,\"",
+            "\"ARIA: Optimizing Vision Foundation Model Inference on Heterogeneous Mobile Processors for Augmented Reality,\"",
+            "\"Panopticus: Omnidirectional 3D Object Detection on Resource-constrained Edge Devices,\"",
+            "\"Optimizing Profitability of E-Scooter Sharing System via Battery-aware Recommendation,\"",
+            "\"Vulture: Cross-Device Web Experience with Fine-Grained Graphical User Interface Distribution,\""
+          ],
+          "research_areas": [
+            "모바일 컴퓨팅",
+            "On-device AI",
+            "크로스디바이스 Web",
+            "Batteryless 시스템",
+            "기계학습 기반 시스템 최적화"
+          ]
+        },
+        {
+          "professor": "이수경",
+          "url": "http://winet.yonsei.ac.kr/home/",
+          "publications": [
+            "“Deep Reinforcement Learning for MU-MIMO Beamforming Training in mmWave WLAN,”",
+            "“Distributed Inference in IoT-based Aerial Network of UAVs,”",
+            "“Cooperative Service Caching for Reducing Delay in Multi-Edge Networks,”",
+            "“Public Bus-Assisted Task Offloading for UAVs,\"",
+            "“Stackelberg Game-Based Vehicle-Aided Task Offloading for UAVs,”",
+            "Incentive-Aware Partitioning and Offloading Scheme for Inference Services in Edge Computing,”"
+          ],
+          "research_areas": [
+            "사물인터넷",
+            "엣지컴퓨팅",
+            "자율주행차량 통신",
+            "지능형 IoT 서비스",
+            "분산 네트워킹 시스템",
+            "6G 무선 통신"
+          ]
+        },
+        {
+          "professor": "박광현",
+          "url": "https://bdai.yonsei.ac.kr/",
+          "publications": [
+            "SPID-Join: A Skew-resistant Processing-in-DIMM Join Algorithm Exploiting the Bank- and Rank-level Parallelisms of DIMMs",
+            "End-to-end optimization of machine learning prediction queries"
+          ],
+          "research_areas": [
+            "Systems for ML",
+            "Instance-optimized (learned) systems",
+            "H/W and data platform co-design"
+          ]
+        },
+        {
+          "professor": "조성배",
+          "url": "https://sclab.yonsei.ac.kr/",
+          "publications": [
+            "\"AEFA-FDB: A score-based artificial electric field algorithm for optimal reactive power dispatch problem with renewable and load demand uncertainties,\"",
+            "\"A Transformer Network Calibrated with Fuzzy Logic for Phishing URL Detection,\"",
+            "\"Unsupervised Video Anomaly Detection by Memory Network with Autoencoders in Euclidean and Non-Euclidean Spaces,\"",
+            "\"DT-GA-FLANN: Decision Tree based Genetically Optimized FLANN for Missing Value Imputation and Classification,\"",
+            "\"Continual Learning by Contrastive Learning of Regularized Classes in Multivariate Gaussian Distributions\"",
+            "\"Traffic prediction by graph transformer embedded with subgraphs,\""
+          ],
+          "research_areas": [
+            "하이브리드 딥러닝",
+            "뉴로-심볼릭 결합 인공지능",
+            "Trustworthy AI",
+            "딥러닝 응용"
+          ]
+        },
+        {
+          "professor": "정진규",
+          "url": "https://cslab.yonsei.ac.kr/",
+          "publications": [
+            "Transparent Smartphone Memory Expansion",
+            "An Adaptive Zone-Grouping Scheme Enabling General-Purpose File Systems on ZNS SSDs",
+            "Identifying On-/Off-CPU Bottlenecks Together with Blocked Samples",
+            "A Secure, Fast, and Resource-Efficient Serverless Platform with Function REWIND",
+            "Fully Harnessing the Performance Potential of",
+            "DRAM-less Mobile Flash Storage"
+          ],
+          "research_areas": [
+            "운영체제",
+            "스토리지 시스템",
+            "클라우드 컴퓨팅",
+            "머신 가상화",
+            "모바일 시스템"
+          ]
+        },
+        {
+          "professor": "송도경",
+          "url": "https://sslab.yonsei.ac.kr/",
+          "publications": [
+            "ASGARD: Protecting On-Device Deep Neural Networks with Virtualization-Based Trusted Execution Environments"
+          ],
+          "research_areas": [
+            "시스템 보안",
+            "운영체제 보안",
+            "바이너리 역공학",
+            "프로그램 분석",
+            "기밀 컴퓨팅"
+          ]
+        },
+        {
+          "professor": "박영준",
+          "url": "https://sites.google.com/view/asolabysu/home",
+          "publications": [
+            "SortingHat: System Topology-aware Scheduling of Deep Neural Network Models on Multi-GPU Systems",
+            "PIM-CARE: A Compiler-Assisted Dynamic Resource Allocation Framework for Real-world DRAM PIM",
+            "Supporting Register-based Addressing Modes for in-DRAM PIM ISAs",
+            "SPID-Join: A Skew-resistant Processing-in-DIMM Join Algorithm Exploiting the Bank- and Rank-level Parallelisms of DIMMs",
+            "CUrator: An Efficient LLM Execution Engine with Optimized Integration of CUDA Libraries",
+            "Accelerating LLMs using an Efficient GEMM Library and Target-Aware Optimizations on Real-World PIM Devices"
+          ],
+          "research_areas": [
+            "컴파일러",
+            "시스템 소프트웨어",
+            "PIM",
+            "NPU",
+            "GPU"
+          ]
+        },
+        {
+          "professor": "김재형",
+          "url": "https://sites.google.com/view/jaehyungkim",
+          "publications": [
+            "Debiasing Online Preference Learning via Preference Feature Preservation",
+            "Structural Reasoning Improves Molecular Understanding of LLM",
+            "ReVISE: Learning to Refine at Test-Time via Intrinsic Self-Verification",
+            "Few-shot Personalization of LLMs with Mis-aligned Responses",
+            "Spread Preference Annotation: Direct Preference Judgment for Efficient LLM Alignment",
+            "Training-free LLM Verification via Recycling Few-shot Examples"
+          ],
+          "research_areas": [
+            "기계 학습",
+            "자연어처리",
+            "언어모델"
+          ]
+        },
+        {
+          "professor": "여진영",
+          "url": "https://langlab.yonsei.ac.kr/",
+          "publications": [
+            "Rethinking Reward Model Evaluation Through the Lens of Reward Overoptimization",
+            "LLM Meets Scene Graph: Can Large Language Models Understand and Generate Scene Graphs? A Benchmark and Empirical Study",
+            "Can You Share Your Story? Modeling Clients' Metacognition and Openness for LLM Therapist Evaluation",
+            "One Missing Piece for Open-Source Reasoning Models: A Dataset to Mitigate Cold-Starting Short CoT LLMs in RL",
+            "Age-Related Scattered Hypofluorescent Spots as an Adverse Prognostic Factor for Polypoidal Choroidal Vasculopathy",
+            "Review-driven Personalized Preference Reasoning with Large Language Models for Recommendation",
+            "Towards Lifelong Dialogue Agents via Timeline-based Memory Management"
+          ],
+          "research_areas": [
+            "초거대언어모델",
+            "자연어처리",
+            "대화에이전트",
+            "범용인공지능"
+          ]
+        },
+        {
+          "professor": "한동준",
+          "url": "https://sites.google.com/view/djhan930",
+          "publications": [
+            "Local-Cloud Inference Offloading for LLMs in Multi-Modal, Multi-Task, Multi-Dialogue Settings",
+            "Federated Learning over Hierarchical Wireless Networks: Training Latency Minimization via Submodel Partitioning",
+            "Only Send What You Need: Learning to Communicate Efficiently in Federated Multilingual Machine Translation",
+            "Decentralized Sporadic Federated Learning: A Unified Algorithmic Framework with Convergence Guarantees",
+            "Asynchronous Federated Reinforcement Learning with Policy Gradient Updates: Algorithm Design and Convergence Analysis",
+            "Unlocking the Potential of Model Calibration in Federated Learning"
+          ],
+          "research_areas": [
+            "분산/연합학습",
+            "온디바이스 AI",
+            "신뢰가능한 AI",
+            "효율적인 AI",
+            "무선 네트워크"
+          ]
+        },
+        {
+          "professor": "이병주",
+          "url": "https://esports.yonsei.ac.kr/",
+          "publications": [
+            "A kinematic analysis of directional effects on mouse control",
+            "A Mouse With Two Optical Sensors That Eliminates Coordinate Disturbance During Skilled Strokes",
+            "A Simulation Model of Intermittently Controlled Point-and-Click Behaviour",
+            "Aero-plane- A Handheld Force-Feedback Device that Renders Weight Motion Illusion on a Virtual 2D Plane",
+            "Amortized Inference with User Simulations",
+            "Is Less More? Rendering for Esports",
+            "Neuromechanics of a Button Press"
+          ],
+          "research_areas": [
+            "E스포츠",
+            "인간-컴퓨터 상호작용",
+            "인간공학",
+            "데이터과학",
+            "최적화",
+            "강화학습"
+          ]
+        },
+        {
+          "professor": "황성재",
+          "url": "https://micv.yonsei.ac.kr/home",
+          "publications": [
+            "WAVE: Warp-Based View Guidance for Consistent Novel View Synthesis Using a Single Image",
+            "Mono-Modalizing Extremely Heterogeneous Multi-Modal Medical Image Registration",
+            "PRETI: Patient-Aware Retinal Foundation Model via Metadata-Guided Representation Learning",
+            "Pathology-Aware Adaptive Watermarking for Text-Driven Medical Image Synthesis",
+            "Your Large Vision-Language Model Only Needs A Few Attention Heads for Visual Grounding",
+            "Distilling Spectral Graph for Object-Context Aware Open-Vocabulary Semantic Segmentation",
+            "Spatial Transport Optimization by Repositioning Attention Map for Training-Free Text-to-Image Synthesis"
+          ],
+          "research_areas": [
+            "컴퓨터 비전",
+            "머신러닝",
+            "의료영상분석",
+            "알츠하이머"
+          ]
+        },
+        {
+          "professor": "백종덕",
+          "url": "https://sites.google.com/view/yonsei-medisyslab/home?authuser=0",
+          "publications": [
+            "Dose-aware denoising diffusion model for low-dose CT",
+            "X-ray CT metal artifact reduction using neural attenuation field prior",
+            "Continuous representation-based reconstruction for computed tomography",
+            "Generalizability of convolutional neural network-based model observer in breast tomosynthesis across volume glandular fractions and signal sizes",
+            "Low-dose computed tomography perceptual image quality assessment",
+            "Iterative reconstruction for limited-angle CT using implicit neural representation"
+          ],
+          "research_areas": [
+            "의료인공지능",
+            "의료영상 시스템",
+            "X-ray 영상 화질 개선",
+            "영상 화질 평가",
+            "의료영상처리"
+          ]
+        },
+        {
+          "professor": "이종민",
+          "url": "https://www.jmlee.kr/home",
+          "publications": [
+            "SEMDICE: Off-policy State Entropy Maximization via Stationary Distribution Correction Estimation",
+            "Mitigating Covariate Shift in Behavioral Cloning via Robust Distribution Correction Estimation",
+            "ROIDICE: Offline Return on Investment Maximization for Efficient Decision Making",
+            "Body Transformer: Leveraging Robot Embodiment for Policy Learning",
+            "Kernel Metric Learning for In-Sample Off-Policy Evaluation of Deterministic RL Policies",
+            "AlberDICE: Addressing Out-Of-Distribution Joint Actions in Offline Multi-Agent RL via Alternating Stationary Distribution Correction Estimation"
+          ],
+          "research_areas": [
+            "강화학습",
+            "순차적 의사 결정 문제",
+            "머신러닝"
+          ]
+        },
+        {
+          "professor": "이경호",
+          "url": "https://icl.yonsei.ac.kr/",
+          "publications": [
+            "Embedding Two-View Knowledge Graphs with Class Inheritance and Structural Similarity",
+            "Confident Action Decision via Hierarchical Policy Learning for Conversational Recommendation",
+            "CLICK: Contrastive Learning for Injecting Contextual Knowledge to Conversational Recommender System",
+            "Persona Expansion with Commonsense Knowledge for Diverse and Consistent Response Generation",
+            "Concept-based Persona Expansion for Improving Diversity of Persona-Grounded Dialogue",
+            "Emp-RFT: Empathetic Response Generation via Recognizing Feature Transitions between Utterances"
+          ],
+          "research_areas": [
+            "지식 그래프",
+            "그래프 표현 학습 및 추론",
+            "추천 시스템",
+            "대화 모델"
+          ]
+        },
+        {
+          "professor": "노알버트",
+          "url": "https://albert-no.github.io/",
+          "publications": [
+            "Assigning Distinct Roles to Quantized and Low-Rank Matrices Toward Optimal Weight Decomposition",
+            "Understanding and Mitigating Memorization in Generative Models via Sharpness of Probability Landscapes",
+            "Improved Communication-Privacy Trade-offs in L2 Mean Estimation under Streaming Differential Privacy",
+            "Censored Sampling of Diffusion Models Using 3 Minutes of Human Feedback",
+            "Exact Optimality of Communication-Privacy-Utility Tradeoffs in Distributed Mean Estimation",
+            "Prune Your Model Before Distill It"
+          ],
+          "research_areas": [
+            "학습이론",
+            "정보이론",
+            "프라이버시",
+            "디퓨전 생성모델",
+            "DNA 저장장치 및 생명정보학"
+          ]
+        },
+        {
+          "professor": "김지응",
+          "url": "https://sites.google.com/view/fcai-lab",
+          "publications": [
+            "ReCraft: Self-Contained Split, Merge, and Membership Change of Raft Protocol",
+            "LiDO: Linearizable Byzantine Distributed Objects with Refinement-Based Liveness Proofs",
+            "AdoB: Bridging Benign and Byzantine Consensus with Atomic Distributed Objects"
+          ],
+          "research_areas": [
+            "프로그래밍 언어 이론",
+            "정형 검증",
+            "시스템 소프트웨어 신뢰성",
+            "인공신경망 신뢰성"
+          ]
+        },
+        {
+          "professor": "안형찬",
+          "url": "http://opt.yonsei.ac.kr/an/",
+          "publications": [
+            "A diameter-revealing proof of the Bondy-Lovász lemma",
+            "Making three out of two: three-way online correlated selection",
+            "Fully adaptive stochastic handling of soft-errors in real-time systems",
+            "Approximation algorithms for the bottleneck asymmetric traveling salesman problem",
+            "Constant-factor approximation algorithms for the parity-constrained facility location problem"
+          ],
+          "research_areas": [
+            "알고리즘 설계",
+            "조합 최적화",
+            "근사 알고리즘",
+            "온라인 알고리즘",
+            "이론 컴퓨터과학",
+            "최적화 기법 응용"
+          ]
+        },
+        {
+          "professor": "이인권",
+          "url": "https://cga.yonsei.ac.kr/",
+          "publications": [
+            "Fake news detection with external entity expanding and multi-modal dynamic fusion",
+            "Multimodal Turn in Place: A Comparative Analysis of Visual and Auditory Reset UIs in Redirected Walking",
+            "In-Vehicle Full-window Augmented Reality System (FARS) for Passengers: Effects on Spatial Knowledge and User Experience",
+            "Is 3DGS Useful?: Comparing the Effectiveness of Recent Reconstruction Methods in VR",
+            "Multiuser computational imaging encryption and authentication with OFDM-assisted key management",
+            "F-RDW: Redirected Walking with Forecasting Future Position"
+          ],
+          "research_areas": [
+            "컴퓨터 그래픽스",
+            "가상 현실",
+            "감성 컴퓨팅",
+            "음악 기술",
+            "인간-컴퓨터 상호작용"
+          ]
+        },
+        {
+          "professor": "이봉신",
+          "url": "https://bongshiny.com/",
+          "publications": [
+            "Mobile Data Visualization",
+            "PiCCL: Data-Driven Mark Composition of Bespoke Pictorial Chart",
+            "From Vision to Touch: Bridging Visual and Tactile Principles for Accessible Data Representation",
+            "From Verbal Reports to Personalized Activity Trackers: Understanding the Challenges of Ground Truth Data Collection with Older Adults in the Wild",
+            "Authoring Data-Driven Chart Animations through Direct Manipulation",
+            "When Refreshable Tactile Displays Meet Conversational Agents: Investigating Accessible Data Presentation and Analysis with Touch and Speech"
+          ],
+          "research_areas": [
+            "휴먼-데이터 인터랙션",
+            "휴먼-컴퓨터/AI 인터랙션",
+            "데이터 시각화",
+            "포용적인 데이터 경험"
+          ]
+        },
+        {
+          "professor": "강민석",
+          "url": "https://minsuk.com/",
+          "publications": [
+            "LLM Comparator: Interactive Analysis of Side-by-Side Evaluation of Large Language Models",
+            "Adversarial Nibbler: An Open Red-Teaming Method for Identifying Diverse Harms in Text-to-Image Generation",
+            "Automatic Histograms: Leveraging Language Models for Text Dataset Exploration",
+            "VLSlice: Interactive Vision-and-Language Slice Discovery",
+            "Visualizing Linguistic Diversity of Text Datasets Synthesized by Large Language Models",
+            "DendroMap: Visual Exploration of Large-Scale Image Datasets for Machine Learning with Treemaps"
+          ],
+          "research_areas": [
+            "데이터 시각화 및 분석",
+            "책임 있는 인공지능",
+            "인간-컴퓨터 상호작용"
+          ]
+        },
+        {
+          "professor": "번트 벅스텔러",
+          "url": "https://elc.yonsei.ac.kr/",
+          "publications": [
+            "Informatik Grundlagen (Computer Science Fundamentals)",
+            "Symbolic Analysis: an Algebra-based Approach",
+            "Comprehensive Design Space Exploration for Graph Neural Network Aggregation on GPUs",
+            "Scalable NUMA-aware persistent B+-tree for non-volatile memory devices",
+            "EVMTracer: Dynamic Analysis of the Parallelization and Redundancy Potential in the Ethereum Virtual Machine",
+            "Adaptive Regression Prefetching Algorithm by Using Big Data Application Characteristics"
+          ],
+          "research_areas": [
+            "블록체인",
+            "멀티코어 및 GPU 병렬화",
+            "PIM",
+            "이종적 영구 메모리",
+            "고레벨 언어 메모리 모델",
+            "컴파일러 및 가상 머신"
+          ]
+        },
+        {
+          "professor": "박은병",
+          "url": "https://v-laboratory.github.io/",
+          "publications": [
+            "DiffuseSlide: Training-Free High Frame Rate Video Generation Diffusion",
+            "Hybrid 3D-4D Gaussian Splatting for Fast Dynamic Scene Representation",
+            "Optimized Minimal 3D Gaussian Splatting",
+            "CompMarkGS: Robust Watermarking for Compression 3D Gaussian Splatting",
+            "Aberration Correcting Vision Transformers for High-Fidelity Metalens Imaging",
+            "Generative Densification: Learning to Densify Gaussians for High-Fidelity Generalizable 3D Reconstruction"
+          ],
+          "research_areas": [
+            "컴퓨터 비전",
+            "비주얼 컴퓨팅",
+            "기계학습"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "서울대학교",
+      "labs": [
+        {
+          "professor": "이교구",
+          "url": "www.marg.snu.ac.kr",
+          "publications": [
+            "Phase-Aware Speech Enhancement with Deep Complex U-Net, ICLR, 2018",
+            "Neural Analysis and Synthesis: Reconstructing Speech from Self-Supervised Representations, NeurIPS, 2021",
+            "Differentiable Artificial Reverberation, TASLP, 2022",
+            "Debiased Automatic Speech Recognition for Dysarthric Speech via Sample Reweighting with Sample Affinity Test",
+            "INTERSPEECH, 2023",
+            "Exploiting Time-Frequency Conformers for Music Audio Enhancement, ACMMM, 2023"
+          ],
+          "research_areas": [
+            "인공 청각 지능 + Deep generative audio"
+          ]
+        },
+        {
+          "professor": "강명주",
+          "url": "https://www.ncia.snu.ac.kr/",
+          "publications": [
+            "Generative Modeling through the Semi-dual Formulation of Unbalanced Optimal Transport, NeurIPS 2023",
+            "Minimal Width for Universal Property of Deep RNN, JMLR 2023",
+            "Learning without prejudices: Continual unbiased learning via benign and malignant forgetting, ICLR 2023",
+            "Do Not Escape From the Manifold: Discovering the Local Coordinates on the Latent Space of GANs, ICLR 2022"
+          ],
+          "research_areas": [
+            "Vision & Perception"
+          ]
+        },
+        {
+          "professor": "최종현",
+          "url": "https://snumpr.github.io",
+          "publications": [
+            "Seo et al., Budgeted Online Continual Learning by Adaptive Layer Freezing and Frequency-based Sampling, ICLR 2025 (Spotlight)",
+            "Kim et al., Multi-Modal Grounded Planning and Efficient Replanning For Learning Embodied Agents with A Few",
+            "Examples, AAAI 2025 (Oral)",
+            "Ahn et al., Tuning Large Multimodal Models for Videos using Reinforcement Learning from AI Feedback, ACL 2024 (Oral)",
+            "Kim et al., Pre-emptive Action Revision by Environmental Feedback for Embodied Instruction Following Agents, CoRL 2024",
+            "Kim et al., ReALFRED: An Embodied Instruction Following Benchmark in Photo-Realistic Environment, ECCV 2024"
+          ],
+          "research_areas": [
+            "Vision & Perception"
+          ]
+        },
+        {
+          "professor": "이상구",
+          "url": "https://ids.snu.ac.kr",
+          "publications": [
+            "Aligning Language Models to Explicitly Handle Ambiguity, EMNLP 2024",
+            "Adaptive Contrastive Decoding in Retrieval-Augmented Generation for Handling Noisy Contexts, Findings of EMNLP",
+            "2024",
+            "Proxy-based Item Representation for Attribute and Context-aware Recommendation, WSDM 2024",
+            "Enhancing Large Language Model Based Sequential Recommender Systems with Pseudo Labels Reconstruction",
+            "Findings of EMNLP 2024",
+            "CELDA: Leveraging Black-box Language Model as Enhanced Classifier without Labels, ACL 2023"
+          ],
+          "research_areas": [
+            "Language & Cognition"
+          ]
+        },
+        {
+          "professor": "정교민",
+          "url": "http://milab.snu.ac.kr/",
+          "publications": [
+            "Seongho Joo, Hyukhun Koh, and Kyomin Jung, DPP-TTS: Diversifying prosodic features of speech via determinantal",
+            "point processes, The 2023 Conference on Empirical Methods in Natural Language Processing: EMNLP 2023 (EMNLP)",
+            "Dec 2023, Singapore, Singapore",
+            "Kang-il Lee, Segwang Kim, and Kyomin Jung, Weakly Supervised Semantic Parsing with Execution-based Spurious",
+            "Program Filtering, The 2023 Conference on Empirical Methods in Natural Language Processing: EMNLP 2023 (EMNLP)",
+            "Dec 2023, Singapore, Singapore",
+            "Minwoo Lee, Hyukhun Koh, Kang-il Lee, Dongdong Zhang, Minsung Kim, and Kyomin Jung, Target-Agnostic GenderAware Contrastive Learning for Mitigating Bias in Multilingual Machine Translation, The 2023 Conference on Empirical",
+            "Methods in Natural Language Processing: EMNLP 2023 (EMNLP), Dec 2023, Singapore, Singapore",
+            "Yerin Hwang*, Yongil Kim*, Hyunkyung Bae, Hwanhee Lee, Jeesoo Bang, and Kyomin Jung, Dialogizer: Context-aware",
+            "Conversational-QA Dataset Generation from Textual Sources, The 2023 Conference on Empirical Methods in Natural",
+            "Language Processing: EMNLP 2023 (EMNLP), Dec 2023, Singapore, Singapore",
+            "Seungpil Won, Heeyoung Kwak, Joongbo Shin, Janghoon Han, and Kyomin Jung, BREAK: Breaking the Dialogue",
+            "State Tracking Barrier with Beam Search and Re-ranking, 60th Annual Meeting of the Association for Computational"
+          ],
+          "research_areas": [
+            "Language & Cognition"
+          ]
+        },
+        {
+          "professor": "정민화",
+          "url": "https://slp.snu.ac.kr/",
+          "publications": [
+            "Speech Intelligibility Assessment of Dysarthric Speech by using Goodness of Pronunciation with Uncertainty",
+            "Quantification, Interspeech 2023",
+            "A Joint Model for Pronunciation Assessment and Mispronunciation Detection and Diagnosis with Multi-task Learning",
+            "Interspeech 2023",
+            "An Analysis of Glottal Features of Chronic Kidney Disease Speech, Interspeech 2023",
+            "Comparison of L2 Korean Pronunciation Error Patterns, ICPhS (International Congress of Phonetic Sciences) 2023",
+            "Automatic Severity Classification of Dysarthric Speech by Using Self-Supervised Model with Multi-Task Learning",
+            "ICASSP (International Conference on Acoustics, Speech, and Signal Processing) 2023"
+          ],
+          "research_areas": [
+            "Language & Cognition"
+          ]
+        },
+        {
+          "professor": "양인순",
+          "url": "coregroup.snu.ac.kr",
+          "publications": [
+            "J. Kim and I. Yang, “Convergence analysis of ODE models for accelerated first-order methods via positive semidefinite",
+            "kernels”, NeurIPS, 2023",
+            "J. Kim and I. Yang, “Unifying Nesterov's Accelerated Gradient Methods for Convex and Strongly Convex Objective",
+            "Functions”, ICML (Oral), 2023",
+            "A. Hakobyan and I. Yang, \"Distributionally Robust Risk Map for Learning-Based Motion Planning and Control: A",
+            "Semidefinite Programming Approach,\" IEEE Transactions on Robotics (T-RO), 2023",
+            "J. Kim, J. Shin and I. Yang, “Hamilton-Jacobi deep Q-Learning for deterministic continuous-time systems with lipschitz",
+            "continuous controls,” Journal of Machine Learning Research (JMLR), 2021",
+            "I. Yang, “Wasserstein distributionally robust stochastic control: A data-driven approach,” IEEE Transactions on",
+            "Automatic Control (TAC), 2021"
+          ],
+          "research_areas": [
+            "Robotics & Action"
+          ]
+        },
+        {
+          "professor": "오성회",
+          "url": "https://rllab.snu.ac.kr",
+          "publications": [
+            "Mineui Hong, Minjae Kang, and Songhwai Oh, \"Diffused Task-Agnostic Milestone Planner,\" in Proc. of Neural",
+            "Information Processing Systems (NeurIPS), Dec. 2023",
+            "Dohyeong Kim, Kyungjae Lee, and Songhwai Oh, \"Trust Region-Based Safe Distributional Reinforcement Learning for",
+            "Multiple Constraints,\" in Proc. of Neural Information Processing Systems (NeurIPS), Dec. 2023",
+            "Minyoung Hwang, Gunmin Lee, Hogun Kee, Chan Woo Kim, Kyungjae Lee, and Songhwai Oh, \"Sequential Preference",
+            "Ranking for Efficient Reinforcement Learning from Human Feedback,\" in Proc. of Neural Information Processing",
+            "Systems (NeurIPS), Dec. 2023",
+            "Taeoh Ha, Jeongwoo Oh, Gunmin Lee, Jaeseok Heo, Do Hyung Kim, Byungkyu Park, Chang-Gun Lee, and Songhwai",
+            "Oh, \"RIANet++: Road Graph and Image Attention Networks for Robust Urban Autonomous Driving under Road",
+            "Changes,\" IEEE Robotics and Automation Letters, vol. 8, no. 11, pp. 7815-7822, Nov. 2023",
+            "Wooseok Oh, Hwiyeon Yoo, Timothy Ha, and Songhwai Oh, \"Local Selective Vision Transformer for Depth Estimation",
+            "Using a Compound Eye Camera,\" Pattern Recognition Letters, vol. 167, pp. 82-29, Mar. 2023"
+          ],
+          "research_areas": [
+            "Robotics & Action"
+          ]
+        },
+        {
+          "professor": "원정담",
+          "url": "http://imo.snu.ac.kr",
+          "publications": [
+            "Jiashun Wang*, Jessica Hodgins, Jungdam Won**, Strategy and Skill Learning for Physics-based Table Tennis",
+            "Animation, SIGGRAPH 2024",
+            "Sunmin Lee*, Taeho Kang, Jungnam Park, Jehee Lee, Jungdam Won**, SAME: Skeleton-Agnostic Motion Embedding",
+            "SIGGRAPH Asia 2023",
+            "Mingyi Shi*, Sebastian Starke, Yuting Ye, Taku Komura, Jungdam Won**, PhaseMP: Robust 3D Pose Estimation via",
+            "Phase-conditioned Human Motion Prior , ICCV 2023",
+            "Jungnam Park*, Moon Seok Park, Jehee Lee, Jungdam Won**, Bidirectional GaitNet: A Bidirectional Prediction",
+            "Model of Human Gait and Anatomical Conditions, SIGGRAPH 2023",
+            "Sunmin Lee*, Sebastian Starke, Yuting Ye, Jungdam Won**, Alexander Winkler**, QuestEnvSim: Environment-aware",
+            "Simulated Motion Tracking From Sparse Sensor Input , SIGGRAPH 2023"
+          ],
+          "research_areas": [
+            "Robotics & Action"
+          ]
+        },
+        {
+          "professor": "박종우",
+          "url": "https://sites.google.com/robotics.snu.ac.kr/fcp/",
+          "publications": [
+            "DSQNet: A Deformable Model-Based Supervised Learning Algorithm for Grasping Unknown Occluded Objects, T-ASE",
+            "2022",
+            "SE (2)-Equivariant Pushing Dynamics Models for Tabletop Object Manipulations, CoRL 2022",
+            "Regularized Autoencoders for Isometric Representation Learning, ICLR 2022",
+            "A statistical manifold framework for point cloud data, ICML 2022",
+            "Autoencoding under normalization constraints, ICML 2021"
+          ],
+          "research_areas": [
+            "Robotics & Action"
+          ]
+        },
+        {
+          "professor": "김현진",
+          "url": "https://larr.snu.ac.kr/",
+          "publications": [
+            "DHRL: A Graph-Based Approach for Long-Horizon and Sparse Hierarchical Reinforcement Learning (Thirty-sixth",
+            "Conference on Neural Information Processing Systems (NeurIPS 2022), oral presentation)",
+            "SNeRL: Semantic-aware Neural Radiance Fields for Reinforcement Learning (Fortieth International Conference on",
+            "Machine Learning (ICML 2023))",
+            "Outcome-Directed Reinforcement Learning by Uncertainty & Temporal Distance-Aware Curriculum Goal Generation (Eleventh International Conference on Learning Representations (ICLR 2023), spotlight)"
+          ],
+          "research_areas": [
+            "Robotics & Action"
+          ]
+        },
+        {
+          "professor": "박재흥",
+          "url": "http://dyros.snu.ac.kr",
+          "publications": [
+            "Real-time Motion Planning Framework for Autonomous Vehicles with Learned Committed Trajectory Distribution",
+            "IROS, 2023",
+            "Proprioceptive External Torque Learning for Floating Base Robot and its Applications to Humanoid Locomotion, IROS, 2023",
+            "Torque-based Deep Reinforcement Learning for Task-and-Robot Agnostic Learning on Bipedal Robots Using Sim-toReal Transfer, RAL, 2023",
+            "Scalable Learned Geometric Feasibility for Cooperative Grasp and Motion Planning, RAL, 2022"
+          ],
+          "research_areas": [
+            "Robotics & Action"
+          ]
+        },
+        {
+          "professor": "하순회",
+          "url": "https://iris.snu.ac.kr/",
+          "publications": [
+            "Woosuk Kang, EunJin Jeong, Sungjun Shim, Soonhoi Ha, \"Optimization of Task Allocation for Resource-Constrained",
+            "Swarm Robots,\" IEEE Transactions on Automation Science and Engineering, Vol. Early Access, pp. 1-18, Apr, 2024",
+            "Choonghoon Park, Soonhoi Ha, \"A Novel Throughput Enhancement Method for Deep Learning Applications on Mobile",
+            "Devices With Heterogeneous Processors,\" IEEE Access, Vol. 12, pp. 38773-38785, Mar, 2024",
+            "Soonhoi Ha, EunJin Jeong, \"Sotware Optimization and Design Methodology for Low Power Computer Vision Systems,\"",
+            "ACM Transactions on Embedded Computing Systems, Jul, 2024",
+            "Changjae Yi, Hyunsu Moh, Soonhoi Ha, \"Vision Transformer Inference on a CNN Accelerator,\" IEEE 42nd International",
+            "Conference on Computer Design (ICCD), Jan, 2025",
+            "Jimin Lee, Soonhoi Ha, \"Empowering Edge Devices With Processing-In-Memory for On-Device Language Inference,\"",
+            "IEEE Embedded Systems Letters, Vol. Early Access, Feb, 2025"
+          ],
+          "research_areas": [
+            "AI Platform & Ai Chip"
+          ]
+        },
+        {
+          "professor": "김재준",
+          "url": "http://vlsi.snu.ac.kr/",
+          "publications": [
+            "Jaeyong Jang*, Yulhwa Kim*, Juheun Lee, Jae-Joon Kim, “FIGNA: Integer Unit-based Accelerator Design for FP-INT",
+            "GEMM Preserving Numerical Accuracy,” IEEE International Symposium on High-Performance Computer Architecture (HPCA), Mar. 2024. (*equally contributed)",
+            "Yulhwa Kim, Dongwon Jo, Hyesung Jeon, Taesu Kim, Daehyun Ahn, Hyungjun Kim, Jae-Joon Kim, “Leveraging",
+            "Early-Stage Robustness in Diffusion Models for Efficient and High-Quality Image Synthesis,” Conference on Neural",
+            "Information Processing Systems (NeurIPS), Dec. 2023",
+            "Hyunsung Yoon, Jae-Joon Kim, “Efficient Sampling and Grouping Acceleration for Point Cloud Deep Learning via",
+            "Single Coordinate Comparison,” IEEE/ACM International Conference on Computer-Aided Design (ICCAD), Nov. 2023",
+            "Inhwan Lee, Eunhwan Kim, Nameun Kang, Hyunmyung Oh and Jae-Joon Kim, “In-Memory Neural Network Accelerator",
+            "based on eDRAM Cell with Enhanced Retention Time,” ACM/IEEE Design Automation Conference (DAC), Jul. 2023",
+            "Yulhwa Kim, Jaeyong Jang, Jehun Lee, Jihoon Park, Jeonghoon Kim, Byeongwook Kim, Baeseong Park, Se Jung",
+            "Kwon, Dongsoo Lee, Jae-Joon Kim, “Winning Both the Accuracy of Floating Point Activation and the Simplicity of",
+            "Integer Arithmetic,” International Conference on Learning Representations (ICLR), May 2023"
+          ],
+          "research_areas": [
+            "AI Platform & Ai Chip"
+          ]
+        },
+        {
+          "professor": "안정호",
+          "url": "http://scale.snu.ac.kr/",
+          "publications": [
+            "SHADOW: Preventing Row Hammer in DRAM with Intra-Subarray Row Shuffling, HPCA 2023",
+            "SHARP: A Short-Word Hierarchical Accelerator for Robust and Practical Fully Homomorphic Encryption, ISCA 2023",
+            "How to Kill the Second Bird with One ECC: The Pursuit of Row Hammer Resilient DRAM, MICRO 2023"
+          ],
+          "research_areas": [
+            "AI Platform & Ai Chip"
+          ]
+        },
+        {
+          "professor": "전동석",
+          "url": "https://mms.snu.ac.kr",
+          "publications": [
+            "S. Lee, J. Park, and D. Jeon, “A 4.27TFLOPS/W FP4/FP8 Hybrid-Precision Neural Network Training Processor Using",
+            "Shift-Add MAC and Reconfigurable PE Array,” IEEE European Solid-State Circuits Conference (ESSCIRC), 2023",
+            "S. Woo and D. Jeon, “Learning with Auxiliary Activation for Memory-Efficient Training,” International Conference on",
+            "Learning Representations (ICLR), 2023",
+            "S. Park, S. Lee, J. Park, H.-S. Choi, and D. Jeon, “A 0.81mm2 740µW Real-Time Speech Enhancement Processor Using",
+            "Multiplier-Less PE Arrays for Hearing Aids in 28nm CMOS,” IEEE International Solid-State Circuits Conference (ISSCC), 2023",
+            "Y. Ko, S. Kim, K. Shin, Y. Park, S. Kim, and D. Jeon, “A 65nm 12.92nJ/inference Mixed-Signal Neuromorphic Processor",
+            "for Image Classification,” IEEE Transactions on Circuits and Systems II (TCAS-II), 2023",
+            "S. Lee, J. Park, and D. Jeon, “Toward Efficient Low-Precision Training: Data Format Optimization and Hysteresis",
+            "Quantization,” International Conference on Learning Representations (ICLR), 2022"
+          ],
+          "research_areas": [
+            "AI Platform & Ai Chip"
+          ]
+        },
+        {
+          "professor": "서지원",
+          "url": "https://mlsys.snu.ac.kr",
+          "publications": [
+            "Hyungjun Oh, Kihong Kim, Jaemin Kim, Sungkyun Kim, Du-seong Chang, and Jiwon Seo, “ExeGPT: Constraint-Aware",
+            "Resource Scheduling for LLM Inference”, In Proceedings of the Architectural Support for Programming Languages and",
+            "Operating Systems (ASPLOS), 2024",
+            "Kang Choi, Donghyun Son, Younghoon Kim, and Jiwon Seo, “Testing the Channels of Convolutional Neural Networks”",
+            "In Proceedings of the 37th AAAI Conference on Artificial Intelligence (AAAI), 2023",
+            "Mehrad Moradshahi, Tianhao Shen, Kalika Bali, Monojit Choudhury, Gael de Chalendar, Anmol Goel, Sungkyun Kim",
+            "Prashant Kodali, Ponnurangam Kumaraguru, Nasredine Semmar, Sina Semnani, Jiwon Seo, Vivek Seshadri, Manish",
+            "Shrivastava, Michael Sun, Aditya Yadavalli, Chaobin You, Deyi Xiong, Monica Lam, “X-RiSAWOZ: High-Quality End-toEnd Multilingual Dialogue Datasets and Few-shot Agents”, Association for Computational Linguistics (ACL Findings)",
+            "2023",
+            "Hyungjun Oh, Junyeol Lee, Hyeongju Kim, and Jiwon Seo, “Out-Of-Order BackProp: An Effective Scheduling Technique",
+            "for Deep Learning”, In Proceedings of the European Conference on Computer Systems (EuroSys), 2022",
+            "Junyeol Lee, Hyeongju Kim, Hyungjun Oh, Jaemin Kim, Hongseok Jeung, Yung-Kyun Noh, and Jiwon Seo, “Gyro"
+          ],
+          "research_areas": [
+            "AI Platform & Ai Chip"
+          ]
+        },
+        {
+          "professor": "김아영",
+          "url": "https://rpm.snu.ac.kr/",
+          "publications": [
+            "Minwoo Jung, Sangwoo Jung and Ayoung Kim, Asynchronous Multiple LiDAR-Inertial Odometry using Point-wise InterLiDAR Uncertainty Propagation. RAL 2023",
+            "Jeongyun Kim, Myung-Hwan Jeon, Sangwoo Jung, Wooseong Yang, Minwoo Jung, Jaeho Shin and Ayoung Kim",
+            "TRansPose: Large-Scale Multispectral Dataset for Transparent Object. International Journal of Robotics Research, 2023",
+            "Hyesu Jang, Minwoo Jung and Ayoung Kim, RaPlace: Place Recognition for Imaging Radar using Radon Transform and",
+            "Mutable Threshold. In Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)",
+            "Detroit, Oct. 2023",
+            "Dong-Guw Lee, Myung-Hwan Jeon, Younggun Cho and Ayoung Kim, Edge-guided Multi-domain RGB-to-TIR image",
+            "Translation for Training Vision Tasks with Challenging Labels. In Proceedings of the IEEE International Conference on",
+            "Robotics and Automation (ICRA), London, May. 2023"
+          ],
+          "research_areas": [
+            "Autonomous Driving"
+          ]
+        },
+        {
+          "professor": "최준원",
+          "url": "http://spa.snu.ac.kr",
+          "publications": [
+            "J. Kim, C. Kang, D. Lee, S. Choi, and J. W. Choi*, \"ProtoOcc: Accurate, Efficient 3D Occupancy Prediction Using Dual",
+            "Branch Encoder-Prototype Query Decoder,\" AAAI Conference on Artificial Intelligence, Feb. 2025",
+            "T. Son, S. W. Seo, J. Kim, S. H. Lee, and J. W. Choi*, \"JoVALE: Detecting Human Actions in Video Using Audiovisual and",
+            "Language Contexts,\" AAAI Conference on Artificial Intelligence, Feb. 2025",
+            "J. Kim, M. Seong, and J. W. Choi*, \"CRT-Fusion: Camera, Radar, Temporal Fusion Using Motion Information for 3D",
+            "Object Detection,\" accepted to Neural Information Processing Systems (NeurIPS), Dec. 2024",
+            "S. Choi, J. Kim, H. Shin, and J. W. Choi*, \"Mask2Map: Vectorized HD Map Construction Using Bird's Eye View",
+            "Segmentation Masks,\" European Conference on Computer Vision (ECCV), Sept. 2024",
+            "G. Bang, K. Choi, J. Kim, D. Kum, and J. W. Choi*, \"RadarDistill: Boosting Radar-based Object Detection Performance",
+            "via Knowledge Distillation from LiDAR Features,\" IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), June 2024"
+          ],
+          "research_areas": [
+            "Autonomous Driving"
+          ]
+        },
+        {
+          "professor": "이영기",
+          "url": "https://hcs.snu.ac.kr/",
+          "publications": [
+            "FarfetchFusion: Towards Fully Mobile Live 3D Telepresence Platform, ACM MobiCom 2023"
+          ],
+          "research_areas": [
+            "Human Ai Interaction"
+          ]
+        },
+        {
+          "professor": "권가진",
+          "url": "cclab.snu.ac.kr",
+          "publications": [
+            "Examining the Effect of Narrative Features and Thematic Music in an Audio-based Exergame, International Journal of",
+            "Human-Computer Interaction 2023",
+            "Using Geometric Features of Drag-and-Drop Trajectories to Understand Students’ Learning, CHI 2023",
+            "EPT-X: An Expression-Pointer Transformer model that generates eXplanations for numbers, ACL 2022",
+            "Application of humanization to survey chatbots: Change in chatbot perception, interaction experience, and survey data",
+            "quality, Computers in Human Behavior 2022"
+          ],
+          "research_areas": [
+            "Human Ai Interaction"
+          ]
+        },
+        {
+          "professor": "서봉원",
+          "url": "hcc.snu.ac.kr",
+          "publications": [
+            "Cinema Multiverse Lounge: Enhancing Film Appreciation via Multi-Agent Conversations, SIGCHI 2025",
+            "BleacherBot: AI Agent as a Sports Co-Viewing Partner, SIGCHI 2025",
+            "Will LLMs Sink or Swim? Exploring Decision-Making Under Pressure, EMNLP Findings 2024",
+            "Self-Referential Review: Exploring the Impact of Self-Reference Effect in Review, SIGIR 2024",
+            "Evaluating and Improving Value Judgments in AI: A Scenario-Based Study on Large Language Models' Depiction of",
+            "Social Conventions, ICWSM 2024"
+          ],
+          "research_areas": [
+            "Human AI Interaction"
+          ]
+        },
+        {
+          "professor": "이준환",
+          "url": "https://hcid.snu.ac.k",
+          "publications": [
+            "Soomin Kim, Joonhwan Lee, and Gahgene Gweon. 2019. Comparing Data from Chatbot and Web Surveys: Effects of",
+            "Platform and Conversational Style on Survey Response Quality. In Proceedings of the 2019 CHI Conference on Human",
+            "Factors in Computing Systems (CHI '19). Association for Computing Machinery, New York, NY, USA, Paper 86, 1–12",
+            "Soomin Kim, Jinsu Eun, Changhoon Oh, Bongwon Suh, and Joonhwan Lee. 2020. Bot in the Bunch: Facilitating Group",
+            "Chat Discussion by Improving Efficiency and Participation with a Chatbot. In Proceedings of the 2020 CHI Conference",
+            "on Human Factors in Computing Systems (CHI '20). Association for Computing Machinery, New York, NY, USA, 1–13",
+            "Soomin Kim, Jinsu Eun, Joseph Seering, and Joonhwan Lee. 2021. Moderator Chatbot for Deliberative Discussion:",
+            "Effects of Discussion Structure and Discussant Facilitation. Proc. ACM Hum.-Comput. Interact. 5, CSCW1, Article 87 (April 2021), 26 pages",
+            "Soomin Kim, Changhoon Oh, Won Ik Cho, Donghoon Shin, Bongwon Suh, and Joonhwan Lee. 2021. Trkic G00gle: Why and",
+            "How Users Game Translation Algorithms. Proc. ACM Hum.-Comput. Interact. 5, CSCW2, Article 344 (October 2021), 24 pages",
+            "Hyanghee Park, Daehwan Ahn, Kartik Hosanagar, and Joonhwan Lee. 2022. Designing Fair AI in Human Resource"
+          ],
+          "research_areas": [
+            "Human Ai Interaction"
+          ]
+        },
+        {
+          "professor": "서진욱",
+          "url": "hcil.snu.ac.kr",
+          "publications": [
+            "Unveiling High-dimensional Backstage: A Survey for Reliable Visual Analytics with Dimensionality Reduction, CHI 2025",
+            "Leveraging Multimodal LLM for Inspirational User Interface Search, CHI 2025",
+            "PhenoFlow: A Human-LLM Driven Visual Analytics System for Exploring Large and Complex Stroke Datasets, IEEE VIS, 2024",
+            "Enhancing Data Literacy On-demand: LLMs as Guides for Novices in Chart Interpretation, IEEE TVCG, 2024",
+            "MoNetExplorer: A Visual Analytics System for Analyzing Dynamic Networks with Temporal Network Motifs, IEEE TVCG, 2023"
+          ],
+          "research_areas": [
+            "Human AI Interaction"
+          ]
+        },
+        {
+          "professor": "김선",
+          "url": "https://bhi-kimlab.github.io/",
+          "publications": [
+            "Exploring chemical space for lead identification by propagating on chemical similarity network. Computational and",
+            "Structural Biotechnology Journal. 2023 Aug 25",
+            "Biomedical knowledge graph learning for drug repurposing by extending guilt-by-association to multiple layers. Nature",
+            "Communications. 2023 June 15",
+            "Clinical Note Owns its Hierarchy: Multi-Level Hypergraph Neural Networks for Patient-Level Representation Learning",
+            "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics, 2023 July 9",
+            "Sparse Structure Learning via Graph Neural Networks for Inductive Document Classification. AAAI 2022. 2022 Feb 22",
+            "Learning the histone codes with large genomic windows and three-dimensional chromatin interactions using",
+            "transformer. Nature Communications. 2022 Nov 5",
+            "BioVLAB-Cancer-Pharmacogenomics: Tumor Heterogeneity and Pharmacogenomics Analysis of Multi-omics Data from",
+            "Tumor on the Cloud. Bioinformatics. 2021 June 29"
+          ],
+          "research_areas": [
+            "Bio",
+            "Medicine",
+            "Pharma"
+          ]
+        },
+        {
+          "professor": "백대현",
+          "url": "https://biosci.snu.ac.kr/AIinBiomedicine",
+          "publications": [
+            "Jeon, H., Ahn, J., Na, B., Hong, S., Sael, L., Kim, S., ... & Baek, D. (2023). AIVariant: a deep learning-based somatic",
+            "variant detector for highly contaminated tumor samples. Experimental & Molecular Medicine, 55(8), 1734-1742",
+            "Kim, D., Kim, S., Park, J., Chang, H. R., Chang, J., Ahn, J., ... & Baek, D. (2021). A high-resolution temporal atlas of the",
+            "SARS-CoV-2 translatome and transcriptome. Nature communications, 12(1), 5120",
+            "Kim, S., Kim, S., Chang, H. R., Kim, D., Park, J., Son, N., ... & Baek, D. (2021). The regulatory impact of RNA-binding",
+            "proteins on microRNA targeting. Nature communications, 12(1), 5057",
+            "Kim, D., Sung, Y. M., Park, J., Kim, S., Kim, J., Park, J., ... & Baek, D. (2016). General rules for functional microRNA",
+            "targeting. Nature genetics, 48(12), 1517-1526"
+          ],
+          "research_areas": [
+            "Bio",
+            "Medicine",
+            "Pharma"
+          ]
+        },
+        {
+          "professor": "이재성",
+          "url": "https://biomed.snu.ac.kr/fmisl",
+          "publications": [
+            "Improving 18F-FDG PET quantification through a spatial normalization method. J Nucl Med. 2024",
+            "Fast and accurate amyloid brain PET quantification without MRI using deep neural networks. J Nucl Med. 2023",
+            "Comparison of deep learning-based emission-only attenuation correction methods for positron emission tomography",
+            "Eur J Nucl Med Mol Imaging. 2022",
+            "A review of deep learning-based approaches for attenuation correction in positron emission tomography. IEEE Trans",
+            "Radiat. Plasma Med. Sci. 2021",
+            "Generation of PET attenuation map for whole-body time-of-flight 18F-FDG PET/MRI using a deep neural network",
+            "trained with simultaneously reconstructed activity and attenuation maps. J Nucl Med. 2019"
+          ],
+          "research_areas": [
+            "Bio",
+            "Medicine",
+            "Pharma"
+          ]
+        },
+        {
+          "professor": "김현제",
+          "url": "http://snulit.com",
+          "publications": [
+            "Christine Suh-Yun Joh, Soyoung Jeong, Cheol Lee, Hee Jung Lee, Jung Ho Lee, Hyun Seung Choi, Soyun Cho, Gwangil",
+            "Kim, Jaehwan Kim, James G Krueger, Chung-Gyu Park, Seon-Pil Jin, Hyun Je Kim, Jung U Shin. Spatial transcriptomic",
+            "profiling reveals the pathophysiology of early-stage hidradenitis suppurativa. Br J Dermatol. 2023 Aug 17:ljad274. doi:",
+            "10.1093/bjd/ljad274. PMID: 37590958",
+            "Jung Ho Lee, Brian H Lee, Soyoung Jeong, Christine Suh-Yun Joh, Hyo Jeong Nam, Hyun Seung Choi, Henry",
+            "Sserwadda, Ji Won Oh, Chung-Gyu Park, Seon-Pil Jin, Hyun Je Kim. Single-cell RNA sequencing identifies distinct",
+            "transcriptomic signatures between PMA/ionomycin- and αCD3/αCD28-activated primary human T cells. Genomics",
+            "Inform. 2023 Jun;21(2):e18. doi: 10.5808/gi.23009. Epub 2023 Jun 30. PMID: 37704208; PMCID: PMC10326540",
+            "Sunho Lee, Sunyoung Jung, Hyun Je Kim**, Sueon Kim, Ji Hwan Moon, Hyunwoo Chung, Seong-Jun Kang, Chung-Gyu",
+            "Park. Mesenchymal stem cell-derived extracellular vesicles subvert the Th17 cell by destabilizing RORγt through posttranslational modification. Experimental & Molecular Medicine 2023 Apr;55(4):870. doi: 10.1038/s12276-023-01001-4",
+            "Erratum for: Exp Mol Med. 2023 Mar;55(3):665-679. PMID: 37100897; PMCID: PMC10167263",
+            "Lim Y, Kang SJ, Cho BK, Kim HJ, Mun JH, Roh MR, Gulati N, Yang HJ, Moon JH, Won CH, Park CG. Intra-tumoral",
+            "heterogeneity and immune escape of melanoma arising from congenital melanocytic nevus revealed by spatial gene",
+            "expression profiling. J Eur Acad Dermatol Venereol. 2022 Dec;36(12):e1044-e1047. doi: 10.1111/jdv.18443",
+            "Joo EH, Bae JH, Park JH, Bang YJ, Han J, Gulati N, Kim JI, Park CG, Park WY and Kim HJ. Deconvolution of Adult T-Cell",
+            "Leukemia/Lymphoma With Single-CellRNA-Seq Using Frozen Archived Skin Tissue Reveals New Subset of Cancer",
+            "Associated Fibroblast. Front. Immunol. 2022; 13:856363. doi: 10.3389/fimmu.2022.856363"
+          ],
+          "research_areas": [
+            "Bio",
+            "Medicine",
+            "Pharma"
+          ]
+        },
+        {
+          "professor": "이형철",
+          "url": "https://vitallab.ai",
+          "publications": [
+            "Lee et al. Comparison of NLP machine learning models with human physicians for ASA Physical Status classification",
+            "npj Digital Medicine. 2024 Sep 28;7(1):259",
+            "Lee et al. Reinforcement learning model for optimizing dexmedetomidine dosing to prevent delirium in critically ill",
+            "patients. npj Digital Medicine. 2024 Nov 18;7(1):325",
+            "Lim et al. Multicenter validation of a machine learning model to predict intensive care unit readmission within 48",
+            "hours after discharge. eClinicalMedicine, 2025",
+            "Lee et al. Real-time machine learning model to predict in-hospital cardiac arrest using heart rate variability in ICU. npj",
+            "Digital Medicine. 6, 215 (2023)",
+            "Lim et al. Real-time machine learning model to predict short-term mortality in critically ill patients: development and",
+            "international validation. Crit Care. 2024 Mar 14;28(1):76"
+          ],
+          "research_areas": [
+            "Bio",
+            "Medicine",
+            "Pharma"
+          ]
+        },
+        {
+          "professor": "정유성",
+          "url": "micc.snu.ac.kr",
+          "publications": [
+            "A structure translation model for crystal compounds, S. Kim, J. Noh, T. Jin, J. Lee, Y. Jung*, npj Comput Mater (2023)",
+            "Predicting Synthesis Recipes of Inorganic Crystal Materials using Elementwise Template Formulation, S. Kim, J. Noh, G",
+            "Gu, S. Chen, Y. Jung*, Chem. Sci. (2023)",
+            "Path-aware and structure-preserving generation of synthetically accessible molecules. J. Noh, D. Jeong, K. Kim, S. Han",
+            "M. Lee, H. Lee, Y. Jung* ICML (2022)",
+            "A generalized-template-based graph neural network for accurate organic reactivity prediction. S. Chen and Y. Jung*",
+            "Nat Mach Intell (2022)"
+          ],
+          "research_areas": [
+            "Energy",
+            "Environment"
+          ]
+        },
+        {
+          "professor": "손석우",
+          "url": "https://wcd.snu.ac.kr/",
+          "publications": [
+            "Oh, S.-G., S.-W. Son*, Y.-H. Kim, C. Park, J. Ko, K. Shin, J.-H. Ha, and H. Lee, 2024: Deep learning model for heavy",
+            "rainfall nowcasting in South Korea, Weather and Climate Extremes, 44, 100652",
+            "Tian, Y., Y. Zhao, S.-W. Son, J.-J. Luo, and S.-G. Oh, 2023: A deep-learning ensemble method to detect atmospheric",
+            "rivers and its application to long-term changes in precipitation regime, Journal of Geophysical Research - Atmosphere",
+            "128, e2022JD037041",
+            "Oh, S.-G., C. Park, S.-W. Son*, J. Ko, K. Shin, S. Kim, and H. Lee, 2023: Evaluation of deep-learning-based very shortterm rainfall forecasts in South Korea, Asia-Pacific Journal of Atmospheric Sciences, 59, 239-255",
+            "Ko, J., K. Lee, H. Hwang, S.-G. Oh, S.-W. Son, and K. Shin, 2022: Effective training strategies for deep-learning-based",
+            "precipitation nowcasting and estimation, Computers and Geosciences, 161, 105072",
+            "Kim, H., Y. G. Ham, Y. S. Joo, and S.-W. Son, 2021: Deep Learning for bias correction of MJO prediction, Nature",
+            "Communications, 12, 3087"
+          ],
+          "research_areas": [
+            "Energy",
+            "Environment"
+          ]
+        },
+        {
+          "professor": "국종성",
+          "url": "https://climate.snu.ac.kr",
+          "publications": [
+            "Shin, N. Y., Kang, D., Kim, D., Lee, J. Y., & Kug, J. S. (2024). Data-driven investigation on the boreal summer MJO",
+            "predictability. npj Climate and Atmospheric Science, 7(1), 248",
+            "Shin, N. Y., Kim, D., Kang, D., Kim, H., & Kug, J. S. (2024). Deep learning reveals moisture as the primary predictability",
+            "source of MJO. npj Climate and Atmospheric Science, 7(1), 11",
+            "Oh, J.-H., J.-S. Kug, S.-I. An, F.-F. Jin, M. McPhaden, and J.-S. Shin (2024) Emergent climate change patterns originating",
+            "from deep ocean warming in climate mitigation scenarios, Nature Climate Change, 14, 260-266",
+            "Kug, J.-S.., Oh, J.-H.., An, S.-I.. et al. (2022) Hysteresis of the intertropical convergence zone to CO2 forcing. NatureClimate Changes., 12, 47-53",
+            "Kim, G.-I., J.-H. Oh,, N.-Y. Shin, S.-I. An, S.-W. Yeh, J. Shin and J.-S. Kug (2024) Deep ocean warming-induced El Niño",
+            "changes. Nature Communications 15, 6225"
+          ],
+          "research_areas": [
+            "Energy",
+            "Environment"
+          ]
+        },
+        {
+          "professor": "강현구",
+          "url": "http://hpse.snu.ac.kr/",
+          "publications": [
+            "Lee, Y. I., Lee, S. M., and Kang, T. H.-K. (2025) “Multi-Class Deep Support Vector Data Description for Structural Health",
+            "Monitoring,” ASCE Journal of Structural Engineering, under review",
+            "Lee, S. M., Choi, H.-S., Kim, C., and Kang, T. H.-K. (2025) “Lightweight Alternative Machine Learning Model for",
+            "Automating Concrete Crack Image Classification,” ACI Structural Journal, under review",
+            "Lee, S. M., Hong, J., Choi, H., and Kang, T. H.-K. (2025) “Machine Learning Assisted Method for Automated Impact-Echo",
+            "Testing of Concrete Structures,” Journal of Nondestructive Evaluation, under review",
+            "Lee, J. D. and Kang, T. H.-K. (2024) “Ultimate Shear Strength Prediction for Slender RC Beams without Transverse",
+            "Reinforcement Using Machine Learning Approach,” ACI Structural Journal, Vol. 121, No. 2",
+            "Lee, D., Ahn, B., Jeong, S. Y., and Kang, T. H.-K. (2023) “Improved Method of Determination of Basic Wind Speed with",
+            "Terrain Effects Using Graph Neural Network,” ASCE Journal of Structural Engineering, Vol. 149, No. 1",
+            "Lee, D., Jeong, S. Y., and Kang, T. H.-K. (2022) “Consideration of Terrain Features from Satellite Imagery in Machine",
+            "Learning of Basic Wind Speed,” Building and Environment, Vol. 213"
+          ],
+          "research_areas": [
+            "Construction AI"
+          ]
+        },
+        {
+          "professor": "김덕진",
+          "url": "satgeo.snu.ac.kr",
+          "publications": [
+            "A self-evolving deep learning algorithm for automatic oil spill detection in Sentinel-1 SAR images, RSE 2023 (accepted)",
+            "Back-projected signal-based self-interferometric phase analysis technique for sea surface observation using a single",
+            "scatterometer system, Sensors 2023",
+            "Geometric positioning error mitigation of SAR image in ocean utilizing AIS information, IEEE GRSL 2023",
+            "Deep learning-based flood area extraction for fully-automated and persistent flood monitoring using cloud computing",
+            "Remote Sensing 2022",
+            "Burned area mapping using uni-temporal PlanetScope imagery with a deep learning-based approach, IEEE J-STARS",
+            "2022"
+          ],
+          "research_areas": [
+            "원격 탐사"
+          ]
+        },
+        {
+          "professor": "차지욱",
+          "url": "https://www.connectomelab.com/",
+          "publications": [
+            "Kwon, Junbeom, et al. \"Predicting task-related brain activity from resting-state brain dynamics with fMRI Transformer.\"",
+            "Imaging Neuroscience 3 (2025)",
+            "Kim, Peter, et al. \"Swift: Swin 4d fmri transformer.\" Advances in Neural Information Processing Systems 36 (2023)",
+            "Kwon, Joonwoo, et al. \"Aesfa: an aesthetic feature-aware arbitrary neural style transfer.\" Proceedings of the AAAI",
+            "conference on artificial intelligence. (2024)",
+            "Joo, Yoonjung Yoonie, et al. \"Association of genome-wide polygenic scores for multiple psychiatric and common traits",
+            "in preadolescent youths at risk of suicide.\" JAMA network open (2022)",
+            "Park, Junghoon, et al. \"Over the Quantum Rainbow: Explaining Hybrid Quantum Reinforcement Learning.\" 2024 IEEE",
+            "International Conference on Quantum Computing and Engineering (QCE) (2024)"
+          ],
+          "research_areas": [
+            "Neuroscience"
+          ]
+        },
+        {
+          "professor": "강유",
+          "url": "https://datalab.snu.ac.kr/",
+          "publications": [
+            "SynQ: Accurate Zero-shot Quantization by Synthesis-aware Fine-tuning, ICLR, 2025",
+            "Accurate Link Prediction for Edge-Incomplete Graphs via PU Learning, AAAI 2025",
+            "Sequentially Diversified and Accurate Recommendations in Chronological Order for a Series of Users, WSDM 2025",
+            "Fast and Accurate PARAFAC2 Decomposition for Time Range Queries on Irregular Tensors, CIKM 2024",
+            "FreQuant: A Reinforcement-Learning based Adaptive Portfolio Optimization with Multi-frequency Decomposition, KDD 2024"
+          ],
+          "research_areas": [
+            "Data Intelligence",
+            "Learning"
+          ]
+        },
+        {
+          "professor": "조성준",
+          "url": "https://bdai.snu.ac.kr/",
+          "publications": [
+            "\"MEMTO: Memory-guided Transformer for Multivariate Time Series Anomaly Detection\", 송준호, 김건우, 오정렬",
+            "조성준, NeurIPS 2023, New Orleans, 2023.12",
+            "\"Incorporation of Company-Related Factual Knowledge into Pre-trained Language Models for Stock-Related Spam",
+            "Tweet Filtering\", Jihye Park and Sungzoon Cho, Expert Systems With Applications, Volume 234, 30 December",
+            "2023, 121021",
+            "\"General-Use Unsupervised Keyword Extraction Model for Text Analysis\", Hunsik Shin, Hyejin Lee, Sungzoon Cho",
+            "Expert Systems with Applications, Volume 233, 15 December 2023, 120889",
+            "\"Enhancing Sentiment Knowledge via Self-Supervised Meta-Learning\", 김현종, 조성준, RepL4NLP 2023, Toronto",
+            "Canada, 2023.07"
+          ],
+          "research_areas": [
+            "Data Intelligence"
+          ]
+        },
+        {
+          "professor": "국웅",
+          "url": "https://www.math.snu.ac.kr/~woongkook/(to be updated)",
+          "publications": [
+            "Fractional centralities on networks, Physical Review E 2022",
+            "Effects of catastrophic financial loss on suicide risk: Evidence from Korean stock market crash in October 2008",
+            "Social Psychiatry and Psychiatric Epidemiology 2022",
+            "Topological Data Analysis of Coronary Plaques Demonstrates the Natural History of Coronary Atherosclerosis",
+            "JACC: Cardiovascular Imaging 2021",
+            "Investigation of Flash Crash via Topological Data Analysis, Topology and Its Applications 2021",
+            "Simplicial networks and effective resistance, Advances in Applied Mathematics 2018"
+          ],
+          "research_areas": [
+            "Data Intelligence"
+          ]
+        },
+        {
+          "professor": "강필성",
+          "url": "http://dsba.snu.ac.kr",
+          "publications": [
+            "Hyeongwon Kang, Pilsung Kang*. (2024). Transformer-based Multivariate Time Series Anomaly Detection using",
+            "Inter-Variable Attention Mechanism. Knowledge-Based Systems, 290, 111507",
+            "Jaehyuk Heo, Jeongseob Kim, Euisuk Chung, Subin Kim, Pilsung Kang, Donghwa Shin, Jinho Shin, Daehee Han* (2025). Normalizing flow-based latent space mapping for implicit pattern authentication on mobile devices",
+            "Applied Soft Computing, 169, 112469",
+            "Gunho No+, Yukyung Lee+, Hyeongwon Kang, Pilsung Kang*. (2024). Training-free Retrieval-based Log Anomaly",
+            "Detection with Pre-trained Language Model considering Token-level Information. Engineering Applications of",
+            "Artificial Intelligence, 133, 108613. (+: Equally contributed)",
+            "Jaehee Kim, Yukyung Lee, Pilsung Kang*. (2024). A Gradient Accumulation Method for Dense Retriever under",
+            "Memory Constraint. NeurIPS"
+          ],
+          "research_areas": [
+            "Data Intelligence"
+          ]
+        },
+        {
+          "professor": "송현오",
+          "url": "https://mllab.snu.ac.kr/",
+          "publications": [
+            "Direct Preference-based Policy Optimization without Reward Modeling, NeurIPS 2023",
+            "Efficient Latency-Aware CNN Depth Compression via Two-Stage Dynamic Programming, ICML 2023",
+            "Co-Mixup: Saliency Guided Joint Mixup with Supermodular Diversity, ICLR 2021 Oral",
+            "Parsimonious Black-Box Adversarial Attacks via Efficient Combinatorial Optimization, ICML 2019 Long talk",
+            "Efficient end-to-end learning for quantizable representations, ICML 2018 Long talk"
+          ],
+          "research_areas": [
+            "Machine learning"
+          ]
+        },
+        {
+          "professor": "장병탁",
+          "url": "bi.snu.ac.kr",
+          "publications": [
+            "Robust Imitation via Mirror Descent Inverse Reinforcement Learning (NeurIPS 2022)",
+            "SelecMix: Debiased Learning by Contradicting-pair Sampling (NeurIPS 2022)",
+            "The Dialog Must Go On: Improving Visual Dialog via Generative Self-Training (CVPR 2023)",
+            "Learning Geometry-aware Representations by Sketching (CVPR 2023)",
+            "GVCCI: Lifelong Learning of Visual Grounding for Language-Guided Robotic Manipulation (IROS 2023)"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "문태섭",
+          "url": "https://mindlab-snu.github.io",
+          "publications": [
+            "Heewoong Choi, Sangwon Jung, Hongjoon Ahn and Taesup Moon, “Listwise Reward Estimation for Offline",
+            "Preference-based Reinforcement Learning”, International Conference on Machine Learning (ICML), July 2024",
+            "Sungmin Cha, Kyunghyun Cho and Taesup Moon, “Regularizing with Pseudo-Negatives for Continual SelfSupervised Learning”, International Conference on Machine Learning (ICML), July 2024",
+            "Jaeseok Byun, Dohoon Kim and Taesup Moon, “MAFA: Managing False Negatives for Vision-Language Pretraining”, IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), June 2024",
+            "Sangwon Jung, Sumin Yu, Sanghyuk Chun and Taesup Moon, “Do Counterfactually Fair Image Classifiers",
+            "Satisfy Group Fairness? – A Theoretical and Empirical Study”, Neural Information Processing Systems (NeurIPS)",
+            "December 2024",
+            "Hongjoon Ahn, Jinu Hyeon, Youngmin Oh, Bosun Hwang, and Taesup Moon, “Prevalence of Negative Transfer",
+            "in Continual Reinforcement Learning: Analyses and a Simple Baseline”, International Conference on Learning",
+            "Representations (ICLR), April 2025"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "윤성로",
+          "url": "https://ailab.snu.ac.kr",
+          "publications": [
+            "Integrating Paralinguistics in Speech-Empowered Large Language Models for Natural Conversation, Heeseung",
+            "Kim, et al., in Proceedings of Conference on Neural Information Processing Systems (NeurIPS), Vancouver",
+            "Canada, December 2024",
+            "Unsupervised Homography Estimation on Multimodal Image Pair via Alternating Optimization, Sanghyeob Song",
+            "et al., in Proceedings of Conference on Neural Information Processing Systems (NeurIPS), Vancouver, Canada",
+            "December 2024",
+            "Introducing Spectral Attention for Long-Range Dependency in Time Series Forecasting, Bong Gyun Kang*",
+            "Dongjun Lee*, et al., in Proceedings of Conference on Neural Information Processing Systems (NeurIPS)",
+            "Vancouver, Canada, December 2024. [* equal contribution]",
+            "Textual Training for the Hassle-Free Removal of Unwanted Visual Data, Saehyung Lee, et al., in Proceedings of",
+            "Conference on Neural Information Processing Systems (NeurIPS), Vancouver, Canada, December 2024"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "이원종",
+          "url": "https://drl.snu.ac.kr",
+          "publications": [
+            "Suhyun Kang, Duhun Hwang, Moonjung Eo, Taesup Kim, and Wonjong Rhee, “Meta-Learning with a GeometryAdaptive Preconditioner”, Computer Vision and Pattern Recognition Conference (CVPR), 2023",
+            "Jaeill Kim, Suhyun Kang, Duhun Hwang, Jungwook Shin, and Wonjong Rhee, “VNE: An Effective Method",
+            "for Improving Deep Representation by Manipulating Eigenvalue Distribution”, Computer Vision and Pattern",
+            "Recognition Conference (CVPR), 2023",
+            "Euna Jung, Jaekeol Choi, and Wonjong Rhee. “Semi-Siamese Bi-encoder Neural Ranking Model Using Lightweight",
+            "Fine-Tuning.” The Web Conference (TheWebConf), 2022",
+            "Kyungeun Lee and Wonjong Rhee, “DDP-GCN: Multi-Graph Convolutional Network for Spatiotemporal Traffic",
+            "Forecasting.” Transportation Research Part C: Emerging Technologies, 2022",
+            "Changho Shin, Sunghwan Joo, Jaeryun Yim, Hyoseop Lee, Taesup Moon, and Wonjong Rhee. “Subtask gated",
+            "networks for non-intrusive load monitoring.” AAAI Conference on Artificial Intelligence (AAAI). 2019"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "김용대",
+          "url": "idea-stat.snu.ac.kr",
+          "publications": [
+            "Masked Bayesian Neural Networks: Theoretical Guarantee and its Posterior Inference, 2023 ICML",
+            "Covariate balancing using the integral probability metric for causal inference, 2023 ICML",
+            "Improving Adversarial Robustness by Putting More Regularizations on Less Robust Samples, 2023 ICML",
+            "A likelihood approach to nonparametric estimation of a singular distribution using deep generative models, 2023",
+            "JMLR",
+            "Learning fair representation with a parametric integral probability metric, 2022 ICML"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "박건웅",
+          "url": "https://sites.google.com/view/gwpark",
+          "publications": [
+            "\"Computationally Efficient Learning of Gaussian Linear Structural Equation Models with Equal Error Variances\"",
+            "Journal of Computational and Graphical Statistics (2023): 1-26",
+            "Park, Gunwoong, Sangjoon Moon, Sion Park, and Jong-June Jeon. \"Learning a High-dimensional Linear Structural",
+            "Equation Model via L1-regularized Regression\"Journal of Machine Learning Research 22.102 (2021): 1-41",
+            "Park, Gunwoong. \"Identifiability of Additive Noise Models Using Conditional Variances\"Journal of Machine",
+            "Learning Research 21.75 (2020): 1-34",
+            "Park, Gunwoong and Sion Park. \"Estimating High-dimensional Poisson DAG Models via L1-regularized",
+            "Regression\"Journal of Machine Learning Research 20.95 (2019): 1-41",
+            "Park, Gunwoong, and Garvesh Raskutti. \"Learning Quadratic Variance Function (QVF) DAG models via",
+            "OverDispersion Scoring (ODS).\"The Journal of Machine Learning Research 18.1 (2017): 8300-8342"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "원중호",
+          "url": "https://won-j.github.io",
+          "publications": [
+            "Statistical Inference with Implicit SGD: Proximal Robbins-Monro vs. Polyak-Ruppert, ICML 2022",
+            "Learning from Nested Data with Ornstein Auto-Encoders, ICML 2021",
+            "Proximity Operator of the Matrix Perspective Function and its Applications, NeurIPS 2020",
+            "Optimal Minimization of the Sum of Three Convex Functions with a Linear Operator, AISTATS 2019"
+          ],
+          "research_areas": [
+            "Learning",
+            "Reasoning"
+          ]
+        },
+        {
+          "professor": "이정우",
+          "url": "https://cml.snu.ac.kr/",
+          "publications": [
+            "Hyeonggeun Han, Sehwan Kim, Hyungjun Joo, Sangwoo Hong, and Jungwoo Lee “Mitigating Spurious",
+            "Correlations via Disagreement Probability”, NeurIPS 2024",
+            "Dohyeok Lee, Seungyub Han, Taehyun Cho, and Jungwoo Lee, “SPQR: Controlling Q-ensemble Independence for",
+            "Reinforcement Learning”, NeurIPS 2023, New Orleans, USA",
+            "Taehyun Cho, Seungyub Han, Heesoo Lee, Kyungjae Lee, and Jungwoo Lee, “Pitfall of Optimism: Distributional",
+            "Reinforcement Learning by Randomizing Risk Criterion”, NeurIPS 2023, New Orleans, USA",
+            "Youngwook Kim, Jae Myung Kim, Jieun Jeong, Cordelia Schmid, Zeynep Akata, Jungwoo Lee, “Bridging the Gap",
+            "between Model Explanations in Partially Annotated Multi-label Classification,” CVPR 2023, Vancouver, Canada",
+            "Youngwook Kim*, Jae Myung Kim*, Zeynep Akata, and Jungwoo Lee, “Large Loss Matters in Weakly Supervised",
+            "Multi-Label Classification,” CVPR 2022, New Orleans, Louisiana"
+          ],
+          "research_areas": [
+            "머신러닝(자연어 처리",
+            "편향 제거"
+          ]
+        },
+        {
+          "professor": "김건희",
+          "url": "https://vision.snu.ac.kr/",
+          "publications": [
+            "MPCHAT: Towards Multimodal Persona-Grounded Conversation, ACL 2023",
+            "Fusing Pre-trained Language Models with Multimodal Prompts through Reinforcement Learning, CVPR 2023",
+            "Panoramic Vision Transformer for Saliency Detection in 360 Videos, ECCV 2022",
+            "Recursion of Thought: A Divide-and-Conquer Approach to Multi-Context Reasoning with Language Models, ACL (Findings) 2023",
+            "Lipschitz-constrained Unsupervised Skill Discovery, ICLR 2022"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "박재식",
+          "url": "https://jaesik.info/lab",
+          "publications": [
+            "Locality-aware Gaussian Compression for Fast and High-quality Rendering, (ICLR), 2025",
+            "InstantDrag: Improving Interactivity in Drag-based Image Editing, (SIGGRAPH ASIA), 2024",
+            "Distilling Diffusion Models into Conditional GANs, (ECCV), 2024",
+            "High-Speed Stereo Visual SLAM for Low-Powered Computing Devices, (RAL), 2024",
+            "Budget-Aware Sequential Brick Assembly with Efficient Constraint Satisfaction, (TMLR), 2024"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "주한별",
+          "url": "https://jhugestar.github.io/",
+          "publications": [
+            "CHORUS: Learning Canonicalized 3D Human-Object Spatial Relations from Unbounded Synthesized Images",
+            "Sookwan Han, Hanbyul Joo",
+            "In ICCV 2023"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "김영민",
+          "url": "3d.snu.ac.kr",
+          "publications": [
+            "Hyeongjun Heo, Seonghun Oh, Jae Yong Lee, Young Min Kim**, Yonghyeon Lee**, “Isometric Regularization for",
+            "Manifolds of Functional Data,” International Conference on Learning Representations (ICLR) 2025",
+            "Cheol-Hui Min, Young Min Kim, “ASIMO: Agent-centric Scene representation In Multi-Object manipulation,” The",
+            "International Journal of Robotics Research (IJRR), 2025",
+            "Changwoon Choi, Jaeah Lee, Jaesik Park, Young Min Kim, “3Doodle: Compact Abstraction of Objects with 3D",
+            "Strokes,” SIGGRAPH (ACM Transactions on Graphics) 2024",
+            "Sang Won Im*, Dongsu Zhang*, Jeong Hyun Han, Ryeong Myeong Kim, Changwoon Choi, Young Min Kim**, Ki Tae",
+            "Nam**, “Investigating Chiral Morphogenesis of Gold Using Generative Cellular Automata,” Nature Materials 2024",
+            "Junho Kim, Jiwon Jeong, Young Min Kim, “Fully Geometric Panoramic Localization,” IEEE Conference on",
+            "Computer Vision and Pattern Recognition (CVPR) 2024"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "이경무",
+          "url": "https://cv.snu.ac.kr",
+          "publications": [
+            "Jiwon Kim, Jung Kwon Lee and Kyoung Mu Lee, “Accurate image super-resolution using very deep convolutional",
+            "networks,” CVPR2016, Oral Presentation",
+            "Bee Lim, Sanghyun Son, Heewon Kim, Seungjun Nah, and Kyoung Mu Lee, “Enhanced Deep Residual Networks",
+            "for Single Image Super-Resolution,” CVPR Workshop 2017",
+            "Gyeongsik Moon and Kyoung Mu Lee, “I2L-MeshNet: Image-to-Lixel Prediction Network for Accurate 3D Human",
+            "Pose and Mesh Estimation from a Single RGB Image,” ECCV2020",
+            "Wooseok Lee, Sanghyun Son, and Kyoung Mu Lee, “AP-BSN: Self-Supervised Denoising for Real-World Images via",
+            "Asymmetric PD and Blind-Spot Network,” CVPR2022",
+            "Sangmin Hong*, Mohsen Yavartanoo*, Reyhaneh Neshatavar, and Kyoung Mu Lee, “ACL-SPC: Adaptive ClosedLoop system for Self-Supervised Point Cloud Completion,” CVPR2023"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "한보형",
+          "url": "https://cv.snu.ac.kr",
+          "publications": [
+            "Hyunsoo Lee, Minsoo Kang, and Bohyung Han, “Conditional Score Guidance for Text-Driven Image-to-Image",
+            "Translation,” NeurIPS 2023",
+            "Jaeyoo Park and Bohyung Han, “Multi-Modal Representation Learning with Text-Driven Soft Masks,” CVPR 2023",
+            "Minji Kim, Seungkwan Lee, Jungseul Ok, Bohyung Han, and Minsu Cho, “Towards Sequence-Level Training for Visual",
+            "Tracking,” ECCV 2022",
+            "Jinkyu Kim, Geeho Kim, and Bohyung Han, “Multi-Level Branched Regularization for Federated Learning,” ICML 2022",
+            "Minsoo Kang, Jaeyoo Park, and Bohyung Han, “Class-Incremental Learning by Knowledge Distillation with Adaptive",
+            "Feature Consolidation,” CVPR 2022",
+            "Mijeong Kim, Seonguk Seo, and Bohyung Han, “InfoNeRF: Ray Entropy Minimization for Few-Shot Neural Volume",
+            "Rendering,” CVPR2022"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "전세영",
+          "url": "https://icl.snu.ac.kr/",
+          "publications": [
+            "BH Lee*, SJ Lim*, SG Lee, DU Kang, SY Chun, \"Concept Pinpoint Eraser for Text-to-image Diffusion Models via Residual",
+            "Attention Gate,\" ICLR 2025 (*co-first authors)",
+            "DU Kang, HY Kim, SY Chun, \"Class Distribution-induced Attention Map for Open-vocabulary Semantic Segmentations,\" ICLR 2025",
+            "SM Hong, SY Jeon, KH Lee, EK Ryu**, SY Chun**, \"Gradient-free Decoder Inversion in Latent Diffusion Models,\" NeurIPS",
+            "37:82982-83007, Dec 2024 (**co-corresponding authors)",
+            "JH Jang*, HG Seo*, S Y Chun, \"INTRA: Interaction Relationship-aware Weakly Supervised Affordance Grounding,\" ECCV",
+            "15122:18-34, Oct 2024 (*co-first authors)",
+            "GH Kim*, HY Kim*, HG Seo*, DU Kang*, SY Chun, \"BeyondScene: Higher-Resolution Human-Centric Scene Generation",
+            "With Pretrained Diffusion,\" ECCV 15122:126-142, Oct 2024 (*co-first authors)"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception 3"
+          ]
+        },
+        {
+          "professor": "조남익",
+          "url": "https://ispl.snu.ac.kr",
+          "publications": [
+            "\"Deep Hash Distillation for Image Retrieval\", ECCV, 2022",
+            "\"DProST: Dynamic Projective Spatial Transformer Network for 6D Pose Estimation\", ECCV, 2022",
+            "\"LC-FDNet: Learned Lossless Image Compression with Frequency Decomposition Network\", CVPR, 2022",
+            "\"Perception-Oriented Single Image Super-Resolution using Optimal Objective Estimation\", Proc. Computer Vision",
+            "and Pattern Recognition (CVPR), 2023"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "임종우",
+          "url": "https://rvlab.snu.ac.kr/",
+          "publications": [
+            "Changhee Won, Jongbin Ryu, Jongwoo Lim, \"End-to-End Learning for Omnidirectional Stereo Matching With",
+            "Uncertainty Prior,\" IEEE Trans. Pattern Anal. Mach. Intell.(TPAMI) 43(11): 3850-3862 (2021)",
+            "Changhee Won, Hochang Seok, Zhaopeng Cui, Marc Pollefeys, Jongwoo Lim, \"OmniSLAM: Omnidirectional",
+            "Localization and Dense Mapping for Wide-baseline Multi-camera Systems,\" ICRA 2020: 559-566",
+            "Yi Wu, Jongwoo Lim, Ming-Hsuan Yang, \"Object Tracking Benchmark,\" IEEE Trans. Pattern Anal. Mach. Intell.(TPAMI)",
+            "37(9): 1834-1848 (2015)"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        },
+        {
+          "professor": "곽노준",
+          "url": "http://mipal.snu.ac.kr",
+          "publications": [
+            "Jayeon Yoo, Inseop Chung, Nojun Kwak, \"Unsupervised Domain Adaptation for One-Stage Object Detector using",
+            "Offsets to Bounding Box\", European Conference on Computer Vision (ECCV 2022), October 2022",
+            "Jookyung Song, Yeonjin Chang, SeongUk Park, Nojun Kwak",
+            "\"Semantics-Guided Object Removal for Facial Images: with Broad",
+            "Applicability and Robust Style Preservation\", 2023 International",
+            "Conference on Acoustics, Speech and Signal Processing (ICASSP 2023)",
+            "June 2023",
+            "Seunghyeon Seo, Donghoon Han, Yeonjin Chang, Nojun Kwak, \"MixNeRF: Modeling a Ray with Mixture Density for",
+            "Novel View Synthesis from Sparse Inputs\", The IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR 2023), June 2023",
+            "Jiho Jang, Chaerin Kong, DongHyeon Jeon, Seonhoon Kim, Nojun Kwak, \"Unifying Vision-Language",
+            "Representation Space with Single-tower Transformer\", Thirty-Seventh AAAI Conference on Artificial Intelligence (AAAI 2023), Feb. 2023",
+            "KiYoon Yoo, WonHyuk Ahn, Jiho Jang, Nojun Kwak. \"Robust Multi-bit Natural Language Watermarking through",
+            "Invariant Features\", Annual Meeting of the Association for Computational Linguistics (ACL 2023), July 2023"
+          ],
+          "research_areas": [
+            "Vision",
+            "Perception"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "last_updated": "2025-08-02",
+    "version": "2.0",
+    "description": "간소화된 대학원 랩실 정보 데이터베이스",
+    "total_universities": 4,
+    "total_labs": 141
+  }
+}

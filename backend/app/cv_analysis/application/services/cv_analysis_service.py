@@ -102,32 +102,38 @@ class CVAnalysisService:
         try:
             # LLM을 사용하여 경험 추출
             prompt = f"""
-            당신은 {field} 분야의 저명한 교수입니다.
-            당신의 연구실에 새로운 학생이 지원했습니다. 
-            지원한 학생의 CV를 통해 {field} 분야에 대해서 학생이 얼마나 다양하고 깊은 경험을 했는지 추출해주세요.
-            연구실의 학생을 뽑는 것이니, {field} 분야의 연구에 대한 경험이 있는 학생을 뽑는 것이 목적입니다.
-            
-            - 학생의 CV
-            {cv_text}
-            
-            해당 학생의 CV를 {field} 분야에 관련된 경험들로 분석하여 다음 형식으로 JSON 배열로 반환해주세요.
-            반드시 유효한 JSON 형식으로만 응답해주세요.
-            
-            
-                {{
-                    "title": "프로젝트/연구 제목",
-                    "description": "프로젝트/연구 설명",
-                    "duration": "기간",
-                    "technologies": ["사용 기술들"],
-                    "role": "역할",
-                    "achievements": ["주요 성과들"],
-                    "relevance": "{field} 분야와의 관련성"
-                }}
-            ]
-            
-            모든 프로젝트, 연구, 대회 경험을 포함해주세요.
-            """
-            
+당신은 {field} 분야의 저명한 교수입니다.
+지원자의 CV를 분석하여 {field} 분야와 관련된 모든 프로젝트, 연구, 경험을 구체적으로 추출해주세요.
+
+지원자 CV:
+{cv_text}
+
+CV에서 발견되는 모든 프로젝트, 연구, 경험을 다음 형식으로 JSON 배열을 반환해주세요:
+
+[
+    {{
+        "title": "프로젝트/연구 제목 (구체적)",
+        "description": "프로젝트/연구에 대한 상세한 설명 (목적, 방법, 결과 포함)",
+        "duration": "기간 (예: 2023.03 - 2023.08)",
+        "technologies": ["사용된 기술/도구/언어들"],
+        "role": "역할 (예: 팀장, 개발자, 연구원)",
+        "achievements": ["주요 성과/결과들"],
+        "relevance": "{field} 분야와의 구체적 관련성"
+    }}
+]
+
+중요한 지침:
+1. CV의 각 섹션(Research Experience, Projects, Work Experience 등)에서 모든 관련 경험을 찾아내세요
+2. 각 경험의 제목은 원본 CV에 있는 제목을 그대로 사용하거나 명확하게 요약하세요
+3. 설명에는 프로젝트의 목적, 사용한 방법, 달성한 결과를 포함하세요
+4. 기술 스택은 실제 사용된 기술들을 정확히 나열하세요 (예: FastAPI, Next.js, TypeScript, LangGraph, Gemini AI 등)
+5. 성과는 구체적인 수치나 결과를 포함하세요 (예: 성능 향상 %, 구현한 기능 등)
+6. {field} 분야와의 관련성을 명확히 설명하세요
+
+CV에서 발견되는 모든 프로젝트를 포함하되, 각각을 독립적인 경험으로 분리해주세요.
+반드시 유효한 JSON 형식으로만 응답해주세요.
+"""
+
             response = await openai_client._call_chat_completion(prompt)
             
             # JSON 부분만 추출
@@ -135,6 +141,7 @@ class CVAnalysisService:
             if json_match:
                 json_str = json_match.group()
                 try:
+                    import json
                     experiences = json.loads(json_str)
                     if isinstance(experiences, list) and len(experiences) > 0:
                         logger.info(f"경험 추출 성공: {len(experiences)}개 경험")
@@ -142,34 +149,71 @@ class CVAnalysisService:
                 except json.JSONDecodeError as e:
                     logger.error(f"JSON 파싱 실패: {e}")
             
-            # JSON 파싱에 실패한 경우 기본 구조 반환
-            logger.warning("JSON 파싱 실패, 기본 경험 구조 생성")
-            return [
-                {
-                    "title": "CV 분석 결과",
-                    "description": f"{field} 분야 관련 경험들이 CV에서 확인됨",
-                    "duration": "Various",
-                    "technologies": ["LLM", "NLP", "AI/ML"],
-                    "role": "연구자/개발자",
-                    "achievements": ["다양한 프로젝트 경험 확인"],
-                    "relevance": f"{field} 분야 연구 및 개발 경험"
-                }
-            ]
+            # JSON 파싱에 실패한 경우 더 구체적인 분석 시도
+            logger.warning("JSON 파싱 실패, 대체 분석 시도")
+            return await self._extract_experiences_fallback(cv_text, field)
             
         except Exception as e:
             logger.error(f"경험 추출 실패: {e}")
-            # 오류 발생 시에도 기본 구조 반환
-            return [
-                {
-                    "title": "CV 분석 결과",
-                    "description": f"{field} 분야 관련 경험들이 CV에서 확인됨",
-                    "duration": "Various",
-                    "technologies": ["LLM", "NLP", "AI/ML"],
-                    "role": "연구자/개발자",
-                    "achievements": ["다양한 프로젝트 경험 확인"],
-                    "relevance": f"{field} 분야 연구 및 개발 경험"
-                }
-            ]
+            return await self._extract_experiences_fallback(cv_text, field)
+    
+    async def _extract_experiences_fallback(self, cv_text: str, field: str) -> List[Dict[str, Any]]:
+        """경험 추출 실패 시 대체 방법"""
+        try:
+            # 더 간단한 프롬프트로 재시도
+            prompt = f"""
+CV에서 {field} 관련 경험들을 찾아서 간단한 형식으로 나열해주세요.
+
+CV 내용:
+{cv_text}
+
+CV에서 발견되는 모든 프로젝트, 연구, 경험을 다음 형식으로 응답해주세요:
+프로젝트명: 간단한 설명
+프로젝트명: 간단한 설명
+...
+
+각 프로젝트는 새로운 줄로 구분해주세요.
+CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
+"""
+
+            response = await openai_client._call_chat_completion(prompt)
+            
+            # 응답을 파싱하여 경험 리스트 생성
+            experiences = []
+            lines = response.strip().split('\n')
+            
+            for line in lines:
+                if ':' in line:
+                    title, description = line.split(':', 1)
+                    experiences.append({
+                        "title": title.strip(),
+                        "description": description.strip(),
+                        "duration": "Various",
+                        "technologies": ["관련 기술"],
+                        "role": "참여자",
+                        "achievements": ["프로젝트 완료"],
+                        "relevance": f"{field} 분야 관련 경험"
+                    })
+            
+            if experiences:
+                logger.info(f"대체 방법으로 {len(experiences)}개 경험 추출")
+                return experiences
+            
+        except Exception as e:
+            logger.error(f"대체 경험 추출 실패: {e}")
+        
+        # 최종 대안
+        return [
+            {
+                "title": "CV 분석 결과",
+                "description": f"{field} 분야 관련 경험들이 CV에서 확인됨",
+                "duration": "Various",
+                "technologies": ["LLM", "NLP", "AI/ML"],
+                "role": "연구자/개발자",
+                "achievements": ["다양한 프로젝트 경험 확인"],
+                "relevance": f"{field} 분야 연구 및 개발 경험"
+            }
+        ]
     
     async def _analyze_strengths_weaknesses(self, cv_text: str, field: str, 
                                           trend_analysis: Optional[Dict[str, Any]], 
