@@ -65,17 +65,17 @@ class LLMAnalysisService:
             ])
             
             prompt = f"""
-            다음은 {university_name}의 {professor_name} 교수님의 최신 연구 논문들입니다.
+            다음은 {university_name}의 {professor_name} 교수님의 최신 연구 논문들의 초록들입니다.
             이 논문들을 분석하여 연구실의 전체적인 연구 방향과 특징을 분석해주세요.
 
             연구 분야: {field}
 
-            최신 논문들:
+            최신 논문들의 초록:
             {publications_text}
 
             ## 연구실 전체적인 연구 방향과 특징
 
-            다음 사항들을 포함하여 분석해주세요:
+            다음 사항들을 자연스럽게 포함하여 분석해주세요:
             - 연구실의 전반적인 연구 철학과 접근 방식
             - 연구실이 중점을 두는 핵심 연구 영역
             - 연구실의 독특한 특징이나 강점

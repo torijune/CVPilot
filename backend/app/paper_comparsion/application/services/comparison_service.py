@@ -349,4 +349,4 @@ class ComparisonService:
     
     async def get_comparison_analysis(self, analysis_id: str) -> Optional[ComparisonAnalysis]:
         """비교 분석 결과 조회"""
-        return await self.comparison_repository.get_comparison_analysis(analysis_id) 
+        return await self.comparison_repository.get_comparison_analysis(analysis_id)

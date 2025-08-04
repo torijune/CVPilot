@@ -71,7 +71,6 @@ table_data/
 FGI_data/
 
 package-lock.json
-package.json
 ts
 
 # === 추가: 하위 디렉토리별 명시적 무시 ===
