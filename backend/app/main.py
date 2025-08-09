@@ -18,7 +18,11 @@ app = FastAPI(
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 프로덕션에서는 특정 도메인으로 제한
+    allow_origins=[
+        "http://localhost:3000",  # 로컬 개발
+        "https://*.vercel.app",   # Vercel 배포
+        "https://cvpilot.vercel.app",  # 프로덕션 도메인
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -57,7 +61,6 @@ async def root():
             "Paper Trend Analysis",
             "Paper Comparison", 
             "CV Analysis",
-            "CV Feedback",
             "CV QA",
             "Daily Paper Podcast",
             "Lab Search",
@@ -80,4 +83,6 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+    import os
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port) 

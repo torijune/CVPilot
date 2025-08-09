@@ -9,7 +9,7 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import SchoolIcon from "@mui/icons-material/School";
-import FeedbackIcon from "@mui/icons-material/Feedback";
+
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
@@ -30,14 +30,7 @@ const sections = [
     iconColor: "#0369A1",
     borderColor: "#0EA5E9"
   },
-  {
-    key: "feedback",
-    label: "CV 피드백",
-    icon: <FeedbackIcon />, 
-    color: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)",
-    iconColor: "#D97706",
-    borderColor: "#F59E0B"
-  },
+
   {
     key: "improvement",
     label: "개선 방향",
