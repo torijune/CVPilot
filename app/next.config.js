@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'standalone',
   
   // 환경 변수 설정
   env: {
@@ -15,7 +14,7 @@ const nextConfig = {
     unoptimized: true
   },
 
-  // API 라우트 proxy 설정 (선택사항)
+  // API 라우트 proxy 설정
   async rewrites() {
     return [
       {
@@ -25,11 +24,11 @@ const nextConfig = {
     ]
   },
 
-  // 헤더 설정
+  // CORS 헤더 설정
   async headers() {
     return [
       {
-        source: '/api/:path*',
+        source: '/(.*)',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           { key: 'Access-Control-Allow-Origin', value: '*' },
