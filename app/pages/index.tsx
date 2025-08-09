@@ -175,19 +175,6 @@ export default function HomePage() {
                 CVPilot
               </Typography>
             </Box>
-            
-            <Button
-              variant="contained"
-              onClick={handleGetStarted}
-              sx={{
-                background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%)'
-                }
-              }}
-            >
-              분석 시작하기
-            </Button>
           </Box>
         </Container>
       </Box>
