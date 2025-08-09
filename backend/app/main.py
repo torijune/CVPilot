@@ -22,6 +22,7 @@ app.add_middleware(
         "http://localhost:3000",  # 로컬 개발
         "https://*.vercel.app",   # Vercel 배포
         "https://cvpilot.vercel.app",  # 프로덕션 도메인
+        "https://*.run.app",      # Cloud Run 도메인
     ],
     allow_credentials=True,
     allow_methods=["*"],

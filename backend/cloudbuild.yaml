@@ -1,0 +1,44 @@
+steps:
+  # Docker 이미지 빌드
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/cvpilot-backend:$COMMIT_SHA', '-t', 'gcr.io/$PROJECT_ID/cvpilot-backend:latest', '.']
+
+  # 이미지를 Container Registry에 푸시
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/cvpilot-backend:$COMMIT_SHA']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/cvpilot-backend:latest']
+
+  # Cloud Run에 배포
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'cvpilot-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/cvpilot-backend:$COMMIT_SHA'
+      - '--region'
+      - 'asia-northeast3'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '2Gi'
+      - '--cpu'
+      - '1'
+      - '--timeout'
+      - '300'
+      - '--max-instances'
+      - '10'
+
+# 빌드 이미지를 저장할 위치
+images:
+  - 'gcr.io/$PROJECT_ID/cvpilot-backend:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/cvpilot-backend:latest'
+
+# 빌드 옵션
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8' 
