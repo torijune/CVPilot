@@ -1,10 +1,19 @@
 {
-  "name": "cvpilot",
   "version": 2,
+  "name": "cvpilot",
   "builds": [
     {
-      "src": "app/package.json",
+      "src": "app/next.config.js",
       "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "app/$1"
     }
   ],
   "env": {

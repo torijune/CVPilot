@@ -1,5 +1,5 @@
 // CV QA API 클라이언트
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cvpilot-670621051738.asia-northeast3.run.app';
 
 export interface CVUploadResponse {
   success: boolean;
