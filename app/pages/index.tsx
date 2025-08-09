@@ -129,7 +129,7 @@ export default function HomePage() {
   const [testimonialsRef, testimonialsVisible] = useScrollAnimation();
 
   const handleGetStarted = () => {
-    router.push('/dashboard');
+    router.push('/cv-analysis');
   };
 
   return (
