@@ -338,8 +338,8 @@ const CVQAPage: React.FC = () => {
             두 가지 모드 중 하나를 선택하여 면접 연습을 시작하세요.
           </Typography>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' } }}>
               <Card sx={{ height: '100%' }}>
                 <CardActionArea 
                   onClick={() => handleModeSelect('interview')}
@@ -362,9 +362,9 @@ const CVQAPage: React.FC = () => {
                   </CardContent>
                 </CardActionArea>
               </Card>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={6}>
+            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' } }}>
               <Card sx={{ height: '100%' }}>
                 <CardActionArea 
                   onClick={() => handleModeSelect('practice')}
@@ -387,8 +387,8 @@ const CVQAPage: React.FC = () => {
                   </CardContent>
                 </CardActionArea>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Paper>
       )}
 
@@ -421,9 +421,9 @@ const CVQAPage: React.FC = () => {
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                 CV를 분석해서 생성된 맞춤형 질문입니다. 선택하거나 직접 질문을 입력하세요.
               </Typography>
-              <Grid container spacing={2}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {interviewQuestions.map((question, index) => (
-                  <Grid item xs={12} key={index}>
+                  <Box key={index}>
                     <Button
                       variant="outlined"
                   fullWidth
@@ -442,9 +442,9 @@ const CVQAPage: React.FC = () => {
                         {question}
                       </Typography>
                     </Button>
-                  </Grid>
+                  </Box>
                 ))}
-              </Grid>
+              </Box>
               <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center' }}>
                 <Button
                   variant="text"
