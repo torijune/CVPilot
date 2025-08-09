@@ -19,10 +19,7 @@ COPY . .
 
 # 포트 설정 (Cloud Run은 PORT 환경변수 사용)
 ENV PORT=8080
+EXPOSE $PORT
 
-# 헬스체크 (선택사항)
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:$PORT/health || exit 1
-
-# FastAPI 실행
-CMD exec uvicorn app.main:app --host 0.0.0.0 --port $PORT 
+# FastAPI 실행 (Cloud Run은 PORT 환경변수를 자동으로 설정)
+CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} 

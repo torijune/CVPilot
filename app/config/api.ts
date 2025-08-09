@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
   process.env.NODE_ENV === 'production' 
-    ? 'https://your-cloud-run-url.run.app'  // Cloud Run URL로 변경 필요
+    ? 'https://cvpilot-670621051738.asia-northeast3.run.app'
     : 'http://localhost:8000';
 
 export const apiConfig = {

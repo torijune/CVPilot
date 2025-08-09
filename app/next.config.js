@@ -1,0 +1,44 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  output: 'standalone',
+  
+  // 환경 변수 설정
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://cvpilot-670621051738.asia-northeast3.run.app',
+  },
+
+  // 이미지 최적화
+  images: {
+    domains: ['cvpilot-670621051738.asia-northeast3.run.app'],
+    unoptimized: true
+  },
+
+  // API 라우트 proxy 설정 (선택사항)
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://cvpilot-670621051738.asia-northeast3.run.app/api/:path*',
+      },
+    ]
+  },
+
+  // 헤더 설정
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT' },
+          { key: 'Access-Control-Allow-Headers', value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version' },
+        ],
+      },
+    ]
+  },
+}
+
+module.exports = nextConfig 

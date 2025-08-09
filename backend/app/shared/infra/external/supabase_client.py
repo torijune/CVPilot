@@ -15,13 +15,22 @@ class SupabaseClient:
         self.supabase_url = os.getenv("SUPABASE_URL")
         self.supabase_key = os.getenv("SUPABASE_KEY")
         
-        if not self.supabase_url or not self.supabase_key:
-            raise ValueError("Supabase 환경변수가 설정되지 않았습니다.")
-        
-        self.client: Client = create_client(self.supabase_url, self.supabase_key)
+        # 개발 단계에서는 Supabase 연결을 옵셔널로 처리
+        self.client = None
+        if self.supabase_url and self.supabase_key and self.supabase_url != "placeholder":
+            try:
+                self.client: Client = create_client(self.supabase_url, self.supabase_key)
+                print("✅ Supabase 연결 성공")
+            except Exception as e:
+                print(f"⚠️  Supabase 연결 실패: {e}")
+                self.client = None
+        else:
+            print("⚠️  Supabase 환경변수 미설정 - 일부 기능 제한")
     
     async def get_papers_by_field(self, field: str, limit: int = 100) -> List[Dict[str, Any]]:
         """분야별 논문 조회"""
+        if not self.client:
+            return []
         try:
             result = self.client.table("papers").select("*").eq("field", field).limit(limit).execute()
             return result.data

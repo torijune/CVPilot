@@ -1,19 +1,21 @@
 {
-  "name": "cvpilot",
+  "name": "cvpilot-frontend",
   "version": 2,
-  "builds": [
-    {
-      "src": "app/package.json",
-      "use": "@vercel/next"
+  "buildCommand": "cd app && npm run build",
+  "outputDirectory": "app/.next",
+  "framework": "nextjs",
+  "functions": {
+    "app/pages/api/**/*.js": {
+      "runtime": "nodejs18.x"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app/$1"
-    }
-  ],
+  },
   "env": {
-    "NEXT_PUBLIC_API_URL": "@api_url"
-  }
+    "NEXT_PUBLIC_API_URL": "https://cvpilot-670621051738.asia-northeast3.run.app"
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://cvpilot-670621051738.asia-northeast3.run.app/api/$1"
+    }
+  ]
 } 
