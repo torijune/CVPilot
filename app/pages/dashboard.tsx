@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Box } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import AnalysisPanel from "../components/AnalysisPanel";
-import { analyzeCV, getPaperTrend, extractTextFromFile } from "../api/api";
+import { analyzeCV, extractTextFromFile } from "../api/cv-analysis";
+import { getPaperTrend } from "../api/trends";
 
 export default function Dashboard() {
   const [result, setResult] = useState<any>(null);
@@ -23,10 +24,7 @@ export default function Dashboard() {
       // 1. CV 파일에서 텍스트 추출
       const cvText = await extractTextFromFile(cvFile);
       
-      // 2. CV 분석 수행
-      const cvAnalysisResult = await analyzeCV(cvText, interests);
-      
-      // 3. 관심 분야를 주요 분야와 세부 분야로 구분
+      // 2. 관심 분야를 주요 분야와 세부 분야로 구분
       const mainInterests = [
         "Natural Language Processing (NLP)",
         "Computer Vision (CV)",
@@ -36,6 +34,9 @@ export default function Dashboard() {
       
       const mainInterest = interests.find(interest => mainInterests.includes(interest)) || interests[0];
       const detailedInterests = interests.filter(interest => !mainInterests.includes(interest));
+      
+      // 3. CV 분석 수행
+      const cvAnalysisResult = await analyzeCV(cvText, mainInterest);
       
       // 4. 논문 트렌드 조회 (주요 분야와 세부 분야 모두 전달)
       const paperTrendResult = await getPaperTrend(mainInterest, detailedInterests, 10);

@@ -6,9 +6,9 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cd app && next dev",
+    "build": "cd app && next build",
+    "start": "cd app && next start",
     "backend": "source venv/bin/activate && cd backend && python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
     "app": "cd app && npm run dev",
     "backend:stop": "pkill -f 'uvicorn app.main:app' || true",
