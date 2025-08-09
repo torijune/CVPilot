@@ -1,8 +1,9 @@
 {
   "name": "cvpilot-frontend",
   "version": 2,
-  "buildCommand": "cd app && npm run build",
+  "buildCommand": "cd app && npm ci && npm run build",
   "outputDirectory": "app/.next",
+  "installCommand": "cd app && npm ci",
   "framework": "nextjs",
   "functions": {
     "app/pages/api/**/*.js": {
