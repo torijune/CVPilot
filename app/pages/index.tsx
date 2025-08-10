@@ -38,8 +38,8 @@ const useScrollAnimation = () => {
         setIsVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.05,  // 5%만 보여도 렌더링 시작
+        rootMargin: '0px 0px -100px 0px'  // 하단에서 100px 전까지 렌더링 유지
       }
     );
 
@@ -57,7 +57,7 @@ const useScrollAnimation = () => {
   return [ref, isVisible] as const;
 };
 
-const features = [
+const featuresTop = [
   {
     icon: <TrendingUpIcon sx={{ fontSize: 40, color: '#3B82F6' }} />,
     title: "논문 트렌드 분석",
@@ -81,8 +81,10 @@ const features = [
     color: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)",
     borderColor: "#F59E0B",
     path: "/cv-analysis"
-  },
+  }
+];
 
+const featuresBottom = [
   {
     icon: <AssignmentIcon sx={{ fontSize: 40, color: '#8B5CF6' }} />,
     title: "CV QA",
@@ -123,7 +125,8 @@ export default function HomePage() {
 
   // 각 섹션의 애니메이션 상태
   const [statsRef, statsVisible] = useScrollAnimation();
-  const [featuresRef, featuresVisible] = useScrollAnimation();
+  const [featuresTopRef, featuresTopVisible] = useScrollAnimation();
+  const [featuresBottomRef, featuresBottomVisible] = useScrollAnimation();
   const [howItWorksRef, howItWorksVisible] = useScrollAnimation();
   const [techRef, techVisible] = useScrollAnimation();
   const [testimonialsRef, testimonialsVisible] = useScrollAnimation();
@@ -197,8 +200,8 @@ export default function HomePage() {
         position: 'relative',
         background: 'linear-gradient(135deg, #1F2937 0%, #374151 100%)',
         color: 'white',
-        pt: { xs: 12, md: 16 },
-        pb: { xs: 8, md: 12 },
+        pt: { xs: 8, md: 12 },
+        pb: { xs: 6, md: 8 },
         overflow: 'hidden'
       }}>
         {/* Background Pattern */}
@@ -429,7 +432,7 @@ export default function HomePage() {
       </Box>
 
       {/* Stats Section */}
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+              <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box 
           ref={statsRef}
           sx={{ 
@@ -463,15 +466,15 @@ export default function HomePage() {
         </Box>
       </Container>
 
-      {/* Features Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      {/* Features Section - Top Row */}
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box 
-          ref={featuresRef}
+          ref={featuresTopRef}
           sx={{ 
             textAlign: 'center', 
-            mb: 8,
-            opacity: featuresVisible ? 1 : 0,
-            transform: featuresVisible ? 'translateY(0)' : 'translateY(50px)',
+            mb: 4,
+            opacity: featuresTopVisible ? 1 : 0,
+            transform: featuresTopVisible ? 'translateY(0)' : 'translateY(50px)',
             transition: 'all 0.8s ease-out',
           }}
         >
@@ -499,7 +502,7 @@ export default function HomePage() {
           gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
           gap: 4
         }}>
-          {features.map((feature, index) => (
+          {featuresTop.map((feature, index) => (
             <Card 
               key={index} 
               sx={{
@@ -507,13 +510,67 @@ export default function HomePage() {
                 background: feature.color,
                 border: `2px solid ${feature.borderColor}`,
                 borderRadius: 3,
-                transition: 'all 0.3s ease',
+                transition: 'all 0.6s ease',
                 cursor: 'pointer',
-                opacity: featuresVisible ? 1 : 0,
-                transform: featuresVisible ? 'translateY(0)' : 'translateY(30px)',
-                transitionDelay: featuresVisible ? `${index * 0.1}s` : '0s',
+                opacity: featuresTopVisible ? 1 : 0,
+                transform: featuresTopVisible ? 'translateY(0)' : 'translateY(30px)',
+                transitionDelay: featuresTopVisible ? `${index * 0.1}s` : '0s',
                 '&:hover': {
-                  transform: featuresVisible ? 'translateY(-8px)' : 'translateY(30px)',
+                  transform: featuresTopVisible ? 'translateY(-8px)' : 'translateY(30px)',
+                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
+                }
+              }}
+              onClick={() => router.push(feature.path)}
+            >
+              <CardContent sx={{ p: 4, textAlign: 'center' }}>
+                <Box sx={{ mb: 3 }}>
+                  {feature.icon}
+                </Box>
+                <Typography variant="h5" sx={{ 
+                  fontWeight: 700, 
+                  mb: 2,
+                  color: '#1F2937'
+                }}>
+                  {feature.title}
+                </Typography>
+                <Typography variant="body1" sx={{ 
+                  color: '#4B5563', 
+                  lineHeight: 1.7,
+                  fontWeight: 500
+                }}>
+                  {feature.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      </Container>
+
+      {/* Features Section - Bottom Row */}
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box 
+          ref={featuresBottomRef}
+          sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
+            gap: 4
+          }}
+        >
+          {featuresBottom.map((feature, index) => (
+            <Card 
+              key={index} 
+              sx={{
+                height: '100%',
+                background: feature.color,
+                border: `2px solid ${feature.borderColor}`,
+                borderRadius: 3,
+                transition: 'all 0.6s ease',
+                cursor: 'pointer',
+                opacity: featuresBottomVisible ? 1 : 0,
+                transform: featuresBottomVisible ? 'translateY(0)' : 'translateY(30px)',
+                transitionDelay: featuresBottomVisible ? `${index * 0.1}s` : '0s',
+                '&:hover': {
+                  transform: featuresBottomVisible ? 'translateY(-8px)' : 'translateY(30px)',
                   boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
                 }
               }}
@@ -547,16 +604,16 @@ export default function HomePage() {
       <Box 
         ref={howItWorksRef}
         sx={{ 
-          py: 10,
+          py: 6,
           background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
           position: 'relative',
           opacity: howItWorksVisible ? 1 : 0,
           transform: howItWorksVisible ? 'translateY(0)' : 'translateY(50px)',
-          transition: 'all 0.8s ease-out',
+          transition: 'all 1.2s ease-out',
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h3" sx={{ 
               fontWeight: 800, 
               mb: 3,
@@ -690,7 +747,7 @@ export default function HomePage() {
       <Box 
         ref={techRef}
         sx={{ 
-          py: 10, 
+          py: 6, 
           background: '#1F2937',
           opacity: techVisible ? 1 : 0,
           transform: techVisible ? 'translateY(0)' : 'translateY(50px)',
@@ -698,7 +755,7 @@ export default function HomePage() {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h3" sx={{ 
               fontWeight: 800, 
               mb: 3,
@@ -771,7 +828,7 @@ export default function HomePage() {
       <Box 
         ref={testimonialsRef}
         sx={{ 
-          py: 10, 
+          py: 6, 
           background: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)',
           opacity: testimonialsVisible ? 1 : 0,
           transform: testimonialsVisible ? 'translateY(0)' : 'translateY(50px)',
@@ -779,7 +836,7 @@ export default function HomePage() {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h3" sx={{ 
               fontWeight: 800, 
               mb: 3,
@@ -878,7 +935,7 @@ export default function HomePage() {
       <Box sx={{ 
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         color: 'white',
-        py: 10,
+        py: 6,
         position: 'relative',
         overflow: 'hidden'
       }}>
