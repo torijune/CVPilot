@@ -397,12 +397,13 @@ class SupabaseClient:
             # 1. 해당 분야의 모든 논문 조회 (임베딩이 있는 것만) - 제한 없음
             query = self.client.table("papers").select("*").eq("field", field).not_.is_("combined_embedding", "null")
             
-            # 페이지네이션으로 데이터 가져오기 (제한 없음)
+            # 페이지네이션으로 데이터 가져오기 (최대 1000개로 제한)
             page_size = 100
+            max_papers = 1000  # 최대 논문 수 제한
             all_papers = []
             page = 0
             
-            while True:
+            while len(all_papers) < max_papers:
                 try:
                     result = query.range(page * page_size, (page + 1) * page_size - 1).execute()
                     papers = result.data
@@ -413,13 +414,14 @@ class SupabaseClient:
                     all_papers.extend(papers)
                     page += 1
                     
-                    # 진행상황 로깅 (10페이지마다)
-                    if page % 10 == 0:
+                    # 진행상황 로깅 (5페이지마다)
+                    if page % 5 == 0:
                         logger.info(f"페이지 {page} 완료, 총 {len(all_papers)}개 논문 로드됨")
                     
-                except Exception as e:
-                    logger.warning(f"페이지 {page} 로드 실패: {e}")
-                    break
+                    # 최대 10페이지까지만 로드 (안전 장치)
+                    if page >= 10:
+                        logger.info(f"최대 페이지 수에 도달. 총 {len(all_papers)}개 논문으로 분석 진행")
+                        break
                     
                 except Exception as e:
                     logger.warning(f"페이지 {page} 로드 실패: {e}")

@@ -97,8 +97,8 @@ else
         --package-type Image \
         --code ImageUri=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest \
         --role $ROLE_ARN \
-        --timeout 30 \
-        --memory-size 512 \
+        --timeout 900 \
+        --memory-size 2048 \
         --region $AWS_REGION
 fi
 
