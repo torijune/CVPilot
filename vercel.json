@@ -9,14 +9,11 @@
   ],
   "routes": [
     {
-      "handle": "filesystem"
-    },
-    {
       "src": "/(.*)",
       "dest": "app/$1"
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://cvpilot-670621051738.asia-northeast3.run.app"
+    "NEXT_PUBLIC_API_URL": "https://jazb6u3s5kt22lm54m6b63nae40chkzt.lambda-url.us-east-1.on.aws"
   }
 } 
