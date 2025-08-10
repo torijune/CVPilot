@@ -16,11 +16,11 @@ class LabAnalysisService:
         self.arxiv_service = ArxivService()
         self.llm_service = LLMAnalysisService()
     
-    async def get_professors_by_field(self, field: str) -> List[Professor]:
-        """분야별 교수 목록 조회"""
+    async def get_professors_by_field(self, field: str, university: Optional[str] = None) -> List[Professor]:
+        """분야별 교수 목록 조회 (학교 필터링 지원)"""
         try:
-            logger.info(f"분야별 교수 조회: {field}")
-            professors = await self.repository.get_professors_by_field(field)
+            logger.info(f"분야별 교수 조회: {field}, 학교: {university}")
+            professors = await self.repository.get_professors_by_field(field, university)
             logger.info(f"교수 조회 완료: {len(professors)}명")
             return professors
         except Exception as e:

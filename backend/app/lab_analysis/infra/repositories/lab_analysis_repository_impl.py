@@ -50,24 +50,36 @@ class LabAnalysisRepositoryImpl(LabAnalysisRepository):
             logger.error(f"분석 결과 조회 실패: {e}")
             return None
     
-    async def get_professors_by_field(self, field: str) -> List[Professor]:
-        """분야별 교수 목록 조회"""
+    async def get_professors_by_field(self, field: str, university: Optional[str] = None) -> List[Professor]:
+        """분야별 교수 목록 조회 (학교 필터링 지원)"""
         try:
-            logger.info(f"분야별 교수 조회: {field}")
+            logger.info(f"분야별 교수 조회: {field}, 학교: {university}")
             
-            # lab_search_service를 통해 교수 정보 조회
-            labs = self.lab_search_service.search_labs_by_category(field, min_score=0.3)
+            # lab_search_service를 통해 교수 정보 조회 (async 호출)
+            labs = await self.lab_search_service.search_labs_by_category(field, min_score=0.3)
+            
+            # 학교 필터링 적용
+            if university:
+                labs = [lab for lab in labs if lab.get("university", "").lower() == university.lower()]
+                logger.info(f"학교 필터링 적용: {university}, 필터링 후 {len(labs)}명")
             
             professors = []
             for lab in labs:
+                # category_scores와 primary_category 계산
+                from app.shared.domain.value_objects.research_area_mapper import ResearchAreaMapper
+                
+                research_areas = lab.get("research_areas", [])
+                category_scores = ResearchAreaMapper.map_research_areas_to_categories(research_areas)
+                primary_category = ResearchAreaMapper.get_primary_category(research_areas)
+                
                 # Professor 엔티티로 변환
                 professor = Professor(
                     name=lab.get("professor", ""),
                     university=lab.get("university", ""),
-                    research_areas=lab.get("research_areas", []),
+                    research_areas=research_areas,
                     publications=lab.get("publications", []),
-                    category_scores=lab.get("category_scores", {}),
-                    primary_category=lab.get("primary_category", ""),
+                    category_scores=category_scores,
+                    primary_category=primary_category,
                     url=lab.get("url", "")
                 )
                 professors.append(professor)

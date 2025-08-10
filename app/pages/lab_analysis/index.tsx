@@ -43,7 +43,7 @@ import {
   Lightbulb as LightbulbIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { getProfessorsByField, analyzeLab, ProfessorInfo, LabAnalysisResult } from '../../api/lab_analysis';
+import { getProfessorsByField, getAllUniversities, analyzeLab, ProfessorInfo, LabAnalysisResult } from '../../api/lab_analysis';
 import ReactMarkdown from 'react-markdown';
 
 const fieldOptions = [
@@ -57,6 +57,9 @@ const LabAnalysisPage: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [field, setField] = useState('NLP');
+  const [university, setUniversity] = useState<string>('');
+  const [universities, setUniversities] = useState<string[]>([]);
+  const [universitiesLoading, setUniversitiesLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [professorsLoading, setProfessorsLoading] = useState(false);
   const [professors, setProfessors] = useState<ProfessorInfo[]>([]);
@@ -76,6 +79,24 @@ const LabAnalysisPage: React.FC = () => {
     setResult(null);
   };
 
+  const handleUniversityChange = (event: any) => {
+    setUniversity(event.target.value);
+    setSelectedProfessor(null);
+    setResult(null);
+  };
+
+  const loadUniversities = async () => {
+    setUniversitiesLoading(true);
+    try {
+      const data = await getAllUniversities();
+      setUniversities(data.universities);
+    } catch (err) {
+      console.error('대학 목록 로드 실패:', err);
+    } finally {
+      setUniversitiesLoading(false);
+    }
+  };
+
   const loadProfessors = async () => {
     if (!field) return;
 
@@ -83,7 +104,7 @@ const LabAnalysisPage: React.FC = () => {
     setError(null);
 
     try {
-      const data = await getProfessorsByField(field);
+      const data = await getProfessorsByField(field, university || undefined);
       setProfessors(data.professors);
     } catch (err) {
       setError(err instanceof Error ? err.message : '교수 목록을 불러오는데 실패했습니다.');
@@ -122,8 +143,12 @@ const LabAnalysisPage: React.FC = () => {
   };
 
   useEffect(() => {
+    loadUniversities();
+  }, []);
+
+  useEffect(() => {
     loadProfessors();
-  }, [field]);
+  }, [field, university]);
 
   const isAnalyzeDisabled = !selectedProfessor || loading;
 
@@ -184,6 +209,25 @@ const LabAnalysisPage: React.FC = () => {
                 {fieldOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mb: 3 }}>
+              <InputLabel>학교 선택 (선택사항)</InputLabel>
+              <Select
+                value={university}
+                label="학교 선택 (선택사항)"
+                onChange={handleUniversityChange}
+                disabled={universitiesLoading}
+              >
+                <MenuItem value="">
+                  <em>모든 학교</em>
+                </MenuItem>
+                {universities.map((uni) => (
+                  <MenuItem key={uni} value={uni}>
+                    {uni}
                   </MenuItem>
                 ))}
               </Select>

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 import logging
+from typing import Optional
 from app.lab_analysis.api.models.request_models import LabAnalysisRequest, ProfessorSelectionRequest
 from app.lab_analysis.api.models.response_models import LabAnalysisResponse, ProfessorListResponse, LabAnalysisResultResponse, HealthCheckResponse
 from app.lab_analysis.application.services.lab_analysis_service import LabAnalysisService
@@ -17,13 +18,14 @@ def get_lab_analysis_service() -> LabAnalysisService:
 @router.get("/professors/{field}", response_model=ProfessorListResponse)
 async def get_professors_by_field(
     field: str,
+    university: Optional[str] = None,
     lab_service: LabAnalysisService = Depends(get_lab_analysis_service)
 ):
-    """분야별 교수 목록 조회"""
+    """분야별 교수 목록 조회 (학교 필터링 지원)"""
     try:
-        logger.info(f"교수 목록 조회 요청: {field}")
+        logger.info(f"교수 목록 조회 요청: {field}, 학교: {university}")
         
-        professors = await lab_service.get_professors_by_field(field)
+        professors = await lab_service.get_professors_by_field(field, university)
         
         # 응답 모델로 변환
         professor_infos = []

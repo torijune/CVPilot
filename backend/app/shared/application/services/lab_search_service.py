@@ -2,6 +2,7 @@ import json
 import os
 from typing import List, Dict, Optional
 from ...domain.value_objects.research_area_mapper import ResearchAreaMapper
+from ...infra.external.supabase_client import supabase_client
 
 class LabSearchService:
     """연구실 검색 및 필터링 서비스"""
@@ -11,49 +12,52 @@ class LabSearchService:
         초기화
         
         Args:
-            config_file_path: 연구실 데이터 파일 경로
+            config_file_path: 연구실 데이터 파일 경로 (더 이상 사용하지 않음)
         """
-        if config_file_path is None:
-            # 기본 경로 설정
-            current_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-            config_file_path = os.path.join(current_dir, "utils", "crawl", "school_crawl", "simple_lab_config.json")
-            
-            # 경로가 존재하지 않으면 상대 경로로 시도
-            if not os.path.exists(config_file_path):
-                config_file_path = os.path.join(current_dir, "..", "utils", "crawl", "school_crawl", "simple_lab_config.json")
-            
-            # 여전히 존재하지 않으면 절대 경로로 시도
-            if not os.path.exists(config_file_path):
-                config_file_path = os.path.join(os.path.dirname(current_dir), "utils", "crawl", "school_crawl", "simple_lab_config.json")
-            
-            # 마지막 시도: 현재 작업 디렉토리 기준
-            if not os.path.exists(config_file_path):
-                config_file_path = os.path.join(os.getcwd(), "..", "utils", "crawl", "school_crawl", "simple_lab_config.json")
-        
-        self.config_file_path = config_file_path
-        self.labs_data = self._load_labs_data()
+        self.supabase_client = supabase_client
+        self.labs_data = []  # 초기화 시에는 빈 리스트, 필요할 때 로드
     
-    def _load_labs_data(self) -> List[Dict]:
-        """연구실 데이터 로드"""
+    async def _load_labs_data(self) -> List[Dict]:
+        """Supabase에서 연구실 데이터 로드"""
         try:
-            with open(self.config_file_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+            if not self.supabase_client.client:
+                print("⚠️ Supabase 연결이 없습니다.")
+                return []
             
-            # 모든 연구실 데이터를 평면화
+            # professors 테이블에서 모든 데이터 가져오기
+            result = self.supabase_client.client.table("professors").select("*").execute()
+            professors = result.data
+            
+            # 데이터 형식 변환
             all_labs = []
-            for university in data.get("universities", []):
-                university_name = university.get("name", "")
-                for lab in university.get("labs", []):
-                    lab_with_university = lab.copy()
-                    lab_with_university["university"] = university_name
-                    all_labs.append(lab_with_university)
+            for prof in professors:
+                # 연구 분야를 리스트로 변환
+                research_areas = []
+                if prof.get('field'):
+                    research_areas = [area.strip() for area in prof['field'].split(',') if area.strip()]
+                
+                # 논문을 리스트로 변환
+                publications = []
+                if prof.get('publications'):
+                    publications = [pub.strip() for pub in prof['publications'].split(';') if pub.strip()]
+                
+                lab_data = {
+                    "professor": prof.get('name', ''),
+                    "university": prof.get('university', ''),
+                    "url": prof.get('lab', ''),
+                    "research_areas": research_areas,
+                    "publications": publications
+                }
+                all_labs.append(lab_data)
             
+            print(f"✅ Supabase에서 {len(all_labs)}명의 교수 데이터 로드 완료")
             return all_labs
+            
         except Exception as e:
-            print(f"연구실 데이터 로드 실패: {e}")
+            print(f"❌ 연구실 데이터 로드 실패: {e}")
             return []
     
-    def search_labs_by_category(self, category: str, min_score: float = 0.3) -> List[Dict]:
+    async def search_labs_by_category(self, category: str, min_score: float = 0.3) -> List[Dict]:
         """
         카테고리별 연구실 검색
         
@@ -64,11 +68,15 @@ class LabSearchService:
         Returns:
             필터링된 연구실 리스트
         """
+        # 데이터가 없으면 먼저 로드
+        if not self.labs_data:
+            self.labs_data = await self._load_labs_data()
+        
         return ResearchAreaMapper.filter_labs_by_category(
             self.labs_data, category, min_score
         )
     
-    def search_labs_by_keyword(self, keyword: str) -> List[Dict]:
+    async def search_labs_by_keyword(self, keyword: str) -> List[Dict]:
         """
         키워드로 연구실 검색
         
@@ -78,6 +86,10 @@ class LabSearchService:
         Returns:
             검색 결과 리스트
         """
+        # 데이터가 없으면 먼저 로드
+        if not self.labs_data:
+            self.labs_data = await self._load_labs_data()
+        
         results = []
         keyword_lower = keyword.lower()
         
@@ -106,7 +118,7 @@ class LabSearchService:
         
         return results
     
-    def get_labs_by_university(self, university_name: str) -> List[Dict]:
+    async def get_labs_by_university(self, university_name: str) -> List[Dict]:
         """
         대학별 연구실 조회
         
@@ -116,21 +128,29 @@ class LabSearchService:
         Returns:
             해당 대학의 연구실 리스트
         """
+        # 데이터가 없으면 먼저 로드
+        if not self.labs_data:
+            self.labs_data = await self._load_labs_data()
+        
         return [
             lab for lab in self.labs_data 
             if lab.get("university", "").lower() == university_name.lower()
         ]
     
-    def get_category_statistics(self) -> Dict[str, int]:
+    async def get_category_statistics(self) -> Dict[str, int]:
         """
         카테고리별 통계 조회
         
         Returns:
             카테고리별 연구실 수
         """
+        # 데이터가 없으면 먼저 로드
+        if not self.labs_data:
+            self.labs_data = await self._load_labs_data()
+        
         return ResearchAreaMapper.get_category_statistics(self.labs_data)
     
-    def get_lab_details(self, professor_name: str, university_name: str = None) -> Optional[Dict]:
+    async def get_lab_details(self, professor_name: str, university_name: str = None) -> Optional[Dict]:
         """
         특정 연구실 상세 정보 조회
         
@@ -141,6 +161,10 @@ class LabSearchService:
         Returns:
             연구실 상세 정보
         """
+        # 데이터가 없으면 먼저 로드
+        if not self.labs_data:
+            self.labs_data = await self._load_labs_data()
+        
         for lab in self.labs_data:
             if lab.get("professor") == professor_name:
                 if university_name is None or lab.get("university") == university_name:
@@ -159,7 +183,7 @@ class LabSearchService:
         
         return None
     
-    def get_recommended_labs(self, target_category: str, limit: int = 10) -> List[Dict]:
+    async def get_recommended_labs(self, target_category: str, limit: int = 10) -> List[Dict]:
         """
         특정 카테고리의 추천 연구실 조회
         
@@ -170,16 +194,20 @@ class LabSearchService:
         Returns:
             추천 연구실 리스트
         """
-        filtered_labs = self.search_labs_by_category(target_category, min_score=0.5)
+        filtered_labs = await self.search_labs_by_category(target_category, min_score=0.5)
         return filtered_labs[:limit]
     
-    def get_all_universities(self) -> List[str]:
+    async def get_all_universities(self) -> List[str]:
         """
         모든 대학 목록 조회
         
         Returns:
             대학명 리스트
         """
+        # 데이터가 없으면 먼저 로드
+        if not self.labs_data:
+            self.labs_data = await self._load_labs_data()
+        
         universities = set()
         for lab in self.labs_data:
             if lab.get("university"):
