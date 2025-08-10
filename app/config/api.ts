@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
   process.env.NODE_ENV === 'production' 
-    ? 'https://jazb6u3s5kt22lm54m6b63nae40chkzt.lambda-url.us-east-1.on.aws'
+    ? 'https://g5q66inogiknom4a54hosoghfe0mnida.lambda-url.us-east-1.on.aws'
     : 'http://localhost:8000';
 
 export const apiConfig = {
