@@ -37,7 +37,6 @@ test_*.py
 # Deployment
 deploy*.sh
 template.yaml
-lambda_handler.py
 railway.toml
 Procfile
 

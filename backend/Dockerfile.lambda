@@ -1,0 +1,15 @@
+FROM public.ecr.aws/lambda/python:3.11
+
+# 작업 디렉토리 설정
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+# requirements.txt 복사 및 의존성 설치
+COPY requirements-complete.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 애플리케이션 코드 복사
+COPY app/ ./app/
+COPY lambda_handler_production.py lambda_handler.py
+
+# Lambda 핸들러 설정
+CMD ["lambda_handler.handler"] 

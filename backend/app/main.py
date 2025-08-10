@@ -38,8 +38,8 @@ from app.cv_QA.api.routes.cv_qa_routes import router as cv_qa_router
 from app.shared.api.routes.lab_search_routes import router as lab_search_router
 from app.lab_analysis.api.routes.lab_analysis_routes import router as lab_analysis_router
 
-# 정적 파일 서빙 설정 (오디오 파일용)
-temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp_audio")
+# 정적 파일 서빙 설정 (오디오 파일용) - Lambda에서는 /tmp 사용
+temp_dir = "/tmp/audio"
 os.makedirs(temp_dir, exist_ok=True)
 app.mount("/audio", StaticFiles(directory=temp_dir), name="audio")
 

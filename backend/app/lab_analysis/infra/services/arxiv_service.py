@@ -1,9 +1,16 @@
 import logging
-import arxiv
 import requests
 import feedparser
 from typing import List, Optional, Dict
 import re
+
+# 조건부 import
+try:
+    import arxiv
+    ARXIV_AVAILABLE = True
+except ImportError:
+    ARXIV_AVAILABLE = False
+    arxiv = None
 
 logger = logging.getLogger(__name__)
 
@@ -11,10 +18,18 @@ class ArxivService:
     """Arxiv API 서비스"""
     
     def __init__(self):
-        self.client = arxiv.Client()
+        if not ARXIV_AVAILABLE:
+            logger.warning("Arxiv 라이브러리가 설치되지 않았습니다.")
+            self.client = None
+        else:
+            self.client = arxiv.Client()
     
     async def get_recent_publications(self, professor_name: str, university_name: str, limit: int = 10) -> List[Dict[str, str]]:
         """교수의 최신 논문 초록 수집"""
+        if not ARXIV_AVAILABLE or self.client is None:
+            logger.warning("Arxiv 라이브러리가 사용할 수 없습니다.")
+            return []
+            
         try:
             logger.info(f"논문 초록 수집 시작: {professor_name} ({university_name})")
             
@@ -226,6 +241,10 @@ class ArxivService:
     
     async def search_by_keywords(self, keywords: List[str], limit: int = 10) -> List[Dict[str, str]]:
         """키워드로 논문 검색"""
+        if not ARXIV_AVAILABLE or self.client is None:
+            logger.warning("Arxiv 라이브러리가 사용할 수 없습니다.")
+            return []
+            
         try:
             # 키워드를 OR 조건으로 결합
             query = ' OR '.join([f'ti:"{keyword}" OR abs:"{keyword}"' for keyword in keywords])

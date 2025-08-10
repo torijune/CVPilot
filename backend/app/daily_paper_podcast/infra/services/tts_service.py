@@ -3,7 +3,14 @@ import os
 from typing import Optional
 import uuid
 from datetime import datetime
-from google.cloud import texttospeech
+
+# 조건부 import
+try:
+    from google.cloud import texttospeech
+    GOOGLE_TTS_AVAILABLE = True
+except ImportError:
+    GOOGLE_TTS_AVAILABLE = False
+    texttospeech = None
 
 logger = logging.getLogger(__name__)
 
@@ -11,12 +18,17 @@ class TTSService:
     """Google Cloud TTS 서비스"""
     
     def __init__(self):
-        # 정적 파일 서빙을 위한 디렉토리 사용
+        # 정적 파일 서빙을 위한 디렉토리 사용 - Lambda에서는 /tmp 사용
         import os
-        self.temp_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "temp_audio")
+        self.temp_dir = "/tmp/audio"
         os.makedirs(self.temp_dir, exist_ok=True)
         
         # Google Cloud TTS 클라이언트 초기화
+        if not GOOGLE_TTS_AVAILABLE:
+            logger.warning("Google Cloud TTS 라이브러리가 설치되지 않았습니다.")
+            self.client = None
+            return
+            
         try:
             # 서비스 계정 키 경로 설정 (환경 변수에서 가져오거나 기본 경로 사용)
             credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", 
