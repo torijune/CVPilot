@@ -1,0 +1,13 @@
+FROM public.ecr.aws/lambda/python:3.11-x86_64
+
+# 의존성 설치
+COPY requirements-lambda.txt ${LAMBDA_TASK_ROOT}
+RUN pip install -r requirements-lambda.txt
+
+# 애플리케이션 코드 복사
+COPY app/ ${LAMBDA_TASK_ROOT}/app/
+
+# Lambda 핸들러 복사
+COPY lambda_handler.py ${LAMBDA_TASK_ROOT}
+
+CMD ["lambda_handler.handler"] 

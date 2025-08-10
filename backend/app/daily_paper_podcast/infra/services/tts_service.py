@@ -3,7 +3,13 @@ import os
 from typing import Optional
 import uuid
 from datetime import datetime
-from google.cloud import texttospeech
+
+try:
+    from google.cloud import texttospeech
+    GOOGLE_TTS_AVAILABLE = True
+except ImportError:
+    GOOGLE_TTS_AVAILABLE = False
+    texttospeech = None
 
 logger = logging.getLogger(__name__)
 
@@ -11,27 +17,36 @@ class TTSService:
     """Google Cloud TTS 서비스"""
     
     def __init__(self):
-        # 정적 파일 서빙을 위한 디렉토리 사용
+        # Lambda 환경에서는 /tmp 디렉토리 사용 (쓰기 가능한 유일한 디렉토리)
         import os
-        self.temp_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "temp_audio")
+        if os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+            # Lambda 환경
+            self.temp_dir = "/tmp/temp_audio"
+        else:
+            # 로컬 환경
+            self.temp_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "temp_audio")
         os.makedirs(self.temp_dir, exist_ok=True)
         
         # Google Cloud TTS 클라이언트 초기화
-        try:
-            # 서비스 계정 키 경로 설정 (환경 변수에서 가져오거나 기본 경로 사용)
-            credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", 
-                                      "/Users/jang-wonjun/Desktop/Dev/CVPilot/cvpilot-467501-80776d682808.json")
-            
-            if os.path.exists(credentials_path):
-                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
-                self.client = texttospeech.TextToSpeechClient()
-                logger.info("Google Cloud TTS 클라이언트 초기화 완료")
-            else:
-                logger.warning(f"Google Cloud 인증 파일을 찾을 수 없음: {credentials_path}")
-                self.client = None
+        if GOOGLE_TTS_AVAILABLE:
+            try:
+                # 서비스 계정 키 경로 설정 (환경 변수에서 가져오거나 기본 경로 사용)
+                credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", 
+                                          "/Users/jang-wonjun/Desktop/Dev/CVPilot/cvpilot-467501-80776d682808.json")
                 
-        except Exception as e:
-            logger.error(f"Google Cloud TTS 클라이언트 초기화 실패: {e}")
+                if os.path.exists(credentials_path):
+                    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
+                    self.client = texttospeech.TextToSpeechClient()
+                    logger.info("Google Cloud TTS 클라이언트 초기화 완료")
+                else:
+                    logger.warning(f"Google Cloud 인증 파일을 찾을 수 없음: {credentials_path}")
+                    self.client = None
+                    
+            except Exception as e:
+                logger.error(f"Google Cloud TTS 클라이언트 초기화 실패: {e}")
+                self.client = None
+        else:
+            logger.warning("Google Cloud TTS가 설치되지 않음")
             self.client = None
     
     async def generate_audio(self, text: str, tts_settings: dict = None, filename: str = None) -> str:

@@ -15,16 +15,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS 설정
+# CORS 설정 - 모든 도메인 허용 (개발/테스트용)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # 로컬 개발
-        "https://*.vercel.app",   # Vercel 배포
-        "https://cvpilot.vercel.app",  # 프로덕션 도메인
-        "https://*.run.app",      # Cloud Run 도메인
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],  # 모든 도메인 허용
+    allow_credentials=False,  # credentials는 와일드카드와 함께 사용 불가
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -39,7 +34,13 @@ from app.shared.api.routes.lab_search_routes import router as lab_search_router
 from app.lab_analysis.api.routes.lab_analysis_routes import router as lab_analysis_router
 
 # 정적 파일 서빙 설정 (오디오 파일용)
-temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp_audio")
+# Lambda 환경에서는 /tmp 디렉토리 사용
+if os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    # Lambda 환경
+    temp_dir = "/tmp/temp_audio"
+else:
+    # 로컬 환경
+    temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp_audio")
 os.makedirs(temp_dir, exist_ok=True)
 app.mount("/audio", StaticFiles(directory=temp_dir), name="audio")
 

@@ -1,0 +1,40 @@
+# Core FastAPI dependencies
+fastapi==0.115.12
+uvicorn==0.34.2
+pydantic==2.11.4
+python-dotenv==1.1.0
+mangum==0.19.0
+
+# HTTP and API dependencies
+aiohttp==3.11.18
+requests==2.32.3
+python-multipart==0.0.20
+
+# Database and Storage
+supabase==2.16.0
+postgrest==1.1.1
+storage3==0.12.0
+supafunc==0.10.1
+gotrue==2.12.3
+realtime==2.5.3
+
+# File processing
+PyPDF2==3.0.1
+python-docx==1.2.0
+feedparser==6.0.11
+arxiv==2.2.0
+
+# AI and LLM dependencies (essential only)
+openai==1.91.0
+langchain==0.3.26
+langchain-core==0.3.68
+langchain-openai==0.3.25
+
+# Basic utilities
+numpy>=1.23.2,<2.0
+pandas==2.1.4
+python-dateutil==2.9.0.post0
+certifi==2025.4.26
+charset-normalizer==3.4.2
+idna==3.10
+urllib3==2.4.0 

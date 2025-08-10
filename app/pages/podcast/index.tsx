@@ -319,7 +319,7 @@ const PodcastPage: React.FC = () => {
            </Typography>
            <Grid container spacing={2}>
              {availableFields.map((fieldOption) => (
-               <Grid item xs={12} sm={6} md={4} key={fieldOption}>
+                               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={fieldOption}>
                  <Card>
                    <CardActionArea onClick={() => handleFieldSelect(fieldOption)} disabled={loading}>
                      <CardContent>
@@ -366,7 +366,7 @@ const PodcastPage: React.FC = () => {
            </Typography>
            <Grid container spacing={2}>
              {conferences.map((conference) => (
-               <Grid item xs={12} sm={6} md={4} key={conference.name}>
+                               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={conference.name}>
                  <Card>
                    <CardActionArea onClick={() => handleConferenceSelect(conference)} disabled={loading}>
                      <CardContent>

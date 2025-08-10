@@ -3,25 +3,18 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   
-  // 환경 변수 설정
+  // 정적 사이트 생성 설정
+  output: 'export',
+  trailingSlash: true,
+  
+  // 환경 변수 설정 (새 Lambda URL로 업데이트)
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://cvpilot-670621051738.asia-northeast3.run.app',
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'https://na6biybdk3xhs2lk337vtujjd40dbvcv.lambda-url.us-east-1.on.aws',
   },
 
-  // 이미지 최적화
+  // 이미지 최적화 (정적 배포용)
   images: {
-    domains: ['cvpilot-670621051738.asia-northeast3.run.app'],
     unoptimized: true
-  },
-
-  // API 라우트 proxy 설정
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://cvpilot-670621051738.asia-northeast3.run.app/api/:path*',
-      },
-    ]
   },
 
   // CORS 헤더 설정

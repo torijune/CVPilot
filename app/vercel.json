@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "env": {
+    "NEXT_PUBLIC_BACKEND_URL": "https://h5ciln2ocanidckp5scdzwi45q0itixl.lambda-url.us-east-1.on.aws"
+  }
+} 

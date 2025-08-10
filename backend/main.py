@@ -12,6 +12,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app.main import app
 
+# Vercel의 경우 app을 직접 export
+handler = app
+
 if __name__ == "__main__":
     import uvicorn
     
