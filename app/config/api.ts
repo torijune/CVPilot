@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
   process.env.NODE_ENV === 'production' 
-    ? 'https://cvpilot-670621051738.asia-northeast3.run.app'
+    ? 'https://na6biybdk3xhs2lk337vtujjd40dbvcv.lambda-url.us-east-1.on.aws'
     : 'http://localhost:8000';
 
 export const apiConfig = {

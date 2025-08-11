@@ -1,0 +1,5 @@
+FROM public.ecr.aws/lambda/python:3.11-x86_64
+
+COPY test_lambda.py ${LAMBDA_TASK_ROOT}
+
+CMD ["test_lambda.lambda_handler"] 
