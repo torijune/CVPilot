@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Depends, Body
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends, Body, Header
 from typing import List, Optional, Dict, Any
 import logging
 from datetime import datetime
@@ -29,8 +29,8 @@ router = APIRouter()
 _cv_repository = CVRepositoryImpl()
 
 # 의존성 주입
-def get_qa_service() -> QAService:
-    return QAService(_cv_repository)
+def get_qa_service(x_api_key: Optional[str] = Header(None)) -> QAService:
+    return QAService(_cv_repository, x_api_key)
 
 @router.get("/health")
 async def health_check():

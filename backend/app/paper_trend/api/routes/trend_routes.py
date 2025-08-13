@@ -123,26 +123,26 @@ async def get_field_statistics(
         logger.error(f"분야 통계 조회 실패: {e}")
         raise HTTPException(status_code=500, detail="분야 통계 조회 중 오류가 발생했습니다.")
 
-@router.get("/fields/{field}/keywords", response_model=PopularKeywordsResponse)
-async def get_popular_keywords(
-    field: str,
-    limit: int = Query(20, ge=1, le=100, description="반환할 키워드 수"),
-    trend_service: TrendAnalysisService = Depends(get_trend_service)
-):
-    """특정 분야의 인기 키워드 조회"""
-    try:
-        # 간단한 키워드 추출 구현
-        papers = await trend_service.trend_repository.get_papers_by_field(field, limit=100)
+# @router.get("/fields/{field}/keywords", response_model=PopularKeywordsResponse)
+# async def get_popular_keywords(
+#     field: str,
+#     limit: int = Query(20, ge=1, le=100, description="반환할 키워드 수"),
+#     trend_service: TrendAnalysisService = Depends(get_trend_service)
+# ):
+#     """특정 분야의 인기 키워드 조회"""
+#     try:
+#         # 간단한 키워드 추출 구현
+#         papers = await trend_service.trend_repository.get_papers_by_field(field, limit=100)
         
-        # 워드클라우드 서비스를 사용하여 키워드 추출
-        from ...infra.services.wordcloud_service import WordcloudService
-        wordcloud_service = WordcloudService()
-        wordcloud_data = wordcloud_service.generate_wordcloud_data(papers, max_words=limit)
+#         # 워드클라우드 서비스를 사용하여 키워드 추출
+#         from ...infra.services.wordcloud_service import WordcloudService
+#         wordcloud_service = WordcloudService()
+#         wordcloud_data = wordcloud_service.generate_wordcloud_data(papers, max_words=limit)
         
-        return PopularKeywordsResponse(keywords=wordcloud_data.word_frequencies)
-    except Exception as e:
-        logger.error(f"인기 키워드 조회 실패: {e}")
-        raise HTTPException(status_code=500, detail="인기 키워드 조회 중 오류가 발생했습니다.")
+#         return PopularKeywordsResponse(keywords=wordcloud_data.word_frequencies)
+#     except Exception as e:
+#         logger.error(f"인기 키워드 조회 실패: {e}")
+#         raise HTTPException(status_code=500, detail="인기 키워드 조회 중 오류가 발생했습니다.")
 
 @router.get("/health", response_model=HealthCheckResponse)
 async def health_check():
