@@ -1,44 +1,44 @@
 # CVPilot
 
-AI 기술을 활용한 학술 커리어 분석 서비스
+AI-powered academic career analysis service
 
-## 소개
+## Overview
 
-CVPilot은 대학원 진학을 준비하는 학생들을 위한 AI 기반 학술 커리어 분석 플랫폼입니다. CV 분석, 논문 트렌드 분석, 면접 연습 등 다양한 기능을 제공합니다.
+CVPilot is an AI-based academic career analysis platform designed for students preparing for graduate school. It provides various features including CV analysis, paper trend analysis, interview practice, and more.
 
-## 주요 기능
+## Features
 
-### 📊 CV 분석
-- AI가 CV를 분석하여 강점과 개선점 제시
-- 스킬 레이더 차트로 시각화
-- PDF, DOCX, TXT 파일 지원
+### 📊 CV Analysis
+- AI-powered CV analysis with strengths and improvement suggestions
+- Skill radar chart visualization
+- Support for PDF, DOCX, and TXT files
 
-### 📈 논문 트렌드 분석
-- 최신 AI/ML 연구 동향 실시간 분석
-- 관심 분야별 핫한 주제 파악
-- 키워드 기반 트렌드 시각화
+### 📈 Paper Trend Analysis
+- Real-time analysis of latest AI/ML research trends
+- Hot topics identification by research field
+- Keyword-based trend visualization
 
-### 🔍 논문 비교 분석
-- 연구 아이디어와 기존 논문 비교
-- 차별화 전략 제시
-- 유사도 분석
+### 🔍 Paper Comparison Analysis
+- Compare research ideas with existing papers
+- Differentiation strategy suggestions
+- Similarity analysis
 
-### 💬 CV 기반 면접 연습
-- 면접관 모드: AI가 면접관 역할
-- 연습 모드: 모범 답변과 조언 제공
-- 맞춤형 질문 생성
+### 💬 CV-based Interview Practice
+- Interviewer mode: AI acts as an interviewer
+- Practice mode: Sample answers and advice
+- Customized question generation
 
-### 🎙️ 데일리 논문 팟캐스트
-- 최신 논문을 음성으로 요약
-- TTS 기술 활용
-- 오디오 플레이어 제공
+### 🎙️ Daily Paper Podcast
+- Audio summaries of latest papers
+- TTS technology integration
+- Audio player with controls
 
-### 🏫 연구실 분석
-- 연구실별 연구 분야 분석
-- 교수진 프로필 제공
-- 연구실 추천
+### 🏫 Lab Analysis
+- Research field analysis by laboratory
+- Faculty profile information
+- Lab recommendations
 
-## 기술 스택
+## Tech Stack
 
 ### Frontend
 - Next.js 14
@@ -58,46 +58,46 @@ CVPilot은 대학원 진학을 준비하는 학생들을 위한 AI 기반 학술
 - Supabase (PostgreSQL)
 
 ### Infrastructure
-- AWS S3 (정적 호스팅)
+- AWS S3 (Static Hosting)
 - AWS CloudFront (CDN)
-- AWS ECR (Docker 레지스트리)
+- AWS ECR (Docker Registry)
 
-## 시작하기
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - Python 3.11+
 - OpenAI API Key
 
-### Frontend 실행
+### Frontend Setup
 ```bash
 cd app
 npm install
 npm run dev
 ```
 
-### Backend 실행
+### Backend Setup
 ```bash
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-## 배포
+## Deployment
 
-### Frontend 배포
+### Frontend Deployment
 ```bash
 cd app
 ./deploy-frontend.sh
 ```
 
-### Backend 배포
+### Backend Deployment
 ```bash
 cd backend
 ./deploy-lambda.sh
 ```
 
-## 환경 변수
+## Environment Variables
 
 ### Frontend (.env.local)
 ```
@@ -111,31 +111,31 @@ SUPABASE_URL=your-supabase-url
 SUPABASE_KEY=your-supabase-key
 ```
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 CVPilot/
 ├── app/                    # Frontend (Next.js)
-│   ├── components/         # React 컴포넌트
-│   ├── pages/             # 페이지 컴포넌트
+│   ├── components/         # React components
+│   ├── pages/             # Page components
 │   ├── hooks/             # Custom Hooks
-│   ├── api/               # API 클라이언트
-│   └── config/            # 설정 파일
+│   ├── api/               # API clients
+│   └── config/            # Configuration files
 ├── backend/               # Backend (FastAPI)
-│   ├── app/               # 메인 애플리케이션
-│   │   ├── cv_analysis/   # CV 분석 모듈
-│   │   ├── paper_trend/   # 논문 트렌드 모듈
-│   │   ├── cv_QA/         # CV QA 모듈
-│   │   └── shared/        # 공통 모듈
-│   └── requirements.txt   # Python 의존성
-└── utils/                 # 유틸리티 스크립트
+│   ├── app/               # Main application
+│   │   ├── cv_analysis/   # CV analysis module
+│   │   ├── paper_trend/   # Paper trend module
+│   │   ├── cv_QA/         # CV QA module
+│   │   └── shared/        # Shared modules
+│   └── requirements.txt   # Python dependencies
+└── utils/                 # Utility scripts
 ```
 
-## 라이선스
+## License
 
 MIT License
 
-## 기여
+## Contributing
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -145,4 +145,4 @@ MIT License
 
 ---
 
-<sub>project owner: WonJune Jang</sub>
+<sub>Project Owner: WonJune Jang</sub>
