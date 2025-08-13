@@ -4,7 +4,7 @@ from app.daily_paper_podcast.domain.entities.podcast_analysis import PodcastAnal
 from app.daily_paper_podcast.domain.entities.paper import Paper
 from app.daily_paper_podcast.domain.repositories.paper_repository import PaperRepository
 from app.daily_paper_podcast.domain.repositories.podcast_repository import PodcastRepository
-from app.shared.infra.external.openai_client import openai_client
+from app.shared.infra.external.openai_client import get_openai_client
 # 기존 분석 노드들은 더 이상 사용하지 않음 (통합 프롬프트로 대체)
 from app.daily_paper_podcast.infra.services.tts_service import TTSService
 
@@ -413,6 +413,7 @@ class PodcastService:
 분석 결과는 마크다운 형식으로 작성하고, 각 섹션은 명확하게 구분해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             
@@ -475,6 +476,7 @@ class PodcastService:
 순수한 대사만 작성해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             

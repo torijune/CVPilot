@@ -9,7 +9,7 @@ from docx import Document
 
 from ...domain.entities.qa_session import QASession, QAMessage
 from ...domain.repositories.qa_repository import QARepository
-from app.shared.infra.external.openai_client import openai_client
+from app.shared.infra.external.openai_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -243,6 +243,7 @@ CV 내용:
 각 항목은 JSON 형태로 구조화하여 제공해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             
             # 분석 결과 구조화
@@ -315,6 +316,7 @@ JSON 배열 형태로 5개의 질문만 반환해주세요:
 ["질문1", "질문2", "질문3", "질문4", "질문5"]
             """
             
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             
             # JSON 파싱 시도
@@ -387,6 +389,7 @@ CV 분석 정보:
 JSON 형식으로만 응답해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             
             # JSON 파싱 시도
@@ -447,6 +450,7 @@ CV 분석 정보:
 친근하고 도움이 되는 톤으로 답변해주세요. 마치 선배가 후배에게 조언하는 느낌으로 작성해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             
             return {
@@ -583,6 +587,7 @@ JSON 배열 형태로 5개의 질문만 반환해주세요:
 ["질문1", "질문2", "질문3", "질문4", "질문5"]
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             
             # JSON 파싱 시도

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { 
+import {
   Box, 
   Typography, 
   Button, 
@@ -11,9 +11,19 @@ import {
   Chip,
   Stack,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Alert,
+  CircularProgress,
+  InputAdornment,
+  IconButton
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { useApiKey } from '../hooks/useApiKey';
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import SchoolIcon from "@mui/icons-material/School";
@@ -25,6 +35,12 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import SpeedIcon from "@mui/icons-material/Speed";
 import BusinessIcon from "@mui/icons-material/Business";
+import KeyIcon from "@mui/icons-material/Key";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 // 스크롤 애니메이션을 위한 커스텀 훅 (반복 가능)
 const useScrollAnimation = () => {
@@ -122,24 +138,112 @@ export default function HomePage() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { hasApiKey, apiKey, saveApiKey, clearApiKey } = useApiKey();
+  
+  // API Key 관리 상태
+  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false);
+  const [tempApiKey, setTempApiKey] = useState("");
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationError, setValidationError] = useState("");
 
-  // 각 섹션의 애니메이션 상태
-  const [statsRef, statsVisible] = useScrollAnimation();
+  // 애니메이션 훅들
+  const [heroRef, heroVisible] = useScrollAnimation();
   const [featuresTopRef, featuresTopVisible] = useScrollAnimation();
   const [featuresBottomRef, featuresBottomVisible] = useScrollAnimation();
+  const [statsRef, statsVisible] = useScrollAnimation();
   const [howItWorksRef, howItWorksVisible] = useScrollAnimation();
   const [techRef, techVisible] = useScrollAnimation();
   const [testimonialsRef, testimonialsVisible] = useScrollAnimation();
 
+  // API Key 유효성 검증
+  const validateApiKey = async (key: string): Promise<boolean> => {
+    if (!key.trim()) return false;
+    
+    try {
+      const response = await fetch('https://api.openai.com/v1/models', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${key}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  // API Key 저장 핸들러
+  const handleApiKeySave = async () => {
+    if (!tempApiKey.trim()) {
+      setValidationError('API Key를 입력해주세요.');
+      return;
+    }
+
+    setIsValidating(true);
+    setValidationError('');
+
+    const isValid = await validateApiKey(tempApiKey);
+    
+    if (isValid) {
+      saveApiKey(tempApiKey);
+      setValidationError('');
+      setApiKeyDialogOpen(false);
+      setTempApiKey('');
+    } else {
+      setValidationError('유효하지 않은 API Key입니다.');
+    }
+    
+    setIsValidating(false);
+  };
+
+  // API Key 다이얼로그 열기
+  const handleOpenApiKeyDialog = () => {
+    setTempApiKey(apiKey || '');
+    setValidationError('');
+    setShowApiKey(false);
+    setApiKeyDialogOpen(true);
+  };
+
+  // API Key 다이얼로그 닫기
+  const handleCloseApiKeyDialog = () => {
+    setApiKeyDialogOpen(false);
+    setTempApiKey('');
+    setValidationError('');
+    setShowApiKey(false);
+  };
+
+  // API Key 삭제
+  const handleDeleteApiKey = () => {
+    clearApiKey();
+    setApiKeyDialogOpen(false);
+    setTempApiKey('');
+  };
+
+  // API Key 마스킹 표시
+  const getMaskedApiKey = (key: string) => {
+    if (key.length <= 8) return key;
+    return `${key.substring(0, 7)}${'*'.repeat(key.length - 11)}${key.substring(key.length - 4)}`;
+  };
+
   const handleGetStarted = () => {
-    router.push('/dashboard');
+    if (hasApiKey()) {
+      router.push('/cv-analysis');
+    } else {
+      handleOpenApiKeyDialog();
+    }
   };
 
   return (
     <Box sx={{ 
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      transform: 'scale(0.8)',
+      transformOrigin: 'top center',
+      width: '125%', // 80%로 스케일하면서 전체 너비를 맞추기 위해 125%로 설정
+      marginLeft: '-12.5%' // 중앙 정렬을 위해 좌측 마진 조정
     }}>
       {/* Navigation Header */}
       <Box sx={{ 
@@ -179,18 +283,36 @@ export default function HomePage() {
               </Typography>
             </Box>
             
-            <Button
-              variant="contained"
-              onClick={handleGetStarted}
-              sx={{
-                background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%)'
-                }
-              }}
-            >
-              분석 시작하기
-            </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              {/* API Key 상태 표시 */}
+              <Chip
+                icon={hasApiKey() ? <CheckCircleIcon /> : <KeyIcon />}
+                label={hasApiKey() ? "API Key 설정됨" : "API Key 필요"}
+                size="small"
+                sx={{
+                  backgroundColor: hasApiKey() ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                  color: hasApiKey() ? '#10B981' : '#F59E0B',
+                  border: `1px solid ${hasApiKey() ? '#10B981' : '#F59E0B'}`,
+                  '& .MuiChip-icon': {
+                    color: hasApiKey() ? '#10B981' : '#F59E0B'
+                  }
+                }}
+                onClick={handleOpenApiKeyDialog} // 클릭 가능하게 만들기
+              />
+              
+              <Button
+                variant="contained"
+                onClick={handleGetStarted}
+                sx={{
+                  background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%)'
+                  }
+                }}
+              >
+                분석 시작하기
+              </Button>
+            </Box>
           </Box>
         </Container>
       </Box>
@@ -465,6 +587,185 @@ export default function HomePage() {
           ))}
         </Box>
       </Container>
+
+      {/* API Key Status Section */}
+      {hasApiKey() ? (
+        <Box sx={{ 
+          background: 'linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)',
+          py: 3,
+          border: '1px solid #10B981'
+        }}>
+          <Container maxWidth="md">
+            <Paper sx={{
+              p: 3,
+              background: 'rgba(255, 255, 255, 0.9)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: 3,
+              textAlign: 'center',
+              boxShadow: '0 10px 25px rgba(16, 185, 129, 0.2)'
+            }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+                <CheckCircleIcon sx={{ 
+                  fontSize: 32, 
+                  color: '#10B981'
+                }} />
+                <Typography variant="h5" sx={{ 
+                  fontWeight: 700, 
+                  color: '#065F46'
+                }}>
+                  ✅ API Key가 설정되었습니다!
+                </Typography>
+              </Box>
+              <Typography variant="body1" sx={{ 
+                color: '#047857',
+                mt: 1,
+                fontWeight: 500
+              }}>
+                이제 모든 AI 기능을 자유롭게 사용할 수 있습니다.
+              </Typography>
+              <Stack spacing={2} sx={{ maxWidth: 400, mx: 'auto', mt: 2 }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<EditIcon />}
+                  onClick={handleOpenApiKeyDialog}
+                  sx={{
+                    color: '#10B981',
+                    borderColor: '#10B981',
+                    '&:hover': {
+                      backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                      borderColor: '#10B981'
+                    }
+                  }}
+                >
+                  키 변경하기
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<DeleteIcon />}
+                  onClick={handleDeleteApiKey}
+                  sx={{
+                    color: '#EF4444',
+                    borderColor: '#EF4444',
+                    '&:hover': {
+                      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                      borderColor: '#EF4444'
+                    }
+                  }}
+                >
+                  키 삭제하기
+                </Button>
+              </Stack>
+            </Paper>
+          </Container>
+        </Box>
+      ) : (
+        <Box sx={{ 
+          background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+          py: 4,
+          border: '1px solid #F59E0B'
+        }}>
+          <Container maxWidth="md">
+            <Paper sx={{
+              p: 4,
+              background: 'rgba(255, 255, 255, 0.9)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(245, 158, 11, 0.3)',
+              borderRadius: 3,
+              textAlign: 'center',
+              boxShadow: '0 10px 25px rgba(245, 158, 11, 0.2)'
+            }}>
+              <Box sx={{ mb: 3 }}>
+                <KeyIcon sx={{ 
+                  fontSize: 48, 
+                  color: '#F59E0B', 
+                  mb: 2,
+                  filter: 'drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3))'
+                }} />
+                <Typography variant="h4" sx={{ 
+                  fontWeight: 700, 
+                  mb: 2,
+                  color: '#92400E'
+                }}>
+                  🔑 API Key가 필요합니다
+                </Typography>
+                <Typography variant="h6" sx={{ 
+                  color: '#B45309',
+                  mb: 3,
+                  fontWeight: 500
+                }}>
+                  모든 AI 기능을 사용하려면 OpenAI API Key를 설정해주세요
+                </Typography>
+              </Box>
+
+              <Stack spacing={2} sx={{ maxWidth: 400, mx: 'auto' }}>
+                <Box sx={{ 
+                  p: 2, 
+                  background: 'rgba(245, 158, 11, 0.1)',
+                  borderRadius: 2,
+                  border: '1px solid rgba(245, 158, 11, 0.2)'
+                }}>
+                  <Typography variant="body2" sx={{ color: '#92400E', fontWeight: 600 }}>
+                    💡 <strong>시작하기 단계</strong>
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#B45309', mt: 1 }}>
+                    1. 원하는 기능 페이지로 이동<br/>
+                    2. API Key 설정 섹션에서 OpenAI API Key 입력<br/>
+                    3. 모든 AI 기능 자유롭게 사용
+                  </Typography>
+                </Box>
+
+                <Box sx={{ 
+                  p: 2, 
+                  background: 'rgba(59, 130, 246, 0.1)',
+                  borderRadius: 2,
+                  border: '1px solid rgba(59, 130, 246, 0.2)',
+                  textAlign: 'center'
+                }}>
+                  <Typography variant="body2" sx={{ color: '#1E40AF', fontWeight: 600, mb: 1 }}>
+                    🤔 <strong>API Key 발급 방법이 궁금하다면?</strong>
+                  </Typography>
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => router.push('/api-key-guide')}
+                    sx={{
+                      color: '#3B82F6',
+                      textDecoration: 'underline',
+                      '&:hover': {
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        textDecoration: 'underline'
+                      }
+                    }}
+                  >
+                    자세한 발급 가이드 보기 →
+                  </Button>
+                </Box>
+
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => router.push('/cv-analysis')}
+                  sx={{
+                    background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                    color: 'white',
+                    fontWeight: 700,
+                    py: 1.5,
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 8px 25px rgba(245, 158, 11, 0.4)'
+                    },
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  지금 시작하기 - CV 분석
+                </Button>
+              </Stack>
+            </Paper>
+          </Container>
+        </Box>
+      )}
 
       {/* Features Section - Top Row */}
       <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -1209,6 +1510,69 @@ export default function HomePage() {
           </Box>
         </Container>
       </Box>
+
+             {/* API Key 설정 다이얼로그 */}
+       <Dialog open={apiKeyDialogOpen} onClose={handleCloseApiKeyDialog} maxWidth="sm" fullWidth>
+         <DialogTitle>API Key 설정</DialogTitle>
+         <DialogContent>
+           <TextField
+             label="OpenAI API Key"
+             type={showApiKey ? "text" : "password"}
+             value={tempApiKey}
+             onChange={(e) => setTempApiKey(e.target.value)}
+             fullWidth
+             margin="normal"
+             error={!!validationError}
+             helperText={validationError}
+             InputProps={{
+               endAdornment: (
+                 <InputAdornment position="end">
+                   <IconButton
+                     onClick={() => setShowApiKey(!showApiKey)}
+                     onMouseDown={(event) => event.preventDefault()}
+                   >
+                     {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                   </IconButton>
+                 </InputAdornment>
+               )
+             }}
+           />
+           
+           <Alert severity="info" sx={{ mt: 2, mb: 1 }}>
+             <Typography variant="body2">
+               OpenAI API Key가 없으신가요? 
+               <Button
+                 variant="text"
+                 size="small"
+                 onClick={() => {
+                   handleCloseApiKeyDialog();
+                   router.push('/api-key-guide');
+                 }}
+                 sx={{ 
+                   ml: 1,
+                   textDecoration: 'underline',
+                   '&:hover': { textDecoration: 'underline' }
+                 }}
+               >
+                 발급 가이드 보기
+               </Button>
+             </Typography>
+           </Alert>
+         </DialogContent>
+         <DialogActions>
+           <Button onClick={handleCloseApiKeyDialog} color="primary">
+             취소
+           </Button>
+           <Button
+             onClick={handleApiKeySave}
+             color="primary"
+             variant="contained"
+             disabled={isValidating}
+           >
+             {isValidating ? <CircularProgress size={24} color="inherit" /> : "저장"}
+           </Button>
+         </DialogActions>
+       </Dialog>
     </Box>
   );
 }

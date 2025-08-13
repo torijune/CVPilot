@@ -56,12 +56,18 @@ export interface QASessionListResponse {
 }
 
 // CV 파일 업로드 및 분석
-export const uploadCV = async (file: File): Promise<CVUploadResponse> => {
+export const uploadCV = async (file: File, apiKey?: string): Promise<CVUploadResponse> => {
   const formData = new FormData();
   formData.append('file', file);
 
+  const headers: HeadersInit = {};
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1/cv-qa/upload`, {
     method: 'POST',
+    headers,
     body: formData,
   });
 
@@ -73,12 +79,18 @@ export const uploadCV = async (file: File): Promise<CVUploadResponse> => {
 };
 
 // QA 세션 생성
-export const createQASession = async (request: QASessionRequest): Promise<QASessionResponse> => {
+export const createQASession = async (request: QASessionRequest, apiKey?: string): Promise<QASessionResponse> => {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1/cv-qa/sessions`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(request),
   });
 

@@ -3,15 +3,16 @@ import logging
 from ...domain.repositories.comparison_repository import ComparisonRepository
 from ...domain.entities.comparison_analysis import ComparisonAnalysis
 from ...domain.value_objects.comparison_score import ComparisonScore, ComparisonType, ComparisonResult
-from app.shared.infra.external.openai_client import openai_client
+from app.shared.infra.external.openai_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
 class ComparisonService:
     """비교 분석 서비스"""
     
-    def __init__(self, comparison_repository: ComparisonRepository):
+    def __init__(self, comparison_repository: ComparisonRepository, api_key: str = None):
         self.comparison_repository = comparison_repository
+        self.openai_client = get_openai_client(api_key)
     
     async def compare_methods(self, user_idea: str, field: str, 
                             limit: int = 10, similarity_threshold: float = 0.6) -> ComparisonAnalysis:
@@ -20,7 +21,7 @@ class ComparisonService:
             logger.info(f"방법론 비교 분석 시작: {field}, 아이디어: {user_idea[:50]}...")
             
             # 1. 사용자 아이디어 임베딩 생성
-            user_idea_embedding = await openai_client.generate_embedding(user_idea)
+            user_idea_embedding = await self.openai_client.generate_embedding(user_idea)
             
             # 2. 관련 논문 검색
             similar_papers = await self.comparison_repository.search_similar_papers(
@@ -178,7 +179,7 @@ class ComparisonService:
             - **혁신적인 접근 방법** 및 기존 연구와의 차별성을 강조
             """
             
-            result = await openai_client._call_chat_completion(prompt)
+            result = await self.openai_client._call_chat_completion(prompt)
             return result
             
         except Exception as e:
@@ -223,7 +224,7 @@ class ComparisonService:
         - 확장 가능한 연구 영역
         """
             
-            result = await openai_client._call_chat_completion(prompt)
+            result = await self.openai_client._call_chat_completion(prompt)
             return result
             
         except Exception as e:
@@ -263,7 +264,7 @@ class ComparisonService:
             한국어로 작성해주세요.
             """
             
-            result = await openai_client._call_chat_completion(prompt)
+            result = await self.openai_client._call_chat_completion(prompt)
             return result
             
         except Exception as e:

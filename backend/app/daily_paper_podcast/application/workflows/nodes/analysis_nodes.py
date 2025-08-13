@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 import logging
-from app.shared.infra.external.openai_client import openai_client
+from app.shared.infra.external.openai_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +31,7 @@ class ProblemDefinitionNode:
 분석 결과를 2-3문단으로 요약해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             
@@ -65,6 +66,7 @@ class ProposedMethodNode:
 분석 결과를 2-3문단으로 요약해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             
@@ -100,6 +102,7 @@ class ExperimentMethodNode:
 분석 결과를 2-3문단으로 요약해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             
@@ -135,6 +138,7 @@ class KeyResultsNode:
 분석 결과를 2-3문단으로 요약해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             
@@ -170,6 +174,7 @@ class ResearchSignificanceNode:
 분석 결과를 2-3문단으로 요약해주세요.
 """
 
+            openai_client = get_openai_client()
             response = await openai_client._call_chat_completion(prompt)
             return response
             

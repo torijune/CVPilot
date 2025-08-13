@@ -62,12 +62,18 @@ export async function getPaperTrend(interest: string, detailedInterests: string[
 }
 
 // 트렌드 분석 수행
-export async function analyzeTrends(request: TrendAnalysisRequest): Promise<TrendAnalysisResponse> {
+export async function analyzeTrends(request: TrendAnalysisRequest, apiKey?: string): Promise<TrendAnalysisResponse> {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1/trends/analyze`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(request),
   });
 

@@ -41,9 +41,14 @@ import {
   Business as BusinessIcon,
   Article as ArticleIcon,
   Lightbulb as LightbulbIcon,
+  Key as KeyIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { getProfessorsByField, getAllUniversities, analyzeLab, ProfessorInfo, LabAnalysisResult } from '../../api/lab_analysis';
+import { useApiKey } from '../../hooks/useApiKey';
+import ApiKeySection from '../../components/ApiKeySection';
 import ReactMarkdown from 'react-markdown';
 
 const fieldOptions = [
@@ -67,7 +72,10 @@ const LabAnalysisPage: React.FC = () => {
   const [result, setResult] = useState<LabAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showAllPublications, setShowAllPublications] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [isResizing, setIsResizing] = useState(false);
   const router = useRouter();
+  const { hasApiKey } = useApiKey();
 
   const handleGoHome = () => {
     router.push('/');
@@ -142,6 +150,45 @@ const LabAnalysisPage: React.FC = () => {
     }
   };
 
+  // 사이드바 리사이즈 관련 상수
+  const MIN_SIDEBAR_WIDTH = 256;
+  const MAX_SIDEBAR_WIDTH = 480;
+
+  // 리사이즈 핸들러
+  const handleMouseDown = () => {
+    setIsResizing(true);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isResizing) return;
+
+    const newWidth = e.clientX;
+    if (newWidth >= MIN_SIDEBAR_WIDTH && newWidth <= MAX_SIDEBAR_WIDTH) {
+      setSidebarWidth(newWidth);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsResizing(false);
+  };
+
+  // 리사이즈 이벤트 리스너
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
+
   useEffect(() => {
     loadUniversities();
   }, []);
@@ -157,7 +204,14 @@ const LabAnalysisPage: React.FC = () => {
   const hasMorePublications = result?.recent_publications && result.recent_publications.length > 3;
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Box sx={{ 
+      transform: 'scale(0.8)',
+      transformOrigin: 'top center',
+      width: '125%',
+      marginLeft: '-12.5%',
+      minHeight: '100vh'
+    }}>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* 헤더 */}
       <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
         {/* 홈 버튼 */}
@@ -189,9 +243,20 @@ const LabAnalysisPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '400px 1fr' }, gap: 4 }}>
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: { xs: '1fr', lg: `${sidebarWidth}px 1fr` }, 
+        gap: 4,
+        position: 'relative'
+      }}>
         {/* 왼쪽 패널 - 설정 및 교수 선택 */}
         <Stack spacing={3}>
+          {/* API Key 설정 패널 */}
+          <ApiKeySection 
+            functionName="연구실 분석" 
+            description="먼저 OpenAI API Key를 설정해주세요."
+          />
+
           {/* 설정 패널 */}
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
@@ -329,6 +394,42 @@ const LabAnalysisPage: React.FC = () => {
             </Alert>
           )}
         </Stack>
+
+        {/* 리사이즈 핸들러 */}
+        {!isMobile && (
+          <Box
+            onMouseDown={handleMouseDown}
+            sx={{
+              position: 'absolute',
+              left: sidebarWidth - 2,
+              top: 0,
+              width: 4,
+              height: '100%',
+              cursor: 'col-resize',
+              backgroundColor: 'transparent',
+              zIndex: 10,
+              '&:hover': {
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 2,
+                height: 40,
+                backgroundColor: '#E5E7EB',
+                borderRadius: 1,
+                opacity: 0,
+                transition: 'opacity 0.2s ease',
+              },
+              '&:hover::after': {
+                opacity: 1,
+              },
+            }}
+          />
+        )}
 
         {/* 오른쪽 패널 - 교수 목록 및 결과 */}
         <Box>
@@ -662,6 +763,7 @@ const LabAnalysisPage: React.FC = () => {
         </Box>
       </Box>
     </Container>
+    </Box>
   );
 };
 

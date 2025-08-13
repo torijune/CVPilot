@@ -58,6 +58,8 @@ import {
   PaperPreviewResponse
 } from '../../api/podcast';
 import AudioPlayer from '../../components/AudioPlayer';
+import { useApiKey } from '../../hooks/useApiKey';
+import ApiKeySection from '../../components/ApiKeySection';
 
 interface PodcastResult {
   id: string;
@@ -109,6 +111,7 @@ const PodcastPage: React.FC = () => {
   });
   
   const router = useRouter();
+  const { hasApiKey } = useApiKey();
 
   // 분야 목록 로드
   useEffect(() => {
@@ -279,7 +282,14 @@ const PodcastPage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ 
+      transform: 'scale(0.8)',
+      transformOrigin: 'top center',
+      width: '125%',
+      marginLeft: '-12.5%',
+      minHeight: '100vh'
+    }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <MicIcon sx={{ mr: 2, fontSize: 40, color: 'primary.main' }} />
         <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }}>
@@ -304,6 +314,14 @@ const PodcastPage: React.FC = () => {
           ))}
         </Stepper>
       </Paper>
+
+      {/* API Key 설정 섹션 */}
+      <Box sx={{ mb: 3 }}>
+        <ApiKeySection 
+          functionName="데일리 팟캐스트" 
+          description="먼저 OpenAI API Key를 설정해주세요."
+        />
+      </Box>
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -787,6 +805,7 @@ const PodcastPage: React.FC = () => {
         </Typography>
       </Paper>
     </Container>
+    </Box>
   );
 };
 

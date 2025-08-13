@@ -33,12 +33,18 @@ export interface MethodComparisonResponse {
 
 
 // 방법론 비교 수행
-export async function compareMethods(request: MethodComparisonRequest): Promise<MethodComparisonResponse> {
+export async function compareMethods(request: MethodComparisonRequest, apiKey?: string): Promise<MethodComparisonResponse> {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1/comparison/compare`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(request),
   });
 

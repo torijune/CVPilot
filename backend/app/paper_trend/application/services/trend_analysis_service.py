@@ -2,15 +2,16 @@ from typing import List, Dict, Any
 import logging
 from app.paper_trend.domain.repositories.trend_repository import TrendRepository
 from app.paper_trend.domain.entities.trend_analysis import TrendAnalysis
-from app.shared.infra.external.openai_client import openai_client
+from app.shared.infra.external.openai_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
 class TrendAnalysisService:
     """트렌드 분석 서비스"""
     
-    def __init__(self, trend_repository: TrendRepository):
+    def __init__(self, trend_repository: TrendRepository, api_key: str = None):
         self.trend_repository = trend_repository
+        self.openai_client = get_openai_client(api_key)
     
     async def analyze_trends(self, field: str, keywords: List[str], 
                            limit: int = 50, similarity_threshold: float = 0.7) -> TrendAnalysis:
@@ -98,7 +99,7 @@ class TrendAnalysisService:
             # 키워드를 결합하여 쿼리 생성
             query = " ".join(keywords)
             logger.info(f"쿼리 생성: {query}")
-            query_embedding = await openai_client.generate_embedding(query)
+            query_embedding = await self.openai_client.generate_embedding(query)
             logger.info(f"쿼리 임베딩 생성 완료: {len(query_embedding)} 차원")
             
             # 유사도 검색
@@ -154,7 +155,7 @@ class TrendAnalysisService:
         """LLM으로 트렌드 분석"""
         abstracts = [paper.get('abstract', '') for paper in papers[:20]]
         
-        return await openai_client.analyze_trends(abstracts, field, keywords)
+        return await self.openai_client.analyze_trends(abstracts, field, keywords)
     
     async def get_available_fields(self) -> List[str]:
         """사용 가능한 분야 목록 조회"""

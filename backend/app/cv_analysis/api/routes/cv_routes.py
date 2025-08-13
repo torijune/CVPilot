@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form, Header
 import logging
 from ..models.request_models import CVAnalysisRequest, CVAnalysisHistoryRequest
 from ..models.response_models import CVAnalysisResponse, RadarChartResponse, HealthCheckResponse
@@ -11,18 +11,28 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # 의존성 주입
-def get_cv_service() -> CVAnalysisService:
+def get_cv_service(api_key: str = None) -> CVAnalysisService:
     repository = CVRepositoryImpl()
-    return CVAnalysisService(repository)
+    return CVAnalysisService(repository, api_key=api_key)
 
 @router.post("/analyze", response_model=CVAnalysisResponse)
 async def analyze_cv(
     request: CVAnalysisRequest,
-    cv_service: CVAnalysisService = Depends(get_cv_service)
+    x_api_key: str = Header(None, alias="X-API-Key")
 ):
     """CV 분석 수행 (텍스트 입력)"""
     try:
         logger.info(f"CV 분석 요청: {request.field} 분야")
+        
+        # API Key 검증
+        if not x_api_key:
+            raise HTTPException(
+                status_code=401, 
+                detail="API Key가 필요합니다. X-API-Key 헤더를 추가해주세요."
+            )
+        
+        # CV 분석 서비스 생성
+        cv_service = get_cv_service(x_api_key)
         
         # CV 분석 수행
         result = await cv_service.analyze_cv(
@@ -56,11 +66,18 @@ async def analyze_cv(
 async def analyze_cv_from_file(
     file: UploadFile = File(..., description="CV 파일 (PDF, DOCX)"),
     field: str = Form("Machine Learning / Deep Learning (ML/DL)", description="분석할 분야"),
-    cv_service: CVAnalysisService = Depends(get_cv_service)
+    x_api_key: str = Header(None, alias="X-API-Key")
 ):
     """CV 분석 수행 (파일 업로드)"""
     try:
         logger.info(f"CV 파일 분석 요청: {file.filename}, {field} 분야")
+        
+        # API Key 검증
+        if not x_api_key:
+            raise HTTPException(
+                status_code=401, 
+                detail="API Key가 필요합니다. X-API-Key 헤더를 추가해주세요."
+            )
         
         # 파일 유효성 검사
         if not FileProcessor.validate_file(file):
@@ -77,6 +94,9 @@ async def analyze_cv_from_file(
                 status_code=400,
                 detail="파일에서 텍스트를 추출할 수 없습니다."
             )
+        
+        # CV 분석 서비스 생성
+        cv_service = get_cv_service(x_api_key)
         
         # CV 분석 수행
         result = await cv_service.analyze_cv(

@@ -5,15 +5,16 @@ from ...domain.repositories.cv_repository import CVRepository
 from ...domain.entities.cv_analysis import CVAnalysis
 from ...domain.value_objects.cv_skill import CVSkill, SkillLevel, SkillCategory, SkillAssessment
 from ...domain.value_objects.radar_chart_data import CVRadarChartData
-from app.shared.infra.external.openai_client import openai_client
+from app.shared.infra.external.openai_client import get_openai_client
 
 logger = logging.getLogger(__name__)
 
 class CVAnalysisService:
     """CV 분석 서비스"""
     
-    def __init__(self, cv_repository: CVRepository):
+    def __init__(self, cv_repository: CVRepository, api_key: str = None):
         self.cv_repository = cv_repository
+        self.openai_client = get_openai_client(api_key)
     
     async def analyze_cv(self, cv_text: str, field: str = "Machine Learning / Deep Learning (ML/DL)") -> CVAnalysis:
         """CV 분석 수행"""
@@ -83,7 +84,7 @@ class CVAnalysisService:
             스킬들에 대해서 스킬 단어로만 출력해주세요. 자연어 형식으로 스킬에 대해서 설명하거나 얘기를 하지 말고 스킬에 대해서 단어만 쉼표로 구분하여 출력해주세요.
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             # 응답을 파싱하여 스킬 리스트 생성
             skills = [skill.strip() for skill in response.split(',') if skill.strip()]
@@ -134,7 +135,7 @@ CV에서 발견되는 모든 프로젝트를 포함하되, 각각을 독립적�
 반드시 유효한 JSON 형식으로만 응답해주세요.
 """
 
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             # JSON 부분만 추출
             json_match = re.search(r'\[.*\]', response, re.DOTALL)
@@ -176,7 +177,7 @@ CV에서 발견되는 모든 프로젝트, 연구, 경험을 다음 형식으로
 CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
 """
 
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             # 응답을 파싱하여 경험 리스트 생성
             experiences = []
@@ -294,7 +295,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             2. ...
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             # 응답을 강점과 약점으로 분리
             strengths = []
@@ -397,7 +398,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             점수만 숫자로 반환해주세요 (예: 0.75)
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             # 숫자 추출
             import re
@@ -440,7 +441,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             점수만 숫자로 반환해주세요 (예: 0.8)
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             import re
             score_match = re.search(r'0\.\d+', response)
@@ -482,7 +483,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             점수만 숫자로 반환해주세요 (예: 0.6)
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             import re
             score_match = re.search(r'0\.\d+', response)
@@ -527,7 +528,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             점수만 숫자로 반환해주세요 (예: 0.7)
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             import re
             score_match = re.search(r'0\.\d+', response)
@@ -569,7 +570,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             점수만 숫자로 반환해주세요 (예: 0.65)
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             import re
             score_match = re.search(r'0\.\d+', response)
@@ -611,7 +612,7 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
             점수만 숫자로 반환해주세요 (예: 0.8)
             """
             
-            response = await openai_client._call_chat_completion(prompt)
+            response = await self.openai_client._call_chat_completion(prompt)
             
             import re
             score_match = re.search(r'0\.\d+', response)

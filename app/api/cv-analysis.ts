@@ -30,12 +30,18 @@ export async function uploadCVAndInterest(cvFile: File, interests: string[]) {
 }
 
 // CV 분석 API 호출 (텍스트 입력)
-export async function analyzeCV(cvText: string, field: string = "Machine Learning / Deep Learning (ML/DL)") {
+export async function analyzeCV(cvText: string, field: string = "Machine Learning / Deep Learning (ML/DL)", apiKey?: string) {
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1/cv/analyze`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify({
       cv_text: cvText,
       field: field
@@ -50,13 +56,19 @@ export async function analyzeCV(cvText: string, field: string = "Machine Learnin
 }
 
 // CV 분석 API 호출 (파일 업로드)
-export async function analyzeCVFromFile(file: File, field: string = "Machine Learning / Deep Learning (ML/DL)") {
+export async function analyzeCVFromFile(file: File, field: string = "Machine Learning / Deep Learning (ML/DL)", apiKey?: string) {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("field", field);
   
+  const headers: HeadersInit = {};
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+  
   const response = await fetch(`${BACKEND_URL}/api/v1/cv/analyze/upload`, {
     method: "POST",
+    headers,
     body: formData,
   });
   

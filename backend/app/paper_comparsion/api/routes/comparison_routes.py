@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from typing import List
 import logging
 from ..models.request_models import ComparisonRequest, ComparisonHistoryRequest
@@ -14,18 +14,28 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # 의존성 주입
-def get_comparison_service() -> ComparisonService:
+def get_comparison_service(api_key: str = None) -> ComparisonService:
     repository = ComparisonRepositoryImpl()
-    return ComparisonService(repository)
+    return ComparisonService(repository, api_key=api_key)
 
 @router.post("/compare", response_model=ComparisonResponse)
 async def compare_methods(
     request: ComparisonRequest,
-    comparison_service: ComparisonService = Depends(get_comparison_service)
+    x_api_key: str = Header(None, alias="X-API-Key")
 ):
     """방법론 비교 분석 수행"""
     try:
         logger.info(f"방법론 비교 분석 요청: {request.field}, 아이디어: {request.user_idea[:50]}...")
+        
+        # API Key 검증
+        if not x_api_key:
+            raise HTTPException(
+                status_code=401, 
+                detail="API Key가 필요합니다. X-API-Key 헤더를 추가해주세요."
+            )
+        
+        # 비교 분석 서비스 생성
+        comparison_service = get_comparison_service(x_api_key)
         
         # 비교 분석 수행
         result = await comparison_service.compare_methods(

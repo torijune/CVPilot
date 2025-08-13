@@ -11,14 +11,15 @@ logger = logging.getLogger(__name__)
 class OpenAIClient:
     """OpenAI API 클라이언트"""
     
-    def __init__(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
+    def __init__(self, api_key: Optional[str] = None):
+        # 클라이언트에서 제공한 API key를 우선 사용, 없으면 환경변수 사용
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = "https://api.openai.com/v1"
         self.model_name = "gpt-4o-mini"
         self.embedding_model = "text-embedding-3-small"
         
         if not self.api_key:
-            raise ValueError("OPENAI_API_KEY 환경변수가 설정되지 않았습니다.")
+            raise ValueError("API Key가 제공되지 않았습니다. 클라이언트에서 API Key를 전송하거나 OPENAI_API_KEY 환경변수를 설정해주세요.")
     
     async def generate_embedding(self, text: str) -> List[float]:
         """텍스트 임베딩 생성"""
@@ -129,5 +130,7 @@ class OpenAIClient:
                     logger.error(f"OpenAI API 오류: {response.status} - {error_text}")
                     raise Exception(f"API 오류: {response.status}")
 
-# 싱글톤 인스턴스
-openai_client = OpenAIClient() 
+# 팩토리 함수 - API key에 따라 클라이언트 인스턴스 생성
+def get_openai_client(api_key: Optional[str] = None) -> OpenAIClient:
+    """OpenAI 클라이언트 인스턴스를 반환합니다."""
+    return OpenAIClient(api_key=api_key) 

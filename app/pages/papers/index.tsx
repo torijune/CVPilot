@@ -205,7 +205,14 @@ export default function PapersPage() {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ 
+      transform: 'scale(0.8)',
+      transformOrigin: 'top center',
+      width: '125%',
+      marginLeft: '-12.5%',
+      minHeight: '100vh'
+    }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* 헤더 */}
       <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
         {/* 홈 버튼 */}
@@ -485,5 +492,6 @@ export default function PapersPage() {
         </Stack>
       </Box>
     </Container>
+    </Box>
   );
 } 

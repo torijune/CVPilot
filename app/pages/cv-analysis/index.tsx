@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -39,6 +39,8 @@ import { useRouter } from 'next/router';
 import CVUploader from '../../components/CVUploader';
 import RadarChart from '../../components/RadarChart';
 import { analyzeCVFromFile } from '../../api/cv-analysis';
+import { useApiKey } from '../../hooks/useApiKey';
+import ApiKeySection from '../../components/ApiKeySection';
 
 interface CVAnalysisResult {
   id: string;
@@ -67,7 +69,49 @@ const CVAnalysisPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showAllExperiences, setShowAllExperiences] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [isResizing, setIsResizing] = useState(false);
   const router = useRouter();
+  const { apiKey, hasApiKey } = useApiKey();
+
+  // 사이드바 리사이즈 관련 상수
+  const MIN_SIDEBAR_WIDTH = 256;
+  const MAX_SIDEBAR_WIDTH = 480;
+
+  // 리사이즈 핸들러
+  const handleMouseDown = () => {
+    setIsResizing(true);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isResizing) return;
+
+    const newWidth = e.clientX;
+    if (newWidth >= MIN_SIDEBAR_WIDTH && newWidth <= MAX_SIDEBAR_WIDTH) {
+      setSidebarWidth(newWidth);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsResizing(false);
+  };
+
+  // 리사이즈 이벤트 리스너
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
 
   const handleGoHome = () => {
     router.push('/');
@@ -88,12 +132,17 @@ const CVAnalysisPage: React.FC = () => {
       return;
     }
 
+    if (!hasApiKey()) {
+      setError('OpenAI API Key를 먼저 설정해주세요.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setShowAllExperiences(false); // 분석 시작 시 더보기 상태 초기화
 
     try {
-      const data = await analyzeCVFromFile(selectedFile, field);
+      const data = await analyzeCVFromFile(selectedFile, field, apiKey);
       setResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
@@ -102,14 +151,21 @@ const CVAnalysisPage: React.FC = () => {
     }
   };
 
-  const isAnalyzeDisabled = !selectedFile || loading;
+  const isAnalyzeDisabled = !selectedFile || loading || !hasApiKey();
 
   // 표시할 경험 개수 결정
   const displayedExperiences = result?.experiences?.slice(0, showAllExperiences ? undefined : 3) || [];
   const hasMoreExperiences = result?.experiences && result.experiences.length > 3;
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Box sx={{ 
+      transform: 'scale(0.8)',
+      transformOrigin: 'top center',
+      width: '125%',
+      marginLeft: '-12.5%',
+      minHeight: '100vh'
+    }}>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* 헤더 */}
       <Box sx={{ mb: 4, textAlign: 'center', position: 'relative' }}>
         {/* 홈 버튼 */}
@@ -141,9 +197,20 @@ const CVAnalysisPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '400px 1fr' }, gap: 4 }}>
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: { xs: '1fr', lg: `${sidebarWidth}px 1fr` }, 
+        gap: 4,
+        position: 'relative'
+      }}>
         {/* 왼쪽 패널 - 입력 및 설정 */}
         <Stack spacing={3}>
+          {/* API Key 설정 패널 */}
+          <ApiKeySection 
+            functionName="CV 분석" 
+            description="먼저 OpenAI API Key를 설정해주세요."
+          />
+
           {/* 입력 패널 */}
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
@@ -204,6 +271,42 @@ const CVAnalysisPage: React.FC = () => {
             </Alert>
           )}
         </Stack>
+
+        {/* 리사이즈 핸들러 */}
+        {!isMobile && (
+          <Box
+            onMouseDown={handleMouseDown}
+            sx={{
+              position: 'absolute',
+              left: sidebarWidth - 2,
+              top: 0,
+              width: 4,
+              height: '100%',
+              cursor: 'col-resize',
+              backgroundColor: 'transparent',
+              zIndex: 10,
+              '&:hover': {
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 2,
+                height: 40,
+                backgroundColor: '#E5E7EB',
+                borderRadius: 1,
+                opacity: 0,
+                transition: 'opacity 0.2s ease',
+              },
+              '&:hover::after': {
+                opacity: 1,
+              },
+            }}
+          />
+        )}
 
         {/* 오른쪽 패널 - 결과 */}
         <Box>
@@ -367,6 +470,7 @@ const CVAnalysisPage: React.FC = () => {
         </Box>
       </Box>
     </Container>
+    </Box>
   );
 };
 

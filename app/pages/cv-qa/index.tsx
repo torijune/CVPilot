@@ -44,6 +44,8 @@ import {
   CVUploadResponse,
   QAMessageResponse
 } from '../../api/cv-qa';
+import { useApiKey } from '../../hooks/useApiKey';
+import ApiKeySection from '../../components/ApiKeySection';
 
 const steps = ['CV 업로드', '모드 선택', 'QA 세션'];
 
@@ -74,6 +76,7 @@ const CVQAPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { hasApiKey } = useApiKey();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -248,7 +251,14 @@ const CVQAPage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ 
+      transform: 'scale(0.8)',
+      transformOrigin: 'top center',
+      width: '125%',
+      marginLeft: '-12.5%',
+      minHeight: '100vh'
+    }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <QuestionAnswerIcon sx={{ mr: 2, fontSize: 40, color: 'primary.main' }} />
         <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }}>
@@ -273,6 +283,14 @@ const CVQAPage: React.FC = () => {
           ))}
         </Stepper>
       </Paper>
+
+      {/* API Key 설정 섹션 */}
+      <Box sx={{ mb: 3 }}>
+        <ApiKeySection 
+          functionName="CV 면접 QA" 
+          description="먼저 OpenAI API Key를 설정해주세요."
+        />
+      </Box>
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -705,6 +723,7 @@ const CVQAPage: React.FC = () => {
 
 
     </Container>
+    </Box>
   );
 };
 

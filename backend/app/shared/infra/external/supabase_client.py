@@ -492,7 +492,8 @@ class SupabaseClient:
     async def _generate_embedding_for_keywords(self, keywords: str) -> List[float]:
         """키워드에 대한 임베딩 생성"""
         try:
-            from app.shared.infra.external.openai_client import openai_client
+            from app.shared.infra.external.openai_client import get_openai_client
+            openai_client = get_openai_client()
             return await openai_client.generate_embedding(keywords)
         except Exception as e:
             logger.error(f"키워드 임베딩 생성 실패: {e}")

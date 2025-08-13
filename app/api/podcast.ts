@@ -63,12 +63,18 @@ export interface PaperPreviewResponse {
 }
 
 // 논문 분석만 수행
-export const analyzePaper = async (field: string, papers: any[]) => {
+export const analyzePaper = async (field: string, papers: any[], apiKey?: string) => {
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1/podcast/analyze`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify({
       field: field,
       papers: papers

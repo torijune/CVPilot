@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi import APIRouter, HTTPException, Query, Depends, Header
 from typing import List
 import logging
 from ..models.request_models import TrendAnalysisRequest, FieldStatisticsRequest, PopularKeywordsRequest
@@ -14,9 +14,9 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # 의존성 주입
-def get_trend_service() -> TrendAnalysisService:
+def get_trend_service(api_key: str = None) -> TrendAnalysisService:
     repository = TrendRepositoryImpl()
-    return TrendAnalysisService(repository)
+    return TrendAnalysisService(repository, api_key=api_key)
 
 @router.get("/paper-trend")
 async def get_paper_trend(
@@ -53,11 +53,21 @@ async def get_paper_trend(
 @router.post("/analyze", response_model=TrendAnalysisResponse)
 async def analyze_trends(
     request: TrendAnalysisRequest,
-    trend_service: TrendAnalysisService = Depends(get_trend_service)
+    x_api_key: str = Header(None, alias="X-API-Key")
 ):
     """트렌드 분석 수행"""
     try:
         logger.info(f"트렌드 분석 요청: {request.field}, 키워드: {request.keywords}")
+        
+        # API Key 검증
+        if not x_api_key:
+            raise HTTPException(
+                status_code=401, 
+                detail="API Key가 필요합니다. X-API-Key 헤더를 추가해주세요."
+            )
+        
+        # 트렌드 분석 서비스 생성
+        trend_service = get_trend_service(x_api_key)
         
         # 트렌드 분석 수행
         result = await trend_service.analyze_trends(

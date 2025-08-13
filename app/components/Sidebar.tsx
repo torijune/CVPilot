@@ -1,10 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Box, Typography, Button, Paper, useTheme } from "@mui/material";
+import { Box, Typography, Button, Paper, useTheme, TextField, InputAdornment, IconButton, Alert } from "@mui/material";
 import { useRouter } from "next/router";
 import CVUploader from "./CVUploader";
 import InterestSelector from "./InterestSelector";
+import { useApiKey } from "../hooks/useApiKey";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import HomeIcon from "@mui/icons-material/Home";
+import KeyIcon from "@mui/icons-material/Key";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 type Props = {
   onAnalyze: (cvFile: File | null, interests: string[]) => void;
@@ -15,15 +20,69 @@ type Props = {
 const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [interests, setInterests] = useState<string[]>([]);
-  const [sidebarWidth, setSidebarWidth] = useState(380);
+  const [sidebarWidth, setSidebarWidth] = useState(304); // 380 * 0.8 = 304 (80% 스케일에 맞춤)
   const [isResizing, setIsResizing] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [tempApiKey, setTempApiKey] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationError, setValidationError] = useState("");
+  
   const resizeRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const router = useRouter();
+  const { apiKey, saveApiKey, hasApiKey } = useApiKey();
 
-  // 최소/최대 너비 설정
-  const MIN_WIDTH = 320;
-  const MAX_WIDTH = 600;
+  // API Key 유효성 검증
+  const validateApiKey = async (key: string): Promise<boolean> => {
+    if (!key.trim()) return false;
+    
+    try {
+      const response = await fetch('https://api.openai.com/v1/models', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${key}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  // API Key 저장 핸들러
+  const handleApiKeySave = async () => {
+    if (!tempApiKey.trim()) {
+      setValidationError('API Key를 입력해주세요.');
+      return;
+    }
+
+    setIsValidating(true);
+    setValidationError('');
+
+    const isValid = await validateApiKey(tempApiKey);
+    
+    if (isValid) {
+      saveApiKey(tempApiKey);
+      setTempApiKey("");
+      setValidationError('');
+    } else {
+      setValidationError('유효하지 않은 API Key입니다.');
+    }
+    
+    setIsValidating(false);
+  };
+
+  // 컴포넌트 마운트 시 현재 API Key를 temp 상태에 설정
+  useEffect(() => {
+    if (apiKey && !tempApiKey) {
+      setTempApiKey(apiKey);
+    }
+  }, [apiKey, tempApiKey]);
+
+  // 최소/최대 너비 설정 (80% 스케일에 맞춤)
+  const MIN_WIDTH = 256; // 320 * 0.8 = 256
+  const MAX_WIDTH = 480; // 600 * 0.8 = 480
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -153,6 +212,148 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
             </Button>
           </Box>
           
+          {/* API Key 설정 섹션 */}
+          <Box sx={{ 
+            mb: 3, 
+            p: 2,
+            borderRadius: 2,
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: 2 
+            }}>
+              <KeyIcon sx={{ 
+                color: hasApiKey() ? '#10B981' : '#F59E0B', 
+                mr: 1, 
+                fontSize: 20 
+              }} />
+              <Typography 
+                variant="subtitle2" 
+                sx={{ 
+                  color: 'white', 
+                  fontWeight: 600,
+                  flex: 1
+                }}
+              >
+                OpenAI API Key
+              </Typography>
+              {hasApiKey() && (
+                <CheckCircleIcon sx={{ 
+                  color: '#10B981', 
+                  fontSize: 16 
+                }} />
+              )}
+            </Box>
+
+            {!hasApiKey() && (
+              <Alert 
+                severity="warning" 
+                sx={{ 
+                  mb: 2,
+                  background: 'rgba(245, 158, 11, 0.1)',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  color: '#FCD34D',
+                  '& .MuiAlert-icon': {
+                    color: '#F59E0B'
+                  }
+                }}
+              >
+                <Typography variant="caption">
+                  AI 기능 사용을 위해 API Key가 필요합니다.
+                </Typography>
+              </Alert>
+            )}
+
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="sk-..."
+              type={showApiKey ? 'text' : 'password'}
+              value={tempApiKey}
+              onChange={(e) => setTempApiKey(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <KeyIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 16 }} />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      size="small"
+                      onClick={() => setShowApiKey(!showApiKey)}
+                      sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
+                    >
+                      {showApiKey ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: {
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  borderRadius: 1,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#3B82F6',
+                  },
+                  color: 'white',
+                  fontSize: '0.875rem'
+                }
+              }}
+              sx={{ mb: 1 }}
+            />
+
+            {validationError && (
+              <Alert 
+                severity="error" 
+                sx={{ 
+                  mb: 1,
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  color: '#FCA5A5',
+                  '& .MuiAlert-icon': {
+                    color: '#EF4444'
+                  }
+                }}
+              >
+                <Typography variant="caption">
+                  {validationError}
+                </Typography>
+              </Alert>
+            )}
+
+            <Button
+              fullWidth
+              size="small"
+              variant="outlined"
+              onClick={handleApiKeySave}
+              disabled={isValidating || !tempApiKey.trim()}
+              sx={{
+                borderColor: hasApiKey() ? '#10B981' : 'rgba(255, 255, 255, 0.3)',
+                color: hasApiKey() ? '#10B981' : 'rgba(255, 255, 255, 0.8)',
+                fontSize: '0.75rem',
+                py: 0.5,
+                '&:hover': {
+                  borderColor: hasApiKey() ? '#059669' : 'rgba(255, 255, 255, 0.6)',
+                  backgroundColor: hasApiKey() ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                },
+                '&:disabled': {
+                  borderColor: 'rgba(255, 255, 255, 0.1)',
+                  color: 'rgba(255, 255, 255, 0.3)'
+                }
+              }}
+            >
+              {isValidating ? '검증 중...' : hasApiKey() ? 'API Key 업데이트' : 'API Key 저장'}
+            </Button>
+          </Box>
+          
           <Box sx={{ flex: 1 }}>
             <InterestSelector value={interests} onChange={setInterests} />
             <CVUploader onFileChange={setCvFile} />
@@ -179,11 +380,11 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
                 transform: 'none'
               }
             }}
-            disabled={!cvFile || interests.length === 0 || loading}
+            disabled={!cvFile || interests.length === 0 || loading || !hasApiKey()}
             onClick={() => onAnalyze(cvFile, interests)}
-          >
-            {loading ? "분석 중..." : "분석 시작"}
-          </Button>
+                      >
+              {loading ? "분석 중..." : !hasApiKey() ? "API Key 필요" : "분석 시작"}
+            </Button>
         </Box>
       </Paper>
       
