@@ -153,7 +153,7 @@ export default function HomePage() {
   const [featuresBottomRef, featuresBottomVisible] = useScrollAnimation();
   const [statsRef, statsVisible] = useScrollAnimation();
   const [howItWorksRef, howItWorksVisible] = useScrollAnimation();
-  const [techRef, techVisible] = useScrollAnimation();
+
   const [testimonialsRef, testimonialsVisible] = useScrollAnimation();
 
   // API Key 유효성 검증
@@ -243,7 +243,18 @@ export default function HomePage() {
       transform: 'scale(0.8)',
       transformOrigin: 'top center',
       width: '125%', // 80%로 스케일하면서 전체 너비를 맞추기 위해 125%로 설정
-      marginLeft: '-12.5%' // 중앙 정렬을 위해 좌측 마진 조정
+      marginLeft: '-12.5%', // 중앙 정렬을 위해 좌측 마진 조정
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'radial-gradient(circle at 50% 30%, rgba(245, 158, 11, 0.1) 0%, transparent 50%)',
+        pointerEvents: 'none'
+      }
     }}>
       {/* Navigation Header */}
       <Box sx={{ 
@@ -661,19 +672,40 @@ export default function HomePage() {
         </Box>
       ) : (
         <Box sx={{ 
-          background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+          background: 'linear-gradient(135deg, rgba(254, 243, 199, 0.8) 0%, rgba(253, 230, 138, 0.6) 100%)',
           py: 4,
-          border: '1px solid #F59E0B'
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(45deg, rgba(245, 158, 11, 0.1) 0%, transparent 50%, rgba(245, 158, 11, 0.05) 100%)',
+            pointerEvents: 'none'
+          }
         }}>
           <Container maxWidth="md">
             <Paper sx={{
               p: 4,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              borderRadius: 3,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: 4,
               textAlign: 'center',
-              boxShadow: '0 10px 25px rgba(245, 158, 11, 0.2)'
+              boxShadow: '0 20px 40px rgba(245, 158, 11, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(245, 158, 11, 0.3) 50%, transparent 100%)'
+              }
             }}>
               <Box sx={{ mb: 3 }}>
                 <KeyIcon sx={{ 
@@ -682,28 +714,56 @@ export default function HomePage() {
                   mb: 2,
                   filter: 'drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3))'
                 }} />
-                <Typography variant="h4" sx={{ 
-                  fontWeight: 700, 
-                  mb: 2,
-                  color: '#92400E'
-                }}>
-                  🔑 API Key가 필요합니다
-                </Typography>
-                <Typography variant="h6" sx={{ 
-                  color: '#B45309',
-                  mb: 3,
-                  fontWeight: 500
-                }}>
-                  모든 AI 기능을 사용하려면 OpenAI API Key를 설정해주세요
-                </Typography>
+                <Box
+                  onClick={handleOpenApiKeyDialog}
+                  sx={{
+                    cursor: 'pointer',
+                    p: 2,
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)'
+                    }
+                  }}
+                >
+                  <Typography variant="h4" sx={{ 
+                    fontWeight: 700, 
+                    mb: 2,
+                    color: '#92400E'
+                  }}>
+                    🔑 API Key가 필요합니다
+                  </Typography>
+                  <Typography variant="h6" sx={{ 
+                    color: '#B45309',
+                    mb: 1,
+                    fontWeight: 500
+                  }}>
+                    모든 AI 기능을 사용하려면 OpenAI API Key를 설정해주세요
+                  </Typography>
+                  <Typography variant="body2" sx={{ 
+                    color: '#D97706',
+                    fontWeight: 500,
+                    fontStyle: 'italic'
+                  }}>
+                    👆 클릭하여 API Key 설정하기
+                  </Typography>
+                </Box>
               </Box>
 
               <Stack spacing={2} sx={{ maxWidth: 400, mx: 'auto' }}>
                 <Box sx={{ 
                   p: 2, 
-                  background: 'rgba(245, 158, 11, 0.1)',
-                  borderRadius: 2,
-                  border: '1px solid rgba(245, 158, 11, 0.2)'
+                  background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.12) 100%)',
+                  borderRadius: 3,
+                  border: '1px solid rgba(245, 158, 11, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.16) 100%)',
+                    transform: 'translateY(-1px)'
+                  }
                 }}>
                   <Typography variant="body2" sx={{ color: '#92400E', fontWeight: 600 }}>
                     💡 <strong>시작하기 단계</strong>
@@ -717,10 +777,16 @@ export default function HomePage() {
 
                 <Box sx={{ 
                   p: 2, 
-                  background: 'rgba(59, 130, 246, 0.1)',
-                  borderRadius: 2,
-                  border: '1px solid rgba(59, 130, 246, 0.2)',
-                  textAlign: 'center'
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.12) 100%)',
+                  borderRadius: 3,
+                  border: '1px solid rgba(59, 130, 246, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.16) 100%)',
+                    transform: 'translateY(-1px)'
+                  }
                 }}>
                   <Typography variant="body2" sx={{ color: '#1E40AF', fontWeight: 600, mb: 1 }}>
                     🤔 <strong>API Key 발급 방법이 궁금하다면?</strong>
@@ -768,7 +834,21 @@ export default function HomePage() {
       )}
 
       {/* Features Section - Top Row */}
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ 
+        py: 6,
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '100vw',
+          height: '100%',
+          background: 'linear-gradient(180deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%)',
+          zIndex: -1
+        }
+      }}>
         <Box 
           ref={featuresTopRef}
           sx={{ 
@@ -782,7 +862,10 @@ export default function HomePage() {
           <Typography variant="h3" sx={{ 
             fontWeight: 800, 
             mb: 3,
-            color: '#1F2937',
+            background: 'linear-gradient(135deg, #1F2937 0%, #374151 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
             textShadow: '0 2px 4px rgba(31, 41, 55, 0.1)'
           }}>
             강력한 기능들
@@ -792,7 +875,8 @@ export default function HomePage() {
             maxWidth: 600, 
             mx: 'auto',
             fontWeight: 600,
-            fontSize: '1.25rem'
+            fontSize: '1.25rem',
+            textShadow: '0 1px 2px rgba(75, 85, 99, 0.1)'
           }}>
             AI 기술을 활용한 종합적인 학술 커리어 분석 서비스
           </Typography>
@@ -809,16 +893,32 @@ export default function HomePage() {
               sx={{
                 height: '100%',
                 background: feature.color,
-                border: `2px solid ${feature.borderColor}`,
-                borderRadius: 3,
-                transition: 'all 0.6s ease',
+                border: `1px solid ${feature.borderColor}`,
+                borderRadius: 4,
+                transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
                 cursor: 'pointer',
                 opacity: featuresTopVisible ? 1 : 0,
                 transform: featuresTopVisible ? 'translateY(0)' : 'translateY(30px)',
                 transitionDelay: featuresTopVisible ? `${index * 0.1}s` : '0s',
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%)',
+                  opacity: 0,
+                  transition: 'opacity 0.3s ease'
+                },
                 '&:hover': {
-                  transform: featuresTopVisible ? 'translateY(-8px)' : 'translateY(30px)',
-                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
+                  transform: featuresTopVisible ? 'translateY(-12px) scale(1.02)' : 'translateY(30px)',
+                  boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  '&::before': {
+                    opacity: 1
+                  }
                 }
               }}
               onClick={() => router.push(feature.path)}
@@ -1045,85 +1145,7 @@ export default function HomePage() {
       </Box>
 
       {/* Technologies Section */}
-      <Box 
-        ref={techRef}
-        sx={{ 
-          py: 6, 
-          background: '#1F2937',
-          opacity: techVisible ? 1 : 0,
-          transform: techVisible ? 'translateY(0)' : 'translateY(50px)',
-          transition: 'all 0.8s ease-out',
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Typography variant="h3" sx={{ 
-              fontWeight: 800, 
-              mb: 3,
-              color: 'white'
-            }}>
-              🔬 최신 AI 기술 스택
-            </Typography>
-            <Typography variant="h6" sx={{ 
-              color: '#9CA3AF', 
-              maxWidth: 600, 
-              mx: 'auto',
-              fontWeight: 500
-            }}>
-              업계 최고 수준의 AI 모델과 기술을 활용하여 정확한 분석을 제공합니다
-            </Typography>
-          </Box>
-          
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-            gap: 4
-          }}>
-            {[
-              { name: 'GPT-4', description: '자연어 처리', icon: '🧠' },
-              { name: 'Embedding API', description: '벡터 임베딩', icon: '🔗' },
-              { name: 'Next.js', description: '프론트엔드', icon: '⚛️' },
-              { name: 'FastAPI', description: '백엔드 API', icon: '🚀' },
-              { name: 'PostgreSQL', description: '데이터베이스', icon: '🗄️' },
-              { name: 'Docker', description: '컨테이너화', icon: '🐳' },
-              { name: 'TypeScript', description: '타입 안정성', icon: '📘' },
-              { name: 'Material-UI', description: 'UI 컴포넌트', icon: '🎨' }
-            ].map((tech, index) => (
-              <Paper key={index} sx={{
-                p: 3,
-                textAlign: 'center',
-                background: 'rgba(255, 255, 255, 0.05)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: 3,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                }
-              }}>
-                <Typography sx={{ fontSize: '2.5rem', mb: 1 }}>
-                  {tech.icon}
-                </Typography>
-                <Typography variant="h6" sx={{ 
-                  fontWeight: 700, 
-                  color: 'white',
-                  mb: 1
-                }}>
-                  {tech.name}
-                </Typography>
-                <Typography variant="caption" sx={{ 
-                  color: '#9CA3AF',
-                  fontSize: '0.9rem'
-                }}>
-                  {tech.description}
-                </Typography>
-              </Paper>
-            ))}
-          </Box>
-        </Container>
-      </Box>
+
 
       {/* Testimonials Section */}
       <Box 
