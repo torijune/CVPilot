@@ -53,12 +53,23 @@ interface CVAnalysisResult {
   created_at: string;
 }
 
-const fieldOptions = [
-  { value: 'Natural Language Processing (NLP)', label: 'Natural Language Processing (NLP)' },
-  { value: 'Computer Vision (CV)', label: 'Computer Vision (CV)' },
-  { value: 'Multimodal', label: 'Multimodal' },
-  { value: 'Machine Learning / Deep Learning (ML/DL)', label: 'Machine Learning / Deep Learning (ML/DL)' }
-];
+// 동적으로 fieldOptions 생성하는 함수
+const createFieldOptions = (availableFields: any) => {
+  console.log('createFieldOptions 호출됨, availableFields:', availableFields, typeof availableFields);
+  
+  if (!Array.isArray(availableFields) || availableFields.length === 0) {
+    console.log('availableFields가 배열이 아니거나 비어있음, 빈 배열 반환');
+    return [];
+  }
+  
+  const options = availableFields.map(field => ({
+    value: field,
+    label: field
+  }));
+  
+  console.log('생성된 options:', options);
+  return options;
+};
 
 const CVAnalysisPage: React.FC = () => {
   const theme = useTheme();
@@ -69,6 +80,8 @@ const CVAnalysisPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showAllExperiences, setShowAllExperiences] = useState(false);
+  const [availableFields, setAvailableFields] = useState<string[]>([]);
+  const [fieldsLoading, setFieldsLoading] = useState<boolean>(true);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const router = useRouter();
@@ -112,6 +125,36 @@ const CVAnalysisPage: React.FC = () => {
       document.body.style.userSelect = '';
     };
   }, [isResizing]);
+
+  useEffect(() => {
+    loadAvailableFields();
+  }, []);
+
+  // 분야가 설정되면 초기 필드 설정
+  useEffect(() => {
+    if (availableFields.length > 0 && !field) {
+      setField(availableFields[0] || '');
+    }
+  }, [availableFields, field]);
+
+  const loadAvailableFields = async () => {
+    try {
+      setFieldsLoading(true);
+      // CV 분석용 하드코딩된 분야 목록
+      const fields = [
+        "Machine Learning / Deep Learning (ML/DL)",
+        "Natural Language Processing (NLP)",
+        "Computer Vision (CV)"
+      ];
+      console.log('CV 분석용 분야 목록:', fields);
+      setAvailableFields(fields);
+    } catch (err) {
+      console.error('분야 목록 로드 실패:', err);
+      setAvailableFields([]);
+    } finally {
+      setFieldsLoading(false);
+    }
+  };
 
   const handleGoHome = () => {
     router.push('/');
@@ -229,11 +272,22 @@ const CVAnalysisPage: React.FC = () => {
                 label="분야 선택"
                 onChange={handleFieldChange}
               >
-                {fieldOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                {fieldsLoading ? (
+                  <MenuItem disabled>
+                    <CircularProgress size={16} sx={{ mr: 1 }} />
+                    분야 로딩 중...
                   </MenuItem>
-                ))}
+                ) : (
+                  (() => {
+                    const options = createFieldOptions(availableFields);
+                    console.log('Select 컴포넌트에서 렌더링할 options:', options);
+                    return options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ));
+                  })()
+                )}
               </Select>
             </FormControl>
             

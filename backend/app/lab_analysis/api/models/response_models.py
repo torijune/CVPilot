@@ -38,6 +38,10 @@ class LabAnalysisResultResponse(BaseModel):
     key_insights: str
     created_at: str
 
+class AvailableFieldsResponse(BaseModel):
+    """사용 가능한 분야 응답 모델"""
+    fields: List[str]
+
 class HealthCheckResponse(BaseModel):
     """헬스체크 응답 모델"""
     status: str

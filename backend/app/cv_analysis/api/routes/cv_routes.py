@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form, Header
 import logging
 from ..models.request_models import CVAnalysisRequest, CVAnalysisHistoryRequest
-from ..models.response_models import CVAnalysisResponse, RadarChartResponse, HealthCheckResponse
+from ..models.response_models import CVAnalysisResponse, RadarChartResponse, HealthCheckResponse, AvailableFieldsResponse
 from ...application.services.cv_analysis_service import CVAnalysisService
 from ...infra.repositories.cv_repository_impl import CVRepositoryImpl
 from ...infra.services.file_processor import FileProcessor
@@ -14,6 +14,18 @@ router = APIRouter()
 def get_cv_service(api_key: str = None) -> CVAnalysisService:
     repository = CVRepositoryImpl()
     return CVAnalysisService(repository, api_key=api_key)
+
+@router.get("/fields", response_model=AvailableFieldsResponse)
+async def get_available_fields(
+    cv_service: CVAnalysisService = Depends(get_cv_service)
+):
+    """사용 가능한 분야 목록 조회"""
+    try:
+        fields = await cv_service.get_available_fields()
+        return AvailableFieldsResponse(fields=fields)
+    except Exception as e:
+        logger.error(f"분야 목록 조회 실패: {e}")
+        raise HTTPException(status_code=500, detail="분야 목록 조회 중 오류가 발생했습니다.")
 
 @router.post("/analyze", response_model=CVAnalysisResponse)
 async def analyze_cv(

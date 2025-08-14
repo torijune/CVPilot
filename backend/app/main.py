@@ -25,13 +25,54 @@ app.add_middleware(
 )
 
 # 라우터 등록
-from app.paper_trend.api.routes.trend_routes import router as trend_router
-from app.paper_comparsion.api.routes.comparison_routes import router as comparison_router
-from app.cv_analysis.api.routes.cv_routes import router as cv_router
-from app.daily_paper_podcast.api.routes.podcast_routes import router as daily_paper_podcast_router
-from app.cv_QA.api.routes.cv_qa_routes import router as cv_qa_router
-from app.shared.api.routes.lab_search_routes import router as lab_search_router
-from app.lab_analysis.api.routes.lab_analysis_routes import router as lab_analysis_router
+try:
+    from app.paper_trend.api.routes.trend_routes import router as trend_router
+    logger.info("trend_router import 성공")
+except Exception as e:
+    logger.error(f"trend_router import 실패: {e}")
+    trend_router = None
+
+try:
+    from app.paper_comparsion.api.routes.comparison_routes import router as comparison_router
+    logger.info("comparison_router import 성공")
+except Exception as e:
+    logger.error(f"comparison_router import 실패: {e}")
+    comparison_router = None
+
+try:
+    from app.cv_analysis.api.routes.cv_routes import router as cv_router
+    logger.info("cv_router import 성공")
+except Exception as e:
+    logger.error(f"cv_router import 실패: {e}")
+    cv_router = None
+
+try:
+    from app.daily_paper_podcast.api.routes.podcast_routes import router as daily_paper_podcast_router
+    logger.info("daily_paper_podcast_router import 성공")
+except Exception as e:
+    logger.error(f"daily_paper_podcast_router import 실패: {e}")
+    daily_paper_podcast_router = None
+
+try:
+    from app.cv_QA.api.routes.cv_qa_routes import router as cv_qa_router
+    logger.info("cv_qa_router import 성공")
+except Exception as e:
+    logger.error(f"cv_qa_router import 실패: {e}")
+    cv_qa_router = None
+
+try:
+    from app.shared.api.routes.lab_search_routes import router as lab_search_router
+    logger.info("lab_search_router import 성공")
+except Exception as e:
+    logger.error(f"lab_search_router import 실패: {e}")
+    lab_search_router = None
+
+try:
+    from app.lab_analysis.api.routes.lab_analysis_routes import router as lab_analysis_router
+    logger.info("lab_analysis_router import 성공")
+except Exception as e:
+    logger.error(f"lab_analysis_router import 실패: {e}")
+    lab_analysis_router = None
 
 # 정적 파일 서빙 설정 (오디오 파일용)
 # Lambda 환경에서는 /tmp 디렉토리 사용
@@ -45,13 +86,51 @@ os.makedirs(temp_dir, exist_ok=True)
 app.mount("/audio", StaticFiles(directory=temp_dir), name="audio")
 
 # 라우터 등록
-app.include_router(trend_router, prefix="/api/v1/trends", tags=["trends"])
-app.include_router(comparison_router, prefix="/api/v1/comparison", tags=["comparison"])
-app.include_router(cv_router, prefix="/api/v1/cv", tags=["cv"])
-app.include_router(daily_paper_podcast_router, prefix="/api/v1/podcast", tags=["podcast"])
-app.include_router(cv_qa_router, prefix="/api/v1/cv-qa", tags=["cv_qa"])
-app.include_router(lab_search_router, prefix="/api/v1/labs", tags=["lab_search"])
-app.include_router(lab_analysis_router, prefix="/api/v1/lab-analysis", tags=["lab_analysis"])
+logger.info("라우터 등록 시작...")
+
+if trend_router:
+    app.include_router(trend_router, prefix="/api/v1/trends", tags=["trends"])
+    logger.info("trend_router 등록 완료")
+else:
+    logger.error("trend_router가 None이므로 등록하지 않음")
+
+if comparison_router:
+    app.include_router(comparison_router, prefix="/api/v1/comparison", tags=["comparison"])
+    logger.info("comparison_router 등록 완료")
+else:
+    logger.error("comparison_router가 None이므로 등록하지 않음")
+
+if cv_router:
+    app.include_router(cv_router, prefix="/api/v1/cv", tags=["cv"])
+    logger.info("cv_router 등록 완료")
+else:
+    logger.error("cv_router가 None이므로 등록하지 않음")
+
+if daily_paper_podcast_router:
+    app.include_router(daily_paper_podcast_router, prefix="/api/v1/podcast", tags=["podcast"])
+    logger.info("daily_paper_podcast_router 등록 완료")
+else:
+    logger.error("daily_paper_podcast_router가 None이므로 등록하지 않음")
+
+if cv_qa_router:
+    app.include_router(cv_qa_router, prefix="/api/v1/cv-qa", tags=["cv_qa"])
+    logger.info("cv_qa_router 등록 완료")
+else:
+    logger.error("cv_qa_router가 None이므로 등록하지 않음")
+
+if lab_search_router:
+    app.include_router(lab_search_router, prefix="/api/v1/labs", tags=["lab_search"])
+    logger.info("lab_search_router 등록 완료")
+else:
+    logger.error("lab_search_router가 None이므로 등록하지 않음")
+
+if lab_analysis_router:
+    app.include_router(lab_analysis_router, prefix="/api/v1/lab-analysis", tags=["lab_analysis"])
+    logger.info("lab_analysis_router 등록 완료")
+else:
+    logger.error("lab_analysis_router가 None이므로 등록하지 않음")
+
+logger.info("라우터 등록 완료")
 
 @app.get("/")
 async def root():

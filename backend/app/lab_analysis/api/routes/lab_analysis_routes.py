@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 import logging
 from typing import Optional
 from app.lab_analysis.api.models.request_models import LabAnalysisRequest, ProfessorSelectionRequest
-from app.lab_analysis.api.models.response_models import LabAnalysisResponse, ProfessorListResponse, LabAnalysisResultResponse, HealthCheckResponse
+from app.lab_analysis.api.models.response_models import LabAnalysisResponse, ProfessorListResponse, LabAnalysisResultResponse, HealthCheckResponse, AvailableFieldsResponse
 from app.lab_analysis.application.services.lab_analysis_service import LabAnalysisService
 from app.lab_analysis.infra.repositories.lab_analysis_repository_impl import LabAnalysisRepositoryImpl
 
@@ -15,12 +15,36 @@ def get_lab_analysis_service() -> LabAnalysisService:
     repository = LabAnalysisRepositoryImpl()
     return LabAnalysisService(repository)
 
-@router.get("/professors/{field}", response_model=ProfessorListResponse)
+@router.get("/test")
+async def test_endpoint():
+    """테스트 엔드포인트"""
+    return {"message": "lab_analysis router is working"}
+
+@router.get("/fields", response_model=AvailableFieldsResponse)
+async def get_available_fields(
+    lab_service: LabAnalysisService = Depends(get_lab_analysis_service)
+):
+    """사용 가능한 분야 목록 조회"""
+    try:
+        fields = await lab_service.get_available_fields()
+        return AvailableFieldsResponse(fields=fields)
+    except Exception as e:
+        logger.error(f"분야 목록 조회 실패: {e}")
+        raise HTTPException(status_code=500, detail="분야 목록 조회 중 오류가 발생했습니다.")
+
+@router.get("/professors", response_model=ProfessorListResponse)
 async def get_professors_by_field(
     field: str,
     university: Optional[str] = None,
     lab_service: LabAnalysisService = Depends(get_lab_analysis_service)
 ):
+    # URL 디코딩 처리
+    import urllib.parse
+    original_field = field
+    field = urllib.parse.unquote(field)
+    logger.info(f"교수 목록 조회 엔드포인트 호출됨")
+    logger.info(f"원본 field: {original_field}")
+    logger.info(f"디코딩된 field: {field}")
     """분야별 교수 목록 조회 (학교 필터링 지원)"""
     try:
         logger.info(f"교수 목록 조회 요청: {field}, 학교: {university}")

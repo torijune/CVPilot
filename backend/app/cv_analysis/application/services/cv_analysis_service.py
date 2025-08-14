@@ -627,4 +627,8 @@ CV의 각 섹션에서 발견되는 모든 관련 경험을 포함해주세요.
     
     async def get_cv_analysis(self, analysis_id: str) -> Optional[CVAnalysis]:
         """CV 분석 결과 조회"""
-        return await self.cv_repository.get_cv_analysis(analysis_id) 
+        return await self.cv_repository.get_cv_analysis(analysis_id)
+    
+    async def get_available_fields(self) -> List[str]:
+        """사용 가능한 분야 목록 조회"""
+        return await self.cv_repository.get_available_fields() 

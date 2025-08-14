@@ -23,4 +23,9 @@ class CVRepository(ABC):
     @abstractmethod
     async def get_required_skills(self, field: str) -> List[str]:
         """필수 스킬 목록 조회"""
+        pass
+    
+    @abstractmethod
+    async def get_available_fields(self) -> List[str]:
+        """사용 가능한 분야 목록 조회"""
         pass 

@@ -94,7 +94,21 @@ export async function getAvailableFields(): Promise<string[]> {
     throw new Error(error.detail || '분야 목록 조회 중 오류가 발생했습니다.');
   }
 
-  return response.json();
+  const data = await response.json();
+  console.log('API 응답 데이터:', data, typeof data);
+  
+  // 응답이 {fields: [...]} 형태인지 확인
+  if (data && data.fields && Array.isArray(data.fields)) {
+    return data.fields;
+  }
+  
+  // 직접 배열인 경우
+  if (Array.isArray(data)) {
+    return data;
+  }
+  
+  console.error('예상치 못한 API 응답 형태:', data);
+  return [];
 }
 
 // 특정 분야의 통계 정보 조회

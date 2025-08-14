@@ -31,7 +31,8 @@ import {
 } from '@mui/icons-material';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { analyzeTrends, getAvailableFields, TrendAnalysisResponse } from '../../api/trends';
+import { analyzeTrends, TrendAnalysisResponse } from '../../api/trends';
+import { getAvailableFields } from '../../api/papers';
 import { useRouter } from 'next/router';
 import { useApiKey } from '../../hooks/useApiKey';
 import ApiKeySection from '../../components/ApiKeySection';
@@ -42,12 +43,37 @@ interface FieldOption {
   icon: React.ReactNode;
 }
 
-const fieldOptions: FieldOption[] = [
-  { value: 'Computer Vision (CV)', label: 'Computer Vision (CV)', icon: <Computer /> },
-  { value: 'Natural Language Processing (NLP)', label: 'Natural Language Processing (NLP)', icon: <Psychology /> },
-  { value: 'Multimodal', label: 'Multimodal', icon: <Science /> },
-  { value: 'Machine Learning / Deep Learning (ML/DL)', label: 'Machine Learning / Deep Learning (ML/DL)', icon: <TrendingUp /> },
-];
+// Field별 아이콘 매핑
+const getFieldIcon = (field: string): React.ReactNode => {
+  switch (field) {
+    case 'Computer Vision (CV)':
+      return <Computer />;
+    case 'Natural Language Processing (NLP)':
+      return <Psychology />;
+    case 'Machine Learning / Deep Learning (ML/DL)':
+      return <TrendingUp />;
+    default:
+      return <Science />;
+  }
+};
+
+// 동적으로 fieldOptions 생성하는 함수
+const createFieldOptions = (availableFields: any): FieldOption[] => {
+  // 디버깅을 위한 로그
+  console.log('availableFields:', availableFields, typeof availableFields);
+  
+  // 배열이 아닌 경우 빈 배열 반환
+  if (!Array.isArray(availableFields) || availableFields.length === 0) {
+    console.log('availableFields is not an array or empty, returning empty array');
+    return [];
+  }
+  
+  return availableFields.map(field => ({
+    value: field,
+    label: field,
+    icon: getFieldIcon(field)
+  }));
+};
 
 export default function TrendsPage() {
   const theme = useTheme();
@@ -61,6 +87,7 @@ export default function TrendsPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<TrendAnalysisResponse | null>(null);
   const [availableFields, setAvailableFields] = useState<string[]>([]);
+  const [fieldsLoading, setFieldsLoading] = useState<boolean>(true);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const { apiKey, hasApiKey } = useApiKey();
@@ -110,10 +137,15 @@ export default function TrendsPage() {
 
   const loadAvailableFields = async () => {
     try {
+      setFieldsLoading(true);
       const fields = await getAvailableFields();
+      console.log('API에서 받은 fields:', fields, typeof fields);
       setAvailableFields(fields);
     } catch (err) {
       console.error('분야 목록 로드 실패:', err);
+      setAvailableFields([]); // 오류 시 빈 배열로 설정
+    } finally {
+      setFieldsLoading(false);
     }
   };
 
@@ -293,42 +325,63 @@ export default function TrendsPage() {
               <Typography variant="subtitle1" gutterBottom>
                 연구 분야
               </Typography>
-              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}>
-                {fieldOptions.map((field) => (
+              {fieldsLoading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                  <CircularProgress size={24} />
+                </Box>
+              ) : (
+                <Box sx={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: 1,
+                  '& .field-button': {
+                    justifyContent: 'flex-start', 
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    fontSize: '0.875rem',
+                    py: 1.5,
+                    px: 2,
+                    borderRadius: 2,
+                    transition: 'all 0.2s ease-in-out',
+                    '&.MuiButton-contained': {
+                      backgroundColor: 'primary.main',
+                      color: 'white',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      '&:hover': {
+                        backgroundColor: 'primary.dark',
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      },
+                    },
+                    '&.MuiButton-outlined': {
+                      color: 'text.primary',
+                      borderColor: 'grey.300',
+                      backgroundColor: 'white',
+                      '&:hover': {
+                        backgroundColor: 'grey.50',
+                        borderColor: 'primary.main',
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      },
+                    },
+                  }
+                }}>
+                  {createFieldOptions(availableFields).map((field) => (
                   <Button
                     key={field.value}
                     variant={selectedField === field.value ? 'contained' : 'outlined'}
                     startIcon={field.icon}
                     onClick={() => setSelectedField(field.value)}
                     fullWidth
-                    sx={{ 
-                      justifyContent: 'flex-start', 
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      fontSize: '0.875rem',
-                      py: 1.5,
-                      '&.MuiButton-contained': {
-                        backgroundColor: 'primary.main',
-                        color: 'white',
-                        '&:hover': {
-                          backgroundColor: 'primary.dark',
-                        },
-                      },
-                      '&.MuiButton-outlined': {
-                        color: 'text.primary',
-                        borderColor: 'grey.300',
-                        backgroundColor: 'white',
-                        '&:hover': {
-                          backgroundColor: 'grey.50',
-                          borderColor: 'primary.main',
-                        },
-                      },
-                    }}
+                    className="field-button"
                   >
-                    {field.label}
+                    <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+                      {field.label}
+                    </Box>
                   </Button>
-                ))}
-              </Box>
+                                  ))}
+                </Box>
+              )}
             </Box>
 
             {/* 키워드 입력 */}
@@ -353,6 +406,9 @@ export default function TrendsPage() {
                     fontWeight: 600,
                     color: 'white',
                     backgroundColor: 'primary.main',
+                    whiteSpace: 'nowrap',
+                    minWidth: 'auto',
+                    px: 2,
                     '&:hover': {
                       backgroundColor: 'primary.dark',
                     },

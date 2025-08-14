@@ -28,4 +28,9 @@ class LabAnalysisRepository(ABC):
     @abstractmethod
     async def get_professors_by_field(self, field: str) -> List[Professor]:
         """분야별 교수 목록 조회"""
+        pass
+    
+    @abstractmethod
+    async def get_available_fields(self) -> List[str]:
+        """사용 가능한 분야 목록 조회"""
         pass 

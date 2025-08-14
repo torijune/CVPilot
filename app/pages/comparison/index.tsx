@@ -67,12 +67,38 @@ interface FieldOption {
   icon: React.ReactNode;
 }
 
-const fieldOptions: FieldOption[] = [
-  { value: 'Computer Vision (CV)', label: 'Computer Vision (CV)', icon: <Computer /> },
-  { value: 'Natural Language Processing (NLP)', label: 'Natural Language Processing (NLP)', icon: <Psychology /> },
-  { value: 'Multimodal', label: 'Multimodal', icon: <Science /> },
-  { value: 'Machine Learning / Deep Learning (ML/DL)', label: 'Machine Learning / Deep Learning (ML/DL)', icon: <TrendingUp /> },
-];
+// Field별 아이콘 매핑
+const getFieldIcon = (field: string): React.ReactNode => {
+  switch (field) {
+    case 'Computer Vision (CV)':
+      return <Computer />;
+    case 'Natural Language Processing (NLP)':
+      return <Psychology />;
+    case 'Machine Learning / Deep Learning (ML/DL)':
+      return <TrendingUp />;
+    default:
+      return <Science />;
+  }
+};
+
+// 동적으로 fieldOptions 생성하는 함수
+const createFieldOptions = (availableFields: any): FieldOption[] => {
+  console.log('논문 비교분석 - createFieldOptions 호출됨, availableFields:', availableFields, typeof availableFields);
+  
+  if (!Array.isArray(availableFields) || availableFields.length === 0) {
+    console.log('논문 비교분석 - availableFields가 배열이 아니거나 비어있음, 빈 배열 반환');
+    return [];
+  }
+  
+  const options = availableFields.map(field => ({
+    value: field,
+    label: field,
+    icon: getFieldIcon(field)
+  }));
+  
+  console.log('논문 비교분석 - 생성된 options:', options);
+  return options;
+};
 
 export default function ComparisonPage() {
   const theme = useTheme();
@@ -87,6 +113,7 @@ export default function ComparisonPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<MethodComparisonResponse | null>(null);
   const [availableFields, setAvailableFields] = useState<string[]>([]);
+  const [fieldsLoading, setFieldsLoading] = useState<boolean>(true);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const { apiKey, hasApiKey } = useApiKey();
@@ -142,10 +169,17 @@ export default function ComparisonPage() {
 
   const loadAvailableFields = async () => {
     try {
+      setFieldsLoading(true);
+      console.log('논문 비교분석 - 분야 목록 로드 시작');
       const fields = await getAvailableFields();
+      console.log('논문 비교분석 - 받아온 분야 목록:', fields);
       setAvailableFields(fields);
+      console.log('논문 비교분석 - availableFields 상태 업데이트됨:', fields);
     } catch (err) {
       console.error('분야 목록 로드 실패:', err);
+      setAvailableFields([]);
+    } finally {
+      setFieldsLoading(false);
     }
   };
 
@@ -387,14 +421,25 @@ export default function ComparisonPage() {
                   label="연구 분야"
                 >
                   <MenuItem value="">분야 선택</MenuItem>
-                  {fieldOptions.map((field) => (
-                    <MenuItem key={field.value} value={field.value}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {field.icon}
-                        {field.label}
-                      </Box>
+                  {fieldsLoading ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={16} sx={{ mr: 1 }} />
+                      분야 로딩 중...
                     </MenuItem>
-                  ))}
+                  ) : (
+                    (() => {
+                      const options = createFieldOptions(availableFields);
+                      console.log('논문 비교분석 - Select 컴포넌트에서 렌더링할 options:', options);
+                      return options.map((field) => (
+                        <MenuItem key={field.value} value={field.value}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            {field.icon}
+                            {field.label}
+                          </Box>
+                        </MenuItem>
+                      ));
+                    })()
+                  )}
                 </Select>
               </FormControl>
 

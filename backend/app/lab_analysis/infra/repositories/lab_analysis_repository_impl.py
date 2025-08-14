@@ -89,4 +89,21 @@ class LabAnalysisRepositoryImpl(LabAnalysisRepository):
             
         except Exception as e:
             logger.error(f"교수 조회 실패: {e}")
-            return [] 
+            return []
+    
+    async def get_available_fields(self) -> List[str]:
+        """사용 가능한 분야 목록 조회"""
+        try:
+            # Supabase에서 사용 가능한 분야 목록 조회
+            from app.shared.infra.external.supabase_client import SupabaseClient
+            supabase_client = SupabaseClient()
+            return await supabase_client.get_available_fields()
+        except Exception as e:
+            logger.error(f"분야 목록 조회 실패: {e}")
+            # 기본 분야 목록 반환
+            return [
+                "Machine Learning / Deep Learning (ML/DL)",
+                "Natural Language Processing (NLP)",
+                "Computer Vision (CV)",
+                "Multimodal"
+            ] 

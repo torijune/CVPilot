@@ -88,4 +88,12 @@ class LabAnalysisService:
             return await self.repository.get_analysis_result(result_id)
         except Exception as e:
             logger.error(f"분석 결과 조회 실패: {e}")
+            raise
+    
+    async def get_available_fields(self) -> List[str]:
+        """사용 가능한 분야 목록 조회"""
+        try:
+            return await self.repository.get_available_fields()
+        except Exception as e:
+            logger.error(f"분야 목록 조회 실패: {e}")
             raise 

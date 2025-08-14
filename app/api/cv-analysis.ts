@@ -127,4 +127,33 @@ export async function extractTextFromFile(file: File): Promise<string> {
   
   const data = await res.json();
   return data.text;
+}
+
+// 사용 가능한 분야 목록 조회
+export async function getAvailableFields(): Promise<string[]> {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/v1/cv/fields`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data || !Array.isArray(data.fields)) {
+      throw new Error('잘못된 API 응답 형식');
+    }
+    
+    return data.fields;
+  } catch (error) {
+    console.error('getAvailableFields 에러:', error);
+    throw error;
+  }
 } 

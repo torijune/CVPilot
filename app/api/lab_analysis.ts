@@ -40,12 +40,16 @@ export interface LabAnalysisResult {
 
 // 분야별 교수 목록 조회
 export async function getProfessorsByField(field: string, university?: string): Promise<ProfessorListResponse> {
-  let url = `${BACKEND_URL}/api/v1/lab-analysis/professors/${encodeURIComponent(field)}`;
+  let url = `${BACKEND_URL}/api/v1/lab-analysis/professors?field=${encodeURIComponent(field)}`;
   
   // 학교 필터가 있는 경우 쿼리 파라미터 추가
   if (university) {
-    url += `?university=${encodeURIComponent(university)}`;
+    url += `&university=${encodeURIComponent(university)}`;
   }
+  
+  console.log('API 호출 URL:', url);
+  console.log('원본 분야명:', field);
+  console.log('인코딩된 분야명:', encodeURIComponent(field));
   
   const response = await fetch(url, {
     method: "GET",
@@ -55,6 +59,7 @@ export async function getProfessorsByField(field: string, university?: string): 
   });
   
   if (!response.ok) {
+    console.error('API 응답 오류:', response.status, response.statusText);
     throw new Error(`교수 목록 조회 실패: ${response.status}`);
   }
   
@@ -124,4 +129,33 @@ export async function checkLabAnalysisHealth(): Promise<{ status: string; servic
   }
   
   return response.json();
+}
+
+// 사용 가능한 분야 목록 조회
+export async function getAvailableFields(): Promise<string[]> {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/v1/lab-analysis/fields`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data || !Array.isArray(data.fields)) {
+      throw new Error('잘못된 API 응답 형식');
+    }
+    
+    return data.fields;
+  } catch (error) {
+    console.error('getAvailableFields 에러:', error);
+    throw error;
+  }
 }
