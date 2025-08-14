@@ -42,19 +42,14 @@ async def get_available_fields(
 ):
     """사용 가능한 분야 목록 조회"""
     try:
-        # 4개 분야로 제한
-        fields = [
-            "Natural Language Processing (NLP)",
-            "Computer Vision (CV)",
-            "Multimodal",
-            "Machine Learning / Deep Learning (ML/DL)"
-        ]
+        # DB에서 실제 분야 목록 조회
+        fields = await podcast_service.get_available_fields()
         return AvailableFieldsResponse(fields=fields)
     except Exception as e:
         logger.error(f"분야 목록 조회 실패: {e}")
         raise HTTPException(status_code=500, detail="분야 목록 조회 중 오류가 발생했습니다.")
 
-@router.get("/conferences/{field}", response_model=ConferencesResponse)
+@router.get("/conferences", response_model=ConferencesResponse)
 async def get_conferences_by_field(
     field: str,
     podcast_service: PodcastService = Depends(get_podcast_service)
@@ -86,13 +81,14 @@ async def get_conferences_by_field(
         logger.error(f"분야별 학회 목록 조회 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/papers/random/{field}")
+@router.get("/papers/random")
 async def get_random_paper(
     field: str,
     podcast_service: PodcastService = Depends(get_podcast_service)
 ):
     """분야별 랜덤 논문 단일 조회 (팟캐스트용)"""
     try:
+        logger.info(f"랜덤 논문 조회 요청: field='{field}'")
         papers = await podcast_service.get_random_papers_for_field(field, limit=1)
         if not papers:
             raise HTTPException(status_code=404, detail=f"{field} 분야에서 논문을 찾을 수 없습니다.")
@@ -103,7 +99,7 @@ async def get_random_paper(
         logger.error(f"랜덤 논문 조회 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/papers/preview/{field}/{conference}", response_model=PaperPreviewResponse)
+@router.get("/papers/preview", response_model=PaperPreviewResponse)
 async def get_paper_preview(
     field: str,
     conference: str,
@@ -148,7 +144,7 @@ async def get_paper_preview(
         logger.error(f"논문 미리보기 실패: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/papers/reselect/{field}/{conference}", response_model=PaperPreviewResponse)
+@router.post("/papers/reselect", response_model=PaperPreviewResponse)
 async def reselect_paper(
     field: str,
     conference: str,

@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Box,
   Typography,
   Chip,
   TextField,
-  IconButton
+  IconButton,
+  CircularProgress
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-
-const INTERESTS = [
-  "Natural Language Processing (NLP)",
-  "Computer Vision (CV)",
-  "Multimodal",
-  "Machine Learning / Deep Learning (ML/DL)"
-];
+import { getAvailableFields } from "../api/papers";
 
 type Props = {
   value: string[];
@@ -22,6 +17,43 @@ type Props = {
 
 const InterestSelector: React.FC<Props> = ({ value, onChange }) => {
   const [customInterest, setCustomInterest] = useState("");
+  const [availableFields, setAvailableFields] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 사용 가능한 분야 목록 로드
+  useEffect(() => {
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') return;
+    
+    const loadFields = async () => {
+      try {
+        console.log('API에서 분야 목록 로드 시작...');
+        const fields = await getAvailableFields();
+        console.log('API에서 받은 분야 목록:', fields);
+        
+        // 빈 배열이거나 유효하지 않은 경우 기본값 사용
+        if (!fields || fields.length === 0) {
+          throw new Error('빈 분야 목록 반환됨');
+        }
+        
+        setAvailableFields(fields);
+      } catch (error) {
+        console.error('분야 목록 로드 실패:', error);
+        // 에러 발생 시 기본값 사용 (실제 DB 데이터 기반)
+        const fallbackFields = [
+          "Computer Vision (CV)"
+        ];
+        console.log('기본값 사용:', fallbackFields);
+        setAvailableFields(fallbackFields);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // 약간의 지연을 두고 실행 (DOM이 완전히 로드된 후)
+    const timer = setTimeout(loadFields, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleAddCustomInterest = () => {
     const trimmed = customInterest.trim();
@@ -82,7 +114,15 @@ const InterestSelector: React.FC<Props> = ({ value, onChange }) => {
           주요 분야
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-          {INTERESTS.map((interest) => (
+          {isLoading ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <CircularProgress size={20} sx={{ color: '#3B82F6' }} />
+              <Typography sx={{ color: '#9CA3AF', fontSize: '0.875rem' }}>
+                분야 목록 로딩 중...
+              </Typography>
+            </Box>
+          ) : (
+            availableFields.map((interest) => (
             <Chip
               key={interest}
               label={interest}
@@ -109,7 +149,8 @@ const InterestSelector: React.FC<Props> = ({ value, onChange }) => {
                 backdropFilter: 'blur(10px)'
               }}
             />
-          ))}
+            ))
+          )}
         </Box>
       </Box>
 
@@ -208,19 +249,19 @@ const InterestSelector: React.FC<Props> = ({ value, onChange }) => {
                 label={interest}
                 onDelete={() => handleRemoveInterest(interest)}
                 sx={{
-                  backgroundColor: INTERESTS.includes(interest) 
+                  backgroundColor: availableFields.includes(interest) 
                     ? 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)' 
                     : 'rgba(16, 185, 129, 0.2)',
-                  color: INTERESTS.includes(interest) ? '#FFFFFF' : '#10B981',
+                  color: availableFields.includes(interest) ? '#FFFFFF' : '#10B981',
                   fontWeight: 600,
                   fontSize: '0.875rem',
                   padding: '8px 16px',
                   borderRadius: 3,
-                  border: INTERESTS.includes(interest) ? 'none' : '1px solid rgba(16, 185, 129, 0.3)',
+                  border: availableFields.includes(interest) ? 'none' : '1px solid rgba(16, 185, 129, 0.3)',
                   '& .MuiChip-deleteIcon': {
-                    color: INTERESTS.includes(interest) ? '#FFFFFF' : '#10B981',
+                    color: availableFields.includes(interest) ? '#FFFFFF' : '#10B981',
                     '&:hover': {
-                      color: INTERESTS.includes(interest) ? '#E5E7EB' : '#059669',
+                      color: availableFields.includes(interest) ? '#E5E7EB' : '#059669',
                     }
                   },
                   '&:hover': {

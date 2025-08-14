@@ -190,7 +190,7 @@ export const deletePodcastAnalysis = async (analysisId: string) => {
 
 // 분야별 학회 목록 조회
 export const getConferencesByField = async (field: string): Promise<ConferencesResponse> => {
-  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/conferences/${encodeURIComponent(field)}`, {
+  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/conferences?field=${encodeURIComponent(field)}`, {
     method: "GET",
   });
   
@@ -203,7 +203,7 @@ export const getConferencesByField = async (field: string): Promise<ConferencesR
 
 // 특정 분야와 학회의 랜덤 논문 미리보기
 export const getPaperPreview = async (field: string, conference: string): Promise<PaperPreviewResponse> => {
-  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/papers/preview/${encodeURIComponent(field)}/${encodeURIComponent(conference)}`, {
+  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/papers/preview?field=${encodeURIComponent(field)}&conference=${encodeURIComponent(conference)}`, {
     method: "GET",
   });
   
@@ -216,7 +216,7 @@ export const getPaperPreview = async (field: string, conference: string): Promis
 
 // 같은 조건으로 다른 논문 재선택
 export const reselectPaper = async (field: string, conference: string, currentPaperId?: string): Promise<PaperPreviewResponse> => {
-  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/papers/reselect/${encodeURIComponent(field)}/${encodeURIComponent(conference)}`, {
+  const response = await fetch(`${BACKEND_URL}/api/v1/podcast/papers/reselect?field=${encodeURIComponent(field)}&conference=${encodeURIComponent(conference)}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

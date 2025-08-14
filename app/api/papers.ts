@@ -114,4 +114,44 @@ export async function getPapersByField(field: string, limit: number = 50): Promi
   }
 
   return response.json();
+}
+
+// 사용 가능한 분야 목록 조회
+export async function getAvailableFields(): Promise<string[]> {
+  try {
+    console.log('API 호출 시작:', `${BACKEND_URL}/api/v1/comparison/fields`);
+    
+    const response = await fetch(`${BACKEND_URL}/api/v1/comparison/fields`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      // CORS 설정
+      mode: 'cors',
+      credentials: 'omit'
+    });
+    
+    console.log('API 응답 상태:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API 에러 응답:', errorText);
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log('API 응답 데이터:', data);
+    
+    // 데이터 검증
+    if (!data || !Array.isArray(data.fields)) {
+      console.error('잘못된 API 응답 형식:', data);
+      throw new Error('잘못된 API 응답 형식');
+    }
+    
+    return data.fields;
+  } catch (error) {
+    console.error('getAvailableFields 에러:', error);
+    throw error;
+  }
 } 

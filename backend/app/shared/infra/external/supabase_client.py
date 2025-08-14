@@ -32,7 +32,9 @@ class SupabaseClient:
         if not self.client:
             return []
         try:
+            logger.info(f"분야별 논문 조회 시작: {field}, limit: {limit}")
             result = self.client.table("papers").select("*").eq("field", field).limit(limit).execute()
+            logger.info(f"분야별 논문 조회 결과: {len(result.data)}개 논문 발견")
             return result.data
         except Exception as e:
             logger.error(f"분야별 논문 조회 실패: {e}")
@@ -146,9 +148,41 @@ class SupabaseClient:
     async def get_available_fields(self) -> List[str]:
         """사용 가능한 분야 목록 조회"""
         try:
-            result = self.client.table("papers").select("field").execute()
-            fields = list(set([paper['field'] for paper in result.data if paper.get('field')]))
-            return sorted(fields)
+            # 페이지네이션을 사용하여 모든 데이터 가져오기
+            all_fields = set()
+            page_size = 1000
+            page = 0
+            
+            while True:
+                try:
+                    result = self.client.table("papers").select("field").range(page * page_size, (page + 1) * page_size - 1).execute()
+                    papers = result.data
+                    
+                    if not papers:
+                        break
+                    
+                    # 현재 페이지의 field 값들을 수집
+                    for paper in papers:
+                        field = paper.get('field')
+                        if field and field.strip():
+                            all_fields.add(field.strip())
+                    
+                    logger.info(f"페이지 {page + 1}: {len(papers)}개 논문, 현재까지 {len(all_fields)}개 분야")
+                    page += 1
+                    
+                    # 안전장치: 너무 많은 페이지를 로드하지 않도록 제한
+                    if page > 100:  # 최대 100페이지 (100,000개 논문)
+                        logger.warning("최대 페이지 수에 도달하여 중단")
+                        break
+                        
+                except Exception as e:
+                    logger.warning(f"페이지 {page + 1} 로드 실패: {e}")
+                    break
+            
+            fields_list = sorted(list(all_fields))
+            logger.info(f"총 {len(fields_list)}개 분야 발견: {fields_list}")
+            return fields_list
+            
         except Exception as e:
             logger.error(f"분야 목록 조회 실패: {e}")
             raise
