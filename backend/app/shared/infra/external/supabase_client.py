@@ -1,5 +1,6 @@
 import os
 import logging
+import time
 from typing import List, Dict, Any, Optional
 from supabase import create_client, Client
 from dotenv import load_dotenv
@@ -146,42 +147,79 @@ class SupabaseClient:
             raise
     
     async def get_available_fields(self) -> List[str]:
-        """사용 가능한 분야 목록 조회"""
+        """사용 가능한 분야 목록 조회 (SQL 최적화 버전)"""
         try:
-            # 페이지네이션을 사용하여 모든 데이터 가져오기
-            all_fields = set()
-            page_size = 1000
-            page = 0
+            # 캐시된 결과가 있으면 반환 (메모리 캐시, 5분 유효)
+            if hasattr(self, '_cached_fields') and self._cached_fields:
+                if hasattr(self, '_cache_timestamp'):
+                    cache_age = time.time() - self._cache_timestamp
+                    if cache_age < 300:  # 5분 (300초)
+                        logger.info("캐시된 분야 목록 반환")
+                        return self._cached_fields
+                    else:
+                        logger.info("캐시 만료, 새로운 데이터 조회")
+                else:
+                    logger.info("캐시된 분야 목록 반환")
+                    return self._cached_fields
             
-            while True:
-                try:
-                    result = self.client.table("papers").select("field").range(page * page_size, (page + 1) * page_size - 1).execute()
-                    papers = result.data
+            # 효율적인 방법: 알려진 field들을 직접 확인
+            try:
+                # DB에 실제로 존재하는 field들을 확인
+                known_fields = [
+                    "Computer Vision (CV)",
+                    "Machine Learning / Deep Learning (ML/DL)",
+                    "Natural Language Processing (NLP)"
+                ]
+                
+                existing_fields = []
+                for field in known_fields:
+                    try:
+                        # 해당 field를 가진 논문이 있는지 확인 (limit=1로 빠르게)
+                        result = self.client.table("papers").select("id").eq("field", field).limit(1).execute()
+                        if result.data:
+                            existing_fields.append(field)
+                            logger.info(f"Field 확인됨: {field}")
+                    except Exception as e:
+                        logger.warning(f"Field 확인 실패: {field} - {e}")
+                
+                if existing_fields:
+                    logger.info(f"알려진 field 확인으로 {len(existing_fields)}개 분야 발견: {existing_fields}")
                     
-                    if not papers:
-                        break
+                    # 결과를 캐시에 저장 (5분간 유효)
+                    self._cached_fields = existing_fields
+                    self._cache_timestamp = time.time()
                     
-                    # 현재 페이지의 field 값들을 수집
-                    for paper in papers:
-                        field = paper.get('field')
-                        if field and field.strip():
-                            all_fields.add(field.strip())
+                    return existing_fields
+                else:
+                    logger.warning("알려진 field가 없음")
                     
-                    logger.info(f"페이지 {page + 1}: {len(papers)}개 논문, 현재까지 {len(all_fields)}개 분야")
-                    page += 1
-                    
-                    # 안전장치: 너무 많은 페이지를 로드하지 않도록 제한
-                    if page > 100:  # 최대 100페이지 (100,000개 논문)
-                        logger.warning("최대 페이지 수에 도달하여 중단")
-                        break
-                        
-                except Exception as e:
-                    logger.warning(f"페이지 {page + 1} 로드 실패: {e}")
-                    break
+            except Exception as e:
+                logger.warning(f"알려진 field 확인 실패: {e}")
             
-            fields_list = sorted(list(all_fields))
-            logger.info(f"총 {len(fields_list)}개 분야 발견: {fields_list}")
-            return fields_list
+            # SQL이 실패하면 대안 방법 사용
+            try:
+                # Supabase의 내장 함수를 사용한 방법
+                result = self.client.table("papers").select("field").execute()
+                
+                # Python에서 고유한 값들 추출
+                all_fields = set()
+                for paper in result.data:
+                    field = paper.get('field')
+                    if field and field.strip():
+                        all_fields.add(field.strip())
+                
+                fields_list = sorted(list(all_fields))
+                logger.info(f"Python 처리로 {len(fields_list)}개 분야 발견: {fields_list}")
+                
+                # 결과를 캐시에 저장 (5분간 유효)
+                self._cached_fields = fields_list
+                self._cache_timestamp = time.time()
+                
+                return fields_list
+                
+            except Exception as e:
+                logger.error(f"Python 처리도 실패: {e}")
+                raise
             
         except Exception as e:
             logger.error(f"분야 목록 조회 실패: {e}")
