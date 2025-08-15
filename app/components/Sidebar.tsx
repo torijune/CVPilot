@@ -10,6 +10,8 @@ import KeyIcon from "@mui/icons-material/Key";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
   onAnalyze: (cvFile: File | null, interests: string[]) => void;
@@ -20,7 +22,7 @@ type Props = {
 const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [interests, setInterests] = useState<string[]>([]);
-  const [sidebarWidth, setSidebarWidth] = useState(304); // 380 * 0.8 = 304 (80% 스케일에 맞춤)
+  const [sidebarWidth, setSidebarWidth] = useState(340); // 짧은 마스킹으로 줄어든 너비
   const [isResizing, setIsResizing] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
   const [tempApiKey, setTempApiKey] = useState("");
@@ -81,7 +83,7 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
   }, [apiKey, tempApiKey]);
 
   // 최소/최대 너비 설정 (80% 스케일에 맞춤)
-  const MIN_WIDTH = 256; // 320 * 0.8 = 256
+  const MIN_WIDTH = 340; // 짧은 마스킹으로 줄어든 너비
   const MAX_WIDTH = 480; // 600 * 0.8 = 480
 
   useEffect(() => {
@@ -136,7 +138,7 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
         }}
       >
         <Box sx={{ 
-          p: 3, 
+          p: 2.5, 
           height: '100%', 
           overflow: 'auto',
           display: 'flex',
@@ -215,7 +217,7 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
           {/* API Key 설정 섹션 */}
           <Box sx={{ 
             mb: 3, 
-            p: 2,
+            p: 1.5,
             borderRadius: 2,
             background: 'rgba(255, 255, 255, 0.05)',
             border: '1px solid rgba(255, 255, 255, 0.1)'
@@ -261,54 +263,150 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
                   }
                 }}
               >
-                <Typography variant="caption">
+                <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
                   AI 기능 사용을 위해 API Key가 필요합니다.
                 </Typography>
               </Alert>
             )}
 
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="sk-..."
-              type={showApiKey ? 'text' : 'password'}
-              value={tempApiKey}
-              onChange={(e) => setTempApiKey(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <KeyIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 16 }} />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      onClick={() => setShowApiKey(!showApiKey)}
-                      sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                    >
-                      {showApiKey ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                sx: {
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            {hasApiKey() && (
+              <Alert 
+                severity="success" 
+                sx={{ 
+                  mb: 2,
+                  background: 'rgba(16, 185, 129, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  color: '#A7F3D0',
+                  '& .MuiAlert-icon': {
+                    color: '#10B981'
+                  }
+                }}
+              >
+                <Typography variant="caption" sx={{ fontSize: '0.65rem' }}>
+                  API Key 설정됨 - AI 기능 사용 가능
+                </Typography>
+              </Alert>
+            )}
+
+            {/* API Key 표시/입력 영역 */}
+            {hasApiKey() ? (
+              // API Key가 설정된 경우 - 마스킹된 표시
+              <Box sx={{ mb: 2 }}>
+                <Box sx={{
+                  p: 1,
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
                   borderRadius: 1,
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.2)',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.3)',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#3B82F6',
-                  },
-                  color: 'white',
-                  fontSize: '0.875rem'
-                }
-              }}
-              sx={{ mb: 1 }}
-            />
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  minHeight: '32px'
+                }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                    <KeyIcon sx={{ color: '#10B981', fontSize: 14, mr: 0.5, flexShrink: 0 }} />
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: '#10B981',
+                        fontWeight: 600,
+                        fontFamily: 'monospace',
+                        fontSize: '0.65rem',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        maxWidth: 'calc(100% - 35px)', // 적절한 여백
+                        display: 'block',
+                        wordBreak: 'break-all'
+                      }}
+                    >
+                      {tempApiKey.length > 10 
+                        ? `${tempApiKey.substring(0, 7)}***${tempApiKey.substring(tempApiKey.length - 4)}`
+                        : tempApiKey
+                      }
+                    </Typography>
+                  </Box>
+                  <IconButton
+                    size="small"
+                    onClick={() => setShowApiKey(!showApiKey)}
+                    sx={{ 
+                      color: '#10B981',
+                      ml: 1,
+                      flexShrink: 0
+                    }}
+                  >
+                    {showApiKey ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                  </IconButton>
+                </Box>
+                
+                {/* 전체 API Key 표시 (토글) */}
+                {showApiKey && (
+                  <Box sx={{
+                    mt: 1,
+                    p: 1.5,
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: 1,
+                    wordBreak: 'break-all'
+                  }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        fontFamily: 'monospace',
+                        fontSize: '0.7rem',
+                        lineHeight: 1.4
+                      }}
+                    >
+                      {tempApiKey}
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            ) : (
+              // API Key가 설정되지 않은 경우 - 입력 필드
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="sk-..."
+                type={showApiKey ? 'text' : 'password'}
+                value={tempApiKey}
+                onChange={(e) => setTempApiKey(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <KeyIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 16 }} />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        onClick={() => setShowApiKey(!showApiKey)}
+                        sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
+                      >
+                        {showApiKey ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    borderRadius: 1,
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'rgba(255, 255, 255, 0.2)',
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'rgba(255, 255, 255, 0.3)',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#3B82F6',
+                    },
+                    color: 'white',
+                    fontSize: '0.875rem'
+                  }
+                }}
+                sx={{ mb: 1 }}
+              />
+            )}
 
             {validationError && (
               <Alert 
@@ -329,29 +427,84 @@ const Sidebar: React.FC<Props> = ({ onAnalyze, loading, onWidthChange }) => {
               </Alert>
             )}
 
-            <Button
-              fullWidth
-              size="small"
-              variant="outlined"
-              onClick={handleApiKeySave}
-              disabled={isValidating || !tempApiKey.trim()}
-              sx={{
-                borderColor: hasApiKey() ? '#10B981' : 'rgba(255, 255, 255, 0.3)',
-                color: hasApiKey() ? '#10B981' : 'rgba(255, 255, 255, 0.8)',
-                fontSize: '0.75rem',
-                py: 0.5,
-                '&:hover': {
-                  borderColor: hasApiKey() ? '#059669' : 'rgba(255, 255, 255, 0.6)',
-                  backgroundColor: hasApiKey() ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.1)',
-                },
-                '&:disabled': {
-                  borderColor: 'rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.3)'
-                }
-              }}
-            >
-              {isValidating ? '검증 중...' : hasApiKey() ? 'API Key 업데이트' : 'API Key 저장'}
-            </Button>
+            {/* API Key 액션 버튼들 */}
+            {hasApiKey() ? (
+              // API Key가 설정된 경우 - 변경/삭제 버튼
+              <Box sx={{ display: 'flex', gap: 0.5 }}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={handleApiKeySave}
+                  disabled={isValidating}
+                  sx={{
+                    flex: 1,
+                    borderColor: '#3B82F6',
+                    color: '#3B82F6',
+                    fontSize: '0.65rem',
+                    py: 0.5,
+                    px: 1,
+                    minWidth: 'auto',
+                    '&:hover': {
+                      borderColor: '#2563EB',
+                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    },
+                    '&:disabled': {
+                      borderColor: 'rgba(255, 255, 255, 0.1)',
+                      color: 'rgba(255, 255, 255, 0.3)'
+                    }
+                  }}
+                >
+                  {isValidating ? '검증' : '변경'}
+                </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => {
+                    setTempApiKey('');
+                    saveApiKey('');
+                  }}
+                  sx={{
+                    borderColor: '#EF4444',
+                    color: '#EF4444',
+                    fontSize: '0.65rem',
+                    py: 0.5,
+                    minWidth: 'auto',
+                    px: 1,
+                    '&:hover': {
+                      borderColor: '#DC2626',
+                      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    }
+                  }}
+                >
+                  삭제
+                </Button>
+              </Box>
+            ) : (
+              // API Key가 설정되지 않은 경우 - 저장 버튼
+              <Button
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={handleApiKeySave}
+                disabled={isValidating || !tempApiKey.trim()}
+                sx={{
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontSize: '0.75rem',
+                  py: 0.5,
+                  '&:hover': {
+                    borderColor: 'rgba(255, 255, 255, 0.6)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  },
+                  '&:disabled': {
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    color: 'rgba(255, 255, 255, 0.3)'
+                  }
+                }}
+              >
+                {isValidating ? '검증 중...' : 'API Key 저장'}
+              </Button>
+            )}
           </Box>
           
           <Box sx={{ flex: 1 }}>

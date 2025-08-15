@@ -32,7 +32,7 @@ import {
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { analyzeTrends, TrendAnalysisResponse } from '../../api/trends';
-import { getAvailableFields } from '../../api/papers';
+import { getAvailableFields } from '../../api/trends';
 import { useRouter } from 'next/router';
 import { useApiKey } from '../../hooks/useApiKey';
 import ApiKeySection from '../../components/ApiKeySection';

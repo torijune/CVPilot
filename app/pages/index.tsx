@@ -224,7 +224,7 @@ export default function HomePage() {
   // API Key 마스킹 표시
   const getMaskedApiKey = (key: string) => {
     if (key.length <= 8) return key;
-    return `${key.substring(0, 7)}${'*'.repeat(key.length - 11)}${key.substring(key.length - 4)}`;
+    return `${key.substring(0, 7)}***${key.substring(key.length - 4)}`;
   };
 
   const handleGetStarted = () => {

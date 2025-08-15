@@ -43,18 +43,26 @@ else
     echo "✅ S3 버킷이 이미 존재합니다: $BUCKET_NAME"
 fi
 
-# 2. Next.js 빌드
-echo "🏗️ Next.js 빌드 중..."
-npm run build
+# 2. Next.js 빌드 (이미 빌드된 경우 스킵)
+if [ ! -d "app/out" ]; then
+  echo "🏗️ Next.js 빌드 중..."
+  cd app
+  npm run build
+  cd ..
+else
+  echo "✅ 이미 빌드된 파일을 사용합니다."
+fi
 
 # 3. S3에 업로드
 echo "📤 S3에 파일 업로드 중..."
-aws s3 sync .next/static s3://$BUCKET_NAME/_next/static --delete
-aws s3 sync .next/standalone s3://$BUCKET_NAME --delete --exclude "node_modules/*"
+aws s3 sync app/.next/static s3://$BUCKET_NAME/_next/static --delete
+
+# 정적 사이트 파일들 업로드 (output: export 사용)
+aws s3 sync app/out s3://$BUCKET_NAME --delete
 
 # Next.js 정적 파일들도 업로드
-if [ -d "public" ]; then
-    aws s3 sync public s3://$BUCKET_NAME --delete
+if [ -d "app/public" ]; then
+    aws s3 sync app/public s3://$BUCKET_NAME --delete
 fi
 
 # 4. CloudFront 배포 확인/생성

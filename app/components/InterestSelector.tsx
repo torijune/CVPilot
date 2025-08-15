@@ -8,7 +8,7 @@ import {
   CircularProgress
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { getAvailableFields } from "../api/papers";
+import { getAvailableFields } from "../api/trends";
 
 type Props = {
   value: string[];
